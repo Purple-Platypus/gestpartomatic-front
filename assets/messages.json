@@ -1,0 +1,9 @@
+{
+    "errors": {
+        "generic": "Une erreur est survenue. Merci de recommencer plus tard :(",
+        "emailNotUnique": "Cette adresse est déjà utilisée.",
+        "usernameNotUnique": "Un utilisateur a déjà choisi ce pseudo.",
+        "emailUnknown": "Mmmh... Je ne connais pas cette adresse.",
+        "unauthorised": "La connexion a échoué. Vérifiez votre adresse et votre mot de passe."
+    }
+}

@@ -1,0 +1,24 @@
+.v-card.theme--dark,
+.v-navigation-drawer.theme--dark {
+    box-shadow: none !important;
+    background-color: #2f333c !important;
+}
+
+.theme--dark.v-application,
+.theme--dark.v-sheet,
+.theme--dark.v-input input,
+.theme--dark.v-icon {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.theme--dark.v-application .text--secondary {
+    color: rgba(255, 255, 255, 0.62) !important;
+}
+
+#app .v-text-field__slot .theme--dark.v-label {
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.v-list-item--disabled .theme--dark.v-icon {
+    color: rgba(255, 255, 255, 0.3) !important;
+}

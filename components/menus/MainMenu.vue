@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer app class="elevation-0" dark permanent width="180">
-        <!-- <auth-menu v-if="user.id"></auth-menu>
-        <v-list v-else dense>
+        <auth-menu v-if="user.id"></auth-menu>
+        <!-- <v-list v-else dense>
             <v-list-item to="/auth/login">
                 <v-list-item-icon>
                     <v-icon>

@@ -16,6 +16,13 @@ import Snackbar from '../components/commons/Snackbar';
 
 export default {
     components: { 'main-menu': MainMenuVue, Snackbar },
+
+    async fetch() {
+        await this.$axios.$get('/api/users/me').then(res => {
+            console.log('plop');
+            this.$store.dispatch('auth/login', res);
+        });
+    },
     mounted() {
         this.$vuetify.theme.dark = this.$store.state.auth.settingDarkMode;
     },

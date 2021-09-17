@@ -29,12 +29,12 @@
                 Enregistrer
             </v-btn>
 
-            <v-btn class="ml-2" text color="primary" small to="/flux1">
-                <v-icon left>
-                    mdi-arrow-left
+            <nuxt-link to="/flux1">
+                <v-icon color="primary" small>
+                    mdi-chevron-left
                 </v-icon>
-                Retour au Flux-1-matic
-            </v-btn>
+                Retour au Fluxomatic
+            </nuxt-link>
         </v-card-actions>
 
         <v-card-actions>

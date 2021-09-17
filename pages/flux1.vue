@@ -40,11 +40,16 @@ html {
 .overflow {
     word-break: keep-all !important;
     word-wrap: normal !important;
+    white-space: nowrap;
 }
 .propertySpan:last-child {
     margin-right: 1.5rem;
 }
 .propertySpan:hover {
     background-color: #ddd;
+}
+.highlight {
+    background-color: #1976d2;
+    color: #fff;
 }
 </style>

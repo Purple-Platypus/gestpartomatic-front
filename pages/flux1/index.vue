@@ -9,7 +9,6 @@
                 class="ml-2"
                 small
                 depressed
-                color="primary"
                 :outlined="!padding"
                 @click="padding = !padding"
             >
@@ -18,12 +17,12 @@
                 </v-icon>
             </v-btn>
 
-            <v-btn class="ml-2" text color="primary" to="flux1/definitions">
-                <v-icon left>
-                    mdi-book
-                </v-icon>
+            <nuxt-link class="ml-4" to="flux1/definitions">
                 Descriptif du flux 1
-            </v-btn>
+                <v-icon color="primary" small>
+                    mdi-chevron-right
+                </v-icon>
+            </nuxt-link>
         </v-card-actions>
         <v-card-text>
             <v-row>

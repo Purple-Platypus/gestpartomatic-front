@@ -4,7 +4,8 @@
             :accept="accept"
             @change="handleUpload($event)"
             class="d-sr-only"
-            ref="inputCSV"
+            :multiple="multiple"
+            ref="fileInput"
             type="file"
         />
         <v-btn
@@ -13,8 +14,8 @@
             :depressed="depressed"
             :outlined="outlined"
             :small="small"
+            :text="text"
         >
-            <v-icon left>mdi-upload</v-icon>
             <slot></slot>
         </v-btn>
     </div>
@@ -22,18 +23,21 @@
 
 <script>
 export default {
-    props: ['accept', 'color', 'depressed', 'left', 'outlined', 'small'],
+    props: [
+        'accept',
+        'color',
+        'depressed',
+        'multiple',
+        'outlined',
+        'small',
+        'text'
+    ],
     methods: {
         activateUploader() {
-            this.$refs.inputCSV.click();
+            this.$refs.fileInput.click();
         },
         handleUpload(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = event => {
-                this.$emit('change', event.target.result);
-            };
-            reader.readAsText(file);
+            this.$emit('change', event.target.files);
         }
     }
 };

@@ -1,5 +1,5 @@
 <template>
-    <uploader
+    <file-reader
         accept="text/csv"
         @change="handleUpload"
         :depressed="depressed"
@@ -8,15 +8,15 @@
         :small="small"
     >
         <slot></slot>
-    </uploader>
+    </file-reader>
 </template>
 
 <script>
 import Papa from 'papaparse';
-import Uploader from '../commons/Uploader.vue';
+import FileReader from '../commons/FileReader.vue';
 
 export default {
-    components: { Uploader },
+    components: { FileReader },
     props: ['color', 'depressed', 'outlined', 'small'],
     data() {
         return {

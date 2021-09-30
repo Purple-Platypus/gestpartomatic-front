@@ -1,5 +1,5 @@
 <template>
-    <uploader
+    <generic-uploader
         :color="color"
         :depressed="depressed"
         :multiple="multiple"
@@ -8,15 +8,22 @@
         @change="handleUpload"
     >
         <slot></slot>
-    </uploader>
+    </generic-uploader>
 </template>
 
 <script>
-import Uploader from './Uploader.vue';
+import GenericUploader from './GenericUploader.vue';
 
 export default {
-    components: { Uploader },
-    props: ['accept', 'color', 'depressed', 'multiple', 'outlined', 'small'],
+    components: { GenericUploader },
+    props: {
+        accept: String,
+        color: String,
+        depressed: Boolean,
+        multiple: Boolean,
+        outlined: Boolean,
+        small: Boolean
+    },
     methods: {
         handleUpload(files) {
             const file = files[0];

@@ -41,7 +41,9 @@
 <script>
 export default {
     name: 'color-selector',
-    props: ['value'],
+    props: {
+        value: String
+    },
     data() {
         return {
             show: false,

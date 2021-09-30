@@ -6,26 +6,16 @@
                 <nuxt />
             </v-container>
         </v-main>
-        <snackbar />
+        <global-snackbar />
     </v-app>
 </template>
 
 <script>
-import MainMenuVue from '../components/menus/MainMenu.vue';
-import Snackbar from '../components/commons/Snackbar';
+import MainMenu from '../components/menus/MainMenu.vue';
+import GlobalSnackbar from '../components/commons/GlobalSnackbar';
 
 export default {
-    components: { 'main-menu': MainMenuVue, Snackbar },
-
-    async fetch() {
-        await this.$axios.$get('/api/users/me').then(res => {
-            console.log('plop');
-            this.$store.dispatch('auth/login', res);
-        });
-    },
-    mounted() {
-        this.$vuetify.theme.dark = this.$store.state.auth.settingDarkMode;
-    },
+    components: { MainMenu, GlobalSnackbar },
     computed: {
         darkMode() {
             return this.$store.state.auth.settingDarkMode;
@@ -35,6 +25,15 @@ export default {
         darkMode(newValue) {
             this.$vuetify.theme.dark = newValue;
         }
+    },
+    mounted() {
+        this.$vuetify.theme.dark = this.$store.state.auth.settingDarkMode;
+    },
+    async fetch() {
+        await this.$axios.$get('/api/users/me').then(res => {
+            console.log('plop');
+            this.$store.dispatch('auth/login', res);
+        });
     }
 };
 </script>

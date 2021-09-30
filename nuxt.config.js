@@ -62,8 +62,8 @@ export default {
             dark: false,
             themes: {
                 light: {
-                    primary: '#26a69a',
-                    accent: '#14ffec'
+                    primary: '#00ACC1',
+                    accent: '#EF5350'
                 },
                 dark: {
                     primary: '#0d7377',

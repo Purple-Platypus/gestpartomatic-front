@@ -16,9 +16,14 @@ import FileReader from '../commons/FileReader.vue';
 
 export default {
     components: { FileReader },
-    props: ['color', 'depressed', 'outlined', 'small'],
-    data() {
-        return {};
+    props: {
+        color: String,
+        depressed: Boolean,
+        outlined: Boolean,
+        small: Boolean
+    },
+    computed: {
+        ...mapGetters('flux1', ['getArticle'])
     },
     methods: {
         handleUpload(fileContent) {
@@ -76,9 +81,6 @@ export default {
             });
             return splittedDeclaration;
         }
-    },
-    computed: {
-        ...mapGetters('flux1', ['getArticle'])
     }
 };
 </script>

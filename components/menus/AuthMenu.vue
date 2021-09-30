@@ -47,9 +47,10 @@
 <script>
 export default {
     name: 'authMenu',
-    components: {},
-    data() {
-        return {};
+    computed: {
+        user: function() {
+            return this.$store.state.auth;
+        }
     },
     methods: {
         // Déconnexion
@@ -66,11 +67,6 @@ export default {
                         color: 'error'
                     });
                 });
-        }
-    },
-    computed: {
-        user: function() {
-            return this.$store.state.auth;
         }
     }
 };

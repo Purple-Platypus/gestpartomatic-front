@@ -49,6 +49,11 @@ export default {
             ]
         };
     },
+    computed: {
+        user: function() {
+            return this.$store.state.auth;
+        }
+    },
     methods: {
         // Déconnexion
         async logout() {
@@ -64,11 +69,6 @@ export default {
                         color: 'error'
                     });
                 });
-        }
-    },
-    computed: {
-        user: function() {
-            return this.$store.state.auth;
         }
     }
 };

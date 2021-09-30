@@ -16,7 +16,12 @@ import FileReader from '../commons/FileReader.vue';
 
 export default {
     components: { FileReader },
-    props: ['color', 'depressed', 'outlined', 'small'],
+    props: {
+        color: String,
+        depressed: Boolean,
+        outlined: Boolean,
+        small: Boolean
+    },
     data() {
         return {};
     },

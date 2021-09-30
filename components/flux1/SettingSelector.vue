@@ -86,7 +86,9 @@ import ColorSelector from '../commons/ColorSelector.vue';
 export default {
     name: 'setting-selector',
     components: { ColorSelector },
-    props: ['settingId'],
+    props: {
+        settingId: Number
+    },
     data() {
         return {
             articlesList: [
@@ -101,24 +103,6 @@ export default {
                 { text: 'Article 8', value: 8 }
             ]
         };
-    },
-    methods: {
-        getLabel(item) {
-            return 'Pos. ' + item.position + ' - ' + item.label;
-        },
-        updateSetting(prop, value) {
-            this.$store.commit('flux1/updateSetting', {
-                settingId: this.settingId,
-                prop,
-                value
-            });
-        },
-        toggleInvert() {
-            this.setting.invert = !this.setting.invert;
-        },
-        remove() {
-            this.$store.commit('flux1/removeSetting', this.setting);
-        }
     },
     computed: {
         propertiesList() {
@@ -138,6 +122,24 @@ export default {
             return this.$store.state.flux1.selection;
         },
         ...mapGetters('flux1', ['getArticle', 'getSetting'])
+    },
+    methods: {
+        getLabel(item) {
+            return 'Pos. ' + item.position + ' - ' + item.label;
+        },
+        updateSetting(prop, value) {
+            this.$store.commit('flux1/updateSetting', {
+                settingId: this.settingId,
+                prop,
+                value
+            });
+        },
+        toggleInvert() {
+            this.setting.invert = !this.setting.invert;
+        },
+        remove() {
+            this.$store.commit('flux1/removeSetting', this.setting);
+        }
     }
 };
 </script>

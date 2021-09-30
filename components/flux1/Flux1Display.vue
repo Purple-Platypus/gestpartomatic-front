@@ -28,7 +28,25 @@
 <script>
 export default {
     components: {},
-    props: ['flux1', 'padding'],
+    props: {
+        flux1: Array,
+        padding: Boolean
+    },
+    computed: {
+        highlight() {
+            const highlightList = {};
+            this.selection.forEach(prop => {
+                highlightList[prop.propertyId] = prop.style;
+            });
+            return highlightList;
+        },
+        filteredflux1() {
+            return this.filterflux1();
+        },
+        selection() {
+            return this.$store.state.flux1.selection;
+        }
+    },
     methods: {
         getStyle(propertyId) {
             const padStyle = this.padding ? ' mr-2' : '';
@@ -84,21 +102,6 @@ export default {
             }
 
             return match;
-        }
-    },
-    computed: {
-        highlight() {
-            const highlightList = {};
-            this.selection.forEach(prop => {
-                highlightList[prop.propertyId] = prop.style;
-            });
-            return highlightList;
-        },
-        filteredflux1() {
-            return this.filterflux1();
-        },
-        selection() {
-            return this.$store.state.flux1.selection;
         }
     }
 };

@@ -73,8 +73,11 @@ import 'cropperjs/dist/cropper.css';
 
 export default {
     name: 'avatar-selector',
-    components: {},
-    props: ['src', 'source-string', 'small'],
+    props: {
+        src: String,
+        'source-string': String,
+        small: Boolean
+    },
     data() {
         return {
             avatar: this.src,
@@ -84,6 +87,15 @@ export default {
             noUpload: true,
             cropper: {}
         };
+    },
+    watch: {
+        sourceString: function() {
+            if (this.sourceString != '' && this.noUpload) {
+                const generatedAvatar = this.generateAvatar(this.sourceString);
+                this.avatar = generatedAvatar;
+                this.$emit('change', generatedAvatar);
+            }
+        }
     },
     methods: {
         generateAvatar(sourceString) {
@@ -178,16 +190,6 @@ export default {
         },
         closeModal() {
             this.showAvatarEditorModal = false;
-        }
-    },
-    computed: {},
-    watch: {
-        sourceString: function() {
-            if (this.sourceString != '' && this.noUpload) {
-                const generatedAvatar = this.generateAvatar(this.sourceString);
-                this.avatar = generatedAvatar;
-                this.$emit('change', generatedAvatar);
-            }
         }
     }
 };

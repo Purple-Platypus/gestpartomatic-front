@@ -11,19 +11,16 @@
                 </v-row>
             </v-container>
         </v-main>
-        <snackbar />
+        <global-snackbar />
     </v-app>
 </template>
 
 <script>
-import Snackbar from '../components/commons/Snackbar';
+import GlobalSnackbar from '../components/commons/GlobalSnackbar';
 
 export default {
     components: {
-        Snackbar
-    },
-    data() {
-        return {};
+        GlobalSnackbar
     }
 };
 </script>

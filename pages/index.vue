@@ -1,14 +1,15 @@
 <template>
     <v-row class="fill-height">
-        <h1 class="text-h3 font-weight-light">
-            Gestpartomatic
-        </h1>
+        <v-col cols="3">
+            <todo-list></todo-list>
+        </v-col>
     </v-row>
 </template>
 
 <script>
+import TodoList from '../components/todos/TodoList.vue';
 export default {
-    components: {},
+    components: { TodoList },
     head: () => ({
         title: 'Accueil'
     }),

@@ -23,15 +23,15 @@
 
 <script>
 export default {
-    props: [
-        'accept',
-        'color',
-        'depressed',
-        'multiple',
-        'outlined',
-        'small',
-        'text'
-    ],
+    props: {
+        accept: String,
+        color: String,
+        depressed: Boolean,
+        multiple: Boolean,
+        outlined: Boolean,
+        small: Boolean,
+        text: String
+    },
     methods: {
         activateUploader() {
             this.$refs.fileInput.click();

@@ -18,14 +18,36 @@
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
+                        class="mr-2"
                         icon
-                        x-small
+                        small
+                        @click="switchSort"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon
+                            :color="sortDisplay[sortType].color"
+                            size="20px"
+                        >
+                            mdi-{{ sortDisplay[sortType].icon }}
+                        </v-icon>
+                    </v-btn>
+                </template>
+                <span>Trier</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        icon
+                        small
                         @click="toggleShowArchive"
                         v-bind="attrs"
                         v-on="on"
                     >
                         <v-icon
                             :color="showArchive ? 'green' : 'grey lighten-1'"
+                            size="20px"
                         >
                             mdi-checkbox-marked-circle-outline
                         </v-icon>
@@ -84,6 +106,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import TodoListItem from './TodoListItem.vue';
 import TodoListFormCreate from './TodoListFormCreate.vue';
 import TodoListFormUpdate from '../todos/TodoListFormUpdate.vue';
@@ -94,6 +117,12 @@ export default {
     components: { TodoListItem, TodoListFormCreate, TodoListFormUpdate },
     data() {
         return {
+            sortType: 'none',
+            sortDisplay: {
+                none: { color: 'grey', icon: 'calendar-remove' },
+                asc: { color: 'primary', icon: 'sort-calendar-ascending' },
+                desc: { color: 'primary', icon: 'sort-calendar-descending' }
+            },
             showArchive: false,
             isVisibleAddForm: false,
             visibleUpdateForm: null
@@ -102,13 +131,14 @@ export default {
     computed: {
         todosList: function() {
             if (this.showArchive) {
-                return this.$store.getters['todos/userTodos'];
+                return this.sortTodosList(this.userTodos);
             } else {
-                return this.$store.getters['todos/userTodos'].filter(
-                    todo => !todo.isArchived
+                return this.sortTodosList(
+                    this.userTodos.filter(todo => !todo.isArchived)
                 );
             }
-        }
+        },
+        ...mapGetters('todos', ['userTodos'])
     },
     async fetch() {
         await this.$axios
@@ -124,6 +154,39 @@ export default {
             });
     },
     methods: {
+        switchSort() {
+            switch (this.sortType) {
+                case 'none':
+                    this.sortType = 'asc';
+                    break;
+                case 'asc':
+                    this.sortType = 'desc';
+                    break;
+                default:
+                    this.sortType = 'none';
+                    break;
+            }
+        },
+        sortTodosList(todosList) {
+            const sortFunction = this.getFilter();
+            return todosList.sort(sortFunction);
+        },
+        getFilter() {
+            switch (this.sortType) {
+                case 'asc':
+                    return (a, b) => {
+                        return '' + a.deadline > '' + b.deadline;
+                    };
+                case 'desc':
+                    return (a, b) => {
+                        return '' + a.deadline < '' + b.deadline;
+                    };
+                default:
+                    return (a, b) => {
+                        return a.rank > b.rank;
+                    };
+            }
+        },
         toggleShowArchive() {
             this.showArchive = !this.showArchive;
         },

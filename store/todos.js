@@ -39,7 +39,8 @@ export const getters = {
                 return {
                     id: todoId,
                     isArchived: state.todos[todoId].isArchived,
-                    rank: state.todos[todoId].rank
+                    rank: state.todos[todoId].rank,
+                    deadline: state.todos[todoId].deadline
                 };
             })
             .sort((a, b) => {

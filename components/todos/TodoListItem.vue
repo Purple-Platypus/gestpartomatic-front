@@ -1,11 +1,11 @@
 <template>
     <div class="d-flex flex-column">
-        <v-list-item>
+        <v-list-item :class="{ 'no-ellipsis': isFullContentVisible }">
             <v-list-item-icon
                 class="ma-0 pr-4 align-self-center"
                 @click="handleToggle"
             >
-                <v-icon v-if="!displayArchive" color="grey">
+                <v-icon v-if="!isContentStroked" color="grey">
                     mdi-checkbox-blank-circle-outline
                 </v-icon>
                 <v-icon v-else color="grey">
@@ -16,9 +16,10 @@
             <v-list-item-content
                 class="pt-2 pb-1"
                 :class="{
-                    'text-decoration-line-through': displayArchive
+                    'text-decoration-line-through': isContentStroked
                 }"
                 @dblclick="$emit('dblclick')"
+                @click="toggleFullContent"
             >
                 <v-list-item-title v-text="todo.title"></v-list-item-title>
                 <v-list-item-subtitle
@@ -67,7 +68,8 @@ export default {
     },
     data() {
         return {
-            displayArchive: false
+            isContentStroked: false,
+            isFullContentVisible: false
         };
     },
     computed: {
@@ -93,7 +95,7 @@ export default {
         ...mapGetters('todos', ['todoById'])
     },
     mounted() {
-        this.displayArchive = this.todo.isArchived;
+        this.isContentStroked = this.todo.isArchived;
     },
     methods: {
         handleToggle() {
@@ -110,7 +112,7 @@ export default {
             }
         },
         toggleDisplay() {
-            this.displayArchive = !this.displayArchive;
+            this.isContentStroked = !this.isContentStroked;
         },
         setCountDown(color, callback) {
             const delay = 2000;
@@ -152,6 +154,9 @@ export default {
                     });
                 });
         },
+        toggleFullContent() {
+            this.isFullContentVisible = !this.isFullContentVisible;
+        },
         async remove() {
             console.log('remove');
         }
@@ -170,5 +175,11 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.no-ellipsis .v-list-item__title,
+.no-ellipsis .v-list-item__subtitle {
+    text-overflow: inherit;
+    overflow: inherit;
+    white-space: inherit;
 }
 </style>

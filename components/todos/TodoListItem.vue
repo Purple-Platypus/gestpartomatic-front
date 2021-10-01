@@ -1,6 +1,11 @@
 <template>
     <div class="d-flex flex-column">
-        <v-list-item :class="{ 'no-ellipsis': isFullContentVisible }">
+        <v-list-item
+            :class="{
+                'no-ellipsis': isFullContentVisible,
+                'grey lighten-3': todo.isArchived
+            }"
+        >
             <v-list-item-icon
                 class="ma-0 pr-4 align-self-center"
                 @click="handleToggle"
@@ -45,7 +50,7 @@
         </v-list-item>
 
         <v-progress-linear
-            background-color="white"
+            :background-color="todo.isArchived ? 'grey lighten-3' : 'white'"
             bottom
             class="progress--no-transition"
             :color="progress.color || 'primary'"

@@ -35,7 +35,6 @@
 import { mapGetters } from 'vuex';
 import TodoListForm from './TodoListForm.vue';
 import TodoCountdown from './mixins/TodoCountdown.mixin';
-import messages from '~/assets/messages.json';
 
 export default {
     name: 'todo-list-form-update',

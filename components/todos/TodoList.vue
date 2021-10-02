@@ -46,10 +46,10 @@
                         v-on="on"
                     >
                         <v-icon
-                            :color="showArchive ? 'green' : 'grey lighten-1'"
+                            :color="showArchive ? 'primary' : 'grey'"
                             size="20px"
                         >
-                            mdi-checkbox-marked-circle-outline
+                            mdi-archive
                         </v-icon>
                     </v-btn>
                 </template>
@@ -85,28 +85,35 @@
 
             <v-divider></v-divider>
 
-            <template v-for="(todo, index) in todosList">
-                <todo-list-form-update
-                    v-if="visibleUpdateForm == todo.id"
-                    :todoId="todo.id"
-                    :key="todo.id"
-                    @close="visibleUpdateForm = null"
-                />
-                <todo-list-item
-                    v-else
-                    :todoId="todo.id"
-                    :key="todo.id"
-                    @dblclick="toggleUpdateForm(todo.id)"
-                ></todo-list-item>
+            <draggable
+                :disabled="sortType != 'none'"
+                v-model="todosList"
+                ghostClass="grey"
+                dragClass="elevation-4"
+            >
+                <div v-for="todo in todosList" :key="todo.id">
+                    <todo-list-form-update
+                        v-if="visibleUpdateForm == todo.id"
+                        :todoId="todo.id"
+                        @close="visibleUpdateForm = null"
+                    />
+                    <todo-list-item
+                        v-else
+                        :todoId="todo.id"
+                        :key="todo.id"
+                        @dblclick="toggleUpdateForm(todo.id)"
+                    ></todo-list-item>
 
-                <v-divider :key="'todo-list-divider-' + index" />
-            </template>
+                    <v-divider />
+                </div>
+            </draggable>
         </v-card-text>
     </v-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import draggable from 'vuedraggable';
 import TodoListItem from './TodoListItem.vue';
 import TodoListFormCreate from './TodoListFormCreate.vue';
 import TodoListFormUpdate from '../todos/TodoListFormUpdate.vue';
@@ -114,7 +121,12 @@ import messages from '~/assets/messages.json';
 
 export default {
     name: 'todo-list',
-    components: { TodoListItem, TodoListFormCreate, TodoListFormUpdate },
+    components: {
+        draggable,
+        TodoListItem,
+        TodoListFormCreate,
+        TodoListFormUpdate
+    },
     data() {
         return {
             sortType: 'none',
@@ -129,16 +141,23 @@ export default {
         };
     },
     computed: {
-        todosList: function() {
-            if (this.showArchive) {
-                return this.sortTodosList(this.userTodos);
-            } else {
-                return this.sortTodosList(
-                    this.userTodos.filter(todo => !todo.isArchived)
-                );
+        todosList: {
+            get() {
+                if (this.showArchive) {
+                    return this.archivedTodos;
+                } else {
+                    return this.sortTodosList(this.activeTodos);
+                }
+            },
+            set(list) {
+                const newTodosSorting = list.map(listItem => {
+                    return listItem.id;
+                });
+
+                console.log(newTodosSorting);
             }
         },
-        ...mapGetters('todos', ['userTodos'])
+        ...mapGetters('todos', ['activeTodos', 'archivedTodos'])
     },
     async fetch() {
         await this.$axios

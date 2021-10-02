@@ -7,7 +7,7 @@
             }"
         >
             <v-list-item-icon
-                class="ma-0 pr-4 align-self-center"
+                class="ma-0 pt-1 pr-4 align-self-center"
                 @click="handleToggle"
             >
                 <v-icon v-if="!isContentStroked" color="grey">
@@ -16,6 +16,7 @@
                 <v-icon v-else color="grey">
                     mdi-checkbox-marked-circle-outline
                 </v-icon>
+                {{ todo.rank }}
             </v-list-item-icon>
 
             <v-list-item-content

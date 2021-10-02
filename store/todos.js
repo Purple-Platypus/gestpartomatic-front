@@ -11,9 +11,6 @@ export const mutations = {
         state.todosList.push(todo.id);
         Vue.set(state.todos, todo.id, todo);
     },
-    setArchive(state, { todoId, status }) {
-        Vue.set(state.todos[todoId], 'isArchived', status);
-    },
     update(state, updatedTodo) {
         const updatedId = updatedTodo.id;
         Vue.set(state.todos, updatedId, updatedTodo);

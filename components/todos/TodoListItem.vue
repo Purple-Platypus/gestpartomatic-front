@@ -142,29 +142,18 @@ export default {
                 }
             }, delay);
         },
-        async setArchive(status) {
-            await this.$axios
-                .$patch('/api/todos/' + this.todoId, {
-                    isArchived: status
-                })
-                .then(res => {
-                    this.$store.commit('todos/setArchive', {
-                        todoId: this.todoId,
-                        status
-                    });
-                })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
-                });
+        async setArchive(isArchived) {
+            const updatePayload = {
+                isArchived,
+                rank: -1
+            };
+            this.$store.dispatch('todos/modify', {
+                updatePayload,
+                todoId: this.todoId
+            });
         },
         toggleFullContent() {
             this.isFullContentVisible = !this.isFullContentVisible;
-        },
-        async remove() {
-            console.log('remove');
         }
     }
 };

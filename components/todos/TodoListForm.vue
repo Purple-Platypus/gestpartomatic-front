@@ -21,6 +21,7 @@
                             ref="inputDescription"
                             required
                             rows="2"
+                            @keyup.ctrl.enter="submit"
                         ></v-textarea>
                     </v-col>
                 </v-row>

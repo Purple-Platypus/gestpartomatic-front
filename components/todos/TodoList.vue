@@ -15,7 +15,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom>
+            <v-tooltip v-if="!showArchive" bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         class="mr-2"
@@ -49,11 +49,14 @@
                             :color="showArchive ? 'primary' : 'grey'"
                             size="20px"
                         >
-                            mdi-archive
+                            mdi-{{ showArchive ? 'archive' : 'archive-off' }}
                         </v-icon>
                     </v-btn>
                 </template>
-                <span>Afficher les tâches terminées</span>
+                <span
+                    >Afficher les tâches
+                    {{ showArchive ? 'en cours' : 'terminées' }}</span
+                >
             </v-tooltip>
         </v-card-title>
 
@@ -88,7 +91,7 @@
             <draggable
                 :disabled="sortType != 'none'"
                 v-model="todosList"
-                ghostClass="grey"
+                ghostClass="ghost"
                 dragClass="elevation-4"
             >
                 <div v-for="todo in todosList" :key="todo.id">
@@ -112,7 +115,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import draggable from 'vuedraggable';
 import TodoListItem from './TodoListItem.vue';
 import TodoListFormCreate from './TodoListFormCreate.vue';
@@ -150,11 +153,13 @@ export default {
                 }
             },
             set(list) {
-                const newTodosSorting = list.map(listItem => {
-                    return listItem.id;
+                const newTodosSorting = list.map((todo, index) => {
+                    return {
+                        id: todo.id,
+                        rank: index
+                    };
                 });
-
-                console.log(newTodosSorting);
+                this.resetRanking(newTodosSorting);
             }
         },
         ...mapGetters('todos', ['activeTodos', 'archivedTodos'])
@@ -216,22 +221,6 @@ export default {
                 this.$refs.todoListFormCreate.$refs.todoListForm.$refs.inputDescription.focus();
             });
         },
-        async sendTodo() {
-            const createPayload = {
-                rank: this.todosList.length
-            };
-            await this.$axios
-                .$post('/api/todos', createPayload)
-                .then(res => {
-                    this.$store.commit('todos/add', res);
-                })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
-                });
-        },
         toggleUpdateForm(todoId) {
             this.visibleUpdateForm = todoId;
             this.dismissCreateForm();
@@ -245,7 +234,14 @@ export default {
         },
         dismissUpdateForm() {
             this.visibleUpdateForm = null;
-        }
+        },
+        ...mapActions('todos', ['resetRanking'])
     }
 };
 </script>
+
+<style scoped>
+.ghost {
+    background-color: #eeeeee;
+}
+</style>

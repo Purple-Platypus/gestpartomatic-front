@@ -16,7 +16,6 @@
                 <v-icon v-else color="grey">
                     mdi-checkbox-marked-circle-outline
                 </v-icon>
-                {{ todo.rank }}
             </v-list-item-icon>
 
             <v-list-item-content

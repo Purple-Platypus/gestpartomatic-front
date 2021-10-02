@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import messages from '~/assets/messages.json';
 
 export const state = () => ({
     todosList: [],
@@ -29,6 +30,40 @@ export const actions = {
         todosList.forEach(todo => {
             context.commit('add', todo);
         });
+    },
+    async create({ commit }, createPayload) {
+        await this.$axios
+            .$post('/api/todos', createPayload)
+            .then(res => {
+                commit('add', res);
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
+    },
+    async modify({ commit }, { todoId, updatePayload }) {
+        await this.$axios
+            .$patch('/api/todos/' + todoId, updatePayload)
+            .then(res => {
+                commit('update', res);
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
     }
 };
 

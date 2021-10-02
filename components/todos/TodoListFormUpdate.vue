@@ -68,17 +68,13 @@ export default {
                 deadline: updatedTodo.deadline
             };
 
-            await this.$axios
-                .$patch('/api/todos/' + this.todoId, updatePayload)
-                .then(res => {
-                    this.$store.commit('todos/update', res);
-                    this.$emit('close');
+            this.$store
+                .dispatch('todos/modify', {
+                    updatePayload,
+                    todoId: this.todoId
                 })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
+                .then(() => {
+                    this.$emit('close');
                 });
         },
         startCountdown() {

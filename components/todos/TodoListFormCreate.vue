@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import messages from '~/assets/messages.json';
 import TodoListForm from './TodoListForm.vue';
 
 export default {
@@ -28,18 +27,9 @@ export default {
                 rank: this.$store.state.todos.todosList.length
             };
 
-            await this.$axios
-                .$post('/api/todos', createPayload)
-                .then(res => {
-                    this.$store.commit('todos/add', res);
-                    this.$emit('close');
-                })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
-                });
+            this.$store.dispatch('todos/create', createPayload).then(() => {
+                this.$emit('close');
+            });
         }
     }
 };

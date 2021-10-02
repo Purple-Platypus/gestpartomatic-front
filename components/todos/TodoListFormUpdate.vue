@@ -86,17 +86,7 @@ export default {
             });
         },
         async remove() {
-            await this.$axios
-                .$delete('/api/todos/' + this.todoId)
-                .then(res => {
-                    this.$store.commit('todos/remove', this.todoId);
-                })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
-                });
+            this.$store.dispatch('todos/remove', this.todoId);
         },
         abortRemove() {
             this.stopCountdown();

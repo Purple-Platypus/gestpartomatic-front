@@ -18,7 +18,7 @@ export const mutations = {
         const updatedId = updatedTodo.id;
         Vue.set(state.todos, updatedId, updatedTodo);
     },
-    remove(state, todoId) {
+    delete(state, todoId) {
         const deletedIndex = state.todosList.indexOf(todoId);
         Vue.delete(state.todosList, deletedIndex);
         Vue.delete(state.todos, todoId);
@@ -53,6 +53,23 @@ export const actions = {
             .$patch('/api/todos/' + todoId, updatePayload)
             .then(res => {
                 commit('update', res);
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
+    },
+    async remove({ commit }, todoId) {
+        await this.$axios
+            .$delete('/api/todos/' + todoId)
+            .then(() => {
+                commit('delete', todoId);
             })
             .catch(err => {
                 commit(

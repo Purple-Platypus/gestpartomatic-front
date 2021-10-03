@@ -36,31 +36,55 @@
             </v-col>
 
             <v-col class="d-flex flex-column flex-grow-0 pl-1 pr-5">
-                <v-btn
-                    color="primary"
-                    icon
-                    :disabled="!formData.description"
-                    fab
-                    x-small
-                    type="submit"
-                >
-                    <v-icon size="24px">
-                        mdi-check-circle
-                    </v-icon>
-                </v-btn>
+                <v-tooltip v-if="!showArchive" bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            color="primary"
+                            icon
+                            :disabled="!formData.description"
+                            fab
+                            x-small
+                            type="submit"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon size="24px">
+                                mdi-check-circle
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>
+                        Enregistrer <br />
+                        <kbd class="mr-2">
+                            Ctrl + Entrée
+                        </kbd>
+                    </span>
+                </v-tooltip>
 
-                <v-btn
-                    v-if="removable"
-                    fab
-                    color="error"
-                    icon
-                    x-small
-                    @click="remove"
-                >
-                    <v-icon size="24px">
-                        mdi-delete-circle
-                    </v-icon>
-                </v-btn>
+                <v-tooltip v-if="!showArchive" bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            v-if="removable"
+                            fab
+                            color="error"
+                            icon
+                            x-small
+                            @click="remove"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon size="24px">
+                                mdi-delete-circle
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>
+                        Annuler <br />
+                        <kbd class="mr-2">
+                            Échap.
+                        </kbd>
+                    </span>
+                </v-tooltip>
             </v-col>
         </v-row>
     </v-form>

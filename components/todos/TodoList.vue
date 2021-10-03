@@ -76,6 +76,9 @@
                         class="flex-grow-1 text-body-1 font-weight-light primary--text"
                     >
                         Ajouter une tâche
+                        <kbd class="ml-2">
+                            +
+                        </kbd>
                     </v-col>
                 </v-row>
             </v-container>
@@ -117,6 +120,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import draggable from 'vuedraggable';
+import ShortkeysEmitter from '../commons/mixins/ShortkeysEmitter.mixin';
 import TodoListItem from './TodoListItem.vue';
 import TodoListFormCreate from './TodoListFormCreate.vue';
 import TodoListFormUpdate from '../todos/TodoListFormUpdate.vue';
@@ -130,6 +134,7 @@ export default {
         TodoListFormCreate,
         TodoListFormUpdate
     },
+    mixins: [ShortkeysEmitter],
     data() {
         return {
             sortType: 'none',
@@ -178,6 +183,16 @@ export default {
             });
     },
     methods: {
+        handleShortkey(e) {
+            switch (e.key) {
+                case '+':
+                    this.addTodo();
+                    break;
+                case 'Escape':
+                    this.dismissAll();
+                    break;
+            }
+        },
         switchSort() {
             switch (this.sortType) {
                 case 'none':

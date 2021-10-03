@@ -1,6 +1,6 @@
 <template>
     <v-row class="fill-height">
-        <v-col cols="3">
+        <v-col class="pa-0" cols="3">
             <todo-list></todo-list>
         </v-col>
     </v-row>
@@ -13,6 +13,13 @@ export default {
     head: () => ({
         title: 'Accueil'
     }),
-    computed: {}
+    computed: {},
+    mounted() {
+        const shortkeys = [
+            { keys: '+', label: 'Ajouter une tâche' },
+            { keys: 'Ctrl + A', label: 'Ajouter une tâche' }
+        ];
+        this.$store.commit('help/set', shortkeys);
+    }
 };
 </script>

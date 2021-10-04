@@ -2,13 +2,17 @@ import Vue from 'vue';
 import messages from '~/assets/messages.json';
 
 export const state = () => ({
-    todosList: [],
+    todoList: [],
     todos: {}
 });
 
 export const mutations = {
+    reset(state) {
+        state.todoList = [];
+        state.todos = {};
+    },
     add(state, todo) {
-        state.todosList.push(todo.id);
+        state.todoList.push(todo.id);
         Vue.set(state.todos, todo.id, todo);
     },
     update(state, updatedTodo) {
@@ -21,17 +25,28 @@ export const mutations = {
         });
     },
     delete(state, todoId) {
-        const deletedIndex = state.todosList.indexOf(todoId);
-        Vue.delete(state.todosList, deletedIndex);
+        const deletedIndex = state.todoList.indexOf(todoId);
+        Vue.delete(state.todoList, deletedIndex);
         Vue.delete(state.todos, todoId);
     }
 };
 
 export const actions = {
-    init(context, todosList) {
-        todosList.forEach(todo => {
-            context.commit('add', todo);
-        });
+    async init(context) {
+        await this.$axios
+            .$get('/api/todos')
+            .then(res => {
+                context.commit('reset');
+                res.forEach(todo => {
+                    context.commit('add', todo);
+                });
+            })
+            .catch(err => {
+                this.$store.commit('snackbar/setSnackbar', {
+                    text: messages.errors.generic,
+                    color: 'error'
+                });
+            });
     },
     async create({ commit }, createPayload) {
         await this.$axios
@@ -117,7 +132,7 @@ export const actions = {
 
 export const getters = {
     allTodos: state => {
-        return state.todosList
+        return state.todoList
             .map(todoId => {
                 return {
                     id: todoId,

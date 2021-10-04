@@ -177,17 +177,7 @@ export default {
         ...mapGetters('todos', ['activeTodos', 'doneTodos'])
     },
     async fetch() {
-        await this.$axios
-            .$get('/api/todos')
-            .then(res => {
-                this.$store.dispatch('todos/init', res);
-            })
-            .catch(err => {
-                this.$store.commit('snackbar/setSnackbar', {
-                    text: messages.errors.generic,
-                    color: 'error'
-                });
-            });
+        this.$store.dispatch('todos/init');
     },
     methods: {
         handleShortkey(e) {

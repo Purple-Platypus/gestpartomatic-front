@@ -22,6 +22,7 @@
                             required
                             rows="2"
                             @keyup.ctrl.enter="submit"
+                            @keyup.ctrl.delete="remove"
                         ></v-textarea>
                     </v-col>
                 </v-row>
@@ -36,7 +37,7 @@
             </v-col>
 
             <v-col class="d-flex flex-column flex-grow-0 pl-1 pr-5">
-                <v-tooltip v-if="!showArchive" bottom>
+                <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
                             color="primary"
@@ -61,7 +62,7 @@
                     </span>
                 </v-tooltip>
 
-                <v-tooltip v-if="!showArchive" bottom>
+                <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
                             v-if="removable"
@@ -79,9 +80,9 @@
                         </v-btn>
                     </template>
                     <span>
-                        Annuler <br />
+                        Supprimer <br />
                         <kbd class="mr-2">
-                            Échap.
+                            Ctrl. + Suppr.
                         </kbd>
                     </span>
                 </v-tooltip>

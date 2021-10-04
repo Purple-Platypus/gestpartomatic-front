@@ -15,7 +15,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip v-if="!showArchive" bottom>
+            <v-tooltip v-if="!showDone" bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         class="mr-2"
@@ -41,26 +41,37 @@
                     <v-btn
                         icon
                         small
-                        @click="toggleShowArchive"
+                        @click="toggleShowDone"
                         v-bind="attrs"
                         v-on="on"
                     >
                         <v-icon
-                            :color="showArchive ? 'primary' : 'grey'"
+                            :color="showDone ? 'primary' : 'grey'"
                             size="20px"
                         >
-                            mdi-{{ showArchive ? 'archive' : 'archive-off' }}
+                            mdi-{{ showDone ? 'archive' : 'archive-off' }}
                         </v-icon>
                     </v-btn>
                 </template>
                 <span
                     >Afficher les tâches
-                    {{ showArchive ? 'en cours' : 'terminées' }}</span
+                    {{ showDone ? 'en cours' : 'terminées' }}</span
                 >
             </v-tooltip>
         </v-card-title>
 
-        <v-card-text class="pa-0">
+        <v-card-text class="pa-0" v-if="showDone">
+            <div v-for="doneTodo in doneTodos" :key="doneTodo.id">
+                <todo-list-item-done
+                    :todoId="doneTodo.id"
+                    :key="doneTodo.id"
+                ></todo-list-item-done>
+
+                <v-divider />
+            </div>
+        </v-card-text>
+
+        <v-card-text class="pa-0" v-else>
             <v-container class="pa-0" v-if="!isVisibleAddForm">
                 <v-row
                     class="py-2 align-center cursor-pointer"
@@ -76,9 +87,6 @@
                         class="flex-grow-1 text-body-1 font-weight-light primary--text"
                     >
                         Ajouter une tâche
-                        <kbd class="ml-2">
-                            +
-                        </kbd>
                     </v-col>
                 </v-row>
             </v-container>
@@ -101,6 +109,7 @@
                     <todo-list-form-update
                         v-if="visibleUpdateForm == todo.id"
                         :todoId="todo.id"
+                        ref="todoListFormUpdate"
                         @close="visibleUpdateForm = null"
                     />
                     <todo-list-item
@@ -122,6 +131,7 @@ import { mapGetters, mapActions } from 'vuex';
 import draggable from 'vuedraggable';
 import ShortkeysEmitter from '../commons/mixins/ShortkeysEmitter.mixin';
 import TodoListItem from './TodoListItem.vue';
+import TodoListItemDone from './TodoListItemDone.vue';
 import TodoListFormCreate from './TodoListFormCreate.vue';
 import TodoListFormUpdate from '../todos/TodoListFormUpdate.vue';
 import messages from '~/assets/messages.json';
@@ -131,6 +141,7 @@ export default {
     components: {
         draggable,
         TodoListItem,
+        TodoListItemDone,
         TodoListFormCreate,
         TodoListFormUpdate
     },
@@ -143,7 +154,7 @@ export default {
                 asc: { color: 'primary', icon: 'sort-calendar-ascending' },
                 desc: { color: 'primary', icon: 'sort-calendar-descending' }
             },
-            showArchive: false,
+            showDone: false,
             isVisibleAddForm: false,
             visibleUpdateForm: null
         };
@@ -151,11 +162,7 @@ export default {
     computed: {
         todosList: {
             get() {
-                if (this.showArchive) {
-                    return this.archivedTodos;
-                } else {
-                    return this.sortTodosList(this.activeTodos);
-                }
+                return this.sortTodosList(this.activeTodos);
             },
             set(list) {
                 const newTodosSorting = list.map((todo, index) => {
@@ -167,7 +174,7 @@ export default {
                 this.resetRanking(newTodosSorting);
             }
         },
-        ...mapGetters('todos', ['activeTodos', 'archivedTodos'])
+        ...mapGetters('todos', ['activeTodos', 'doneTodos'])
     },
     async fetch() {
         await this.$axios
@@ -226,8 +233,8 @@ export default {
                     };
             }
         },
-        toggleShowArchive() {
-            this.showArchive = !this.showArchive;
+        toggleShowDone() {
+            this.showDone = !this.showDone;
         },
         addTodo() {
             this.isVisibleAddForm = true;
@@ -239,6 +246,9 @@ export default {
         toggleUpdateForm(todoId) {
             this.visibleUpdateForm = todoId;
             this.dismissCreateForm();
+            this.$nextTick().then(() => {
+                this.$refs.todoListFormUpdate[0].$refs.todoListForm.$refs.inputDescription.focus();
+            });
         },
         dismissAll() {
             this.dismissCreateForm();

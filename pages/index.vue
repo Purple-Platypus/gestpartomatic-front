@@ -15,10 +15,7 @@ export default {
     }),
     computed: {},
     mounted() {
-        const shortkeys = [
-            { keys: '+', label: 'Ajouter une tâche' },
-            { keys: 'Ctrl + A', label: 'Ajouter une tâche' }
-        ];
+        const shortkeys = [{ keys: '+', label: 'Ajouter une tâche' }];
         this.$store.commit('help/set', shortkeys);
     }
 };

@@ -4,12 +4,13 @@
             :class="{
                 'no-ellipsis': isFullContentVisible
             }"
+            class="grey lighten-3"
         >
             <v-list-item-icon
                 class="ma-0 pt-1 pr-4 align-self-center"
                 @click="handleToggle"
             >
-                <v-icon v-if="!isContentStroked" color="grey">
+                <v-icon v-if="!todo.isDone" color="grey">
                     mdi-checkbox-blank-circle-outline
                 </v-icon>
                 <v-icon v-else color="grey">
@@ -18,10 +19,7 @@
             </v-list-item-icon>
 
             <v-list-item-content
-                class="pt-2 pb-1"
-                :class="{
-                    'text-decoration-line-through': isContentStroked
-                }"
+                class="pt-2 pb-1 text-decoration-line-through"
                 @dblclick="$emit('dblclick')"
                 @click="toggleFullContent"
             >
@@ -33,14 +31,10 @@
                 </v-list-item-subtitle>
 
                 <v-list-item-subtitle
-                    :class="
-                        'text-caption  mt-1 ' +
-                            (isLate ? 'error' : 'blue-grey') +
-                            '--text'
-                    "
+                    class="text-caption  mt-1 blue-grey--text"
                     v-if="todo.deadline"
                 >
-                    <v-icon :color="isLate ? 'error' : 'blue-grey'" small>
+                    <v-icon color="blue-grey" small>
                         mdi-calendar
                     </v-icon>
                     {{ displayDeadline }}
@@ -49,7 +43,7 @@
         </v-list-item>
 
         <v-progress-linear
-            background-color="white"
+            background-color="grey lighten-3"
             bottom
             class="progress--no-transition"
             :color="progress.color || 'primary'"
@@ -70,7 +64,6 @@ export default {
     },
     data() {
         return {
-            isContentStroked: false,
             isFullContentVisible: false
         };
     },
@@ -91,29 +84,19 @@ export default {
                 .toLocaleDateString('fr-fr', options)
                 .replace(', ', ' à ');
         },
-        isLate() {
-            return new Date() > new Date(this.todo.deadline);
-        },
         ...mapGetters('todos', ['todoById'])
     },
     methods: {
         handleToggle() {
-            this.toggleDisplay();
-
             if (this.progress.key) {
                 this.stopCountdown();
             } else {
-                this.setCountDown('primary', () => {
-                    this.setDone(true);
-                });
+                this.setNotDone();
             }
         },
-        toggleDisplay() {
-            this.isContentStroked = !this.isContentStroked;
-        },
-        async setDone() {
+        async setNotDone() {
             const updatePayload = {
-                isDone: true,
+                isDone: false,
                 rank: -1
             };
             this.$store.dispatch('todos/modify', {

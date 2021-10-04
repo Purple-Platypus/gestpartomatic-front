@@ -12,7 +12,11 @@
             />
 
             <v-overlay absolute class="mb-1" :value="isOverlayVisible">
-                <v-btn color="error" @click="abortRemove">
+                <v-btn
+                    color="error"
+                    ref="abortRemoveButton"
+                    @click="abortRemove"
+                >
                     <v-icon left>
                         mdi-close-circle-outline
                     </v-icon>
@@ -79,6 +83,10 @@ export default {
         startCountdown() {
             this.isOverlayVisible = true;
 
+            this.$nextTick().then(() => {
+                this.$refs.abortRemoveButton.$el.focus();
+            });
+
             this.setCountDown('error', () => {
                 this.isOverlayVisible = false;
                 this.remove();
@@ -90,6 +98,7 @@ export default {
         abortRemove() {
             this.stopCountdown();
             this.isOverlayVisible = false;
+            this.$refs.todoListForm.$refs.inputDescription.focus();
         }
     }
 };

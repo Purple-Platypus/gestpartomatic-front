@@ -121,7 +121,7 @@ export const getters = {
             .map(todoId => {
                 return {
                     id: todoId,
-                    isArchived: state.todos[todoId].isArchived,
+                    isDone: state.todos[todoId].isDone,
                     rank: state.todos[todoId].rank,
                     deadline: state.todos[todoId].deadline,
                     updatedAt: state.todos[todoId].updatedAt
@@ -132,11 +132,11 @@ export const getters = {
             });
     },
     activeTodos: (state, getters) => {
-        return getters.allTodos.filter(todo => !todo.isArchived);
+        return getters.allTodos.filter(todo => !todo.isDone);
     },
-    archivedTodos: (state, getters) => {
+    doneTodos: (state, getters) => {
         return getters.allTodos
-            .filter(todo => todo.isArchived)
+            .filter(todo => todo.isDone)
             .sort((a, b) => {
                 return a.updatedAt > b.updatedAt;
             });

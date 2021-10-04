@@ -5,25 +5,34 @@
         :close-on-content-click="false"
         :value="isOpen"
     >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                @click="open"
-                :color="time ? '' : 'grey'"
-                small
-                v-bind="attrs"
-                text
-                v-on="on"
-            >
-                <v-icon left>
-                    mdi-calendar
-                </v-icon>
-                <span v-if="time">
-                    {{ displayDatetime.short }}
+        <template #activator="{ on: onMenu }">
+            <v-tooltip bottom>
+                <template #activator="{ on: onTooltip }">
+                    <v-btn
+                        :color="time ? '' : 'grey'"
+                        ref="datetimePickerButton"
+                        small
+                        text
+                        v-on="{ ...onMenu, ...onTooltip }"
+                        @click="open"
+                    >
+                        <v-icon left>
+                            mdi-calendar
+                        </v-icon>
+                        <span v-if="time">
+                            {{ displayDatetime.short }}
+                        </span>
+                        <span v-else>
+                            Pas de date
+                        </span>
+                    </v-btn>
+                </template>
+
+                <span>
+                    Ajouter une échéance <br />
+                    <kbd>Ctrl + D</kbd>
                 </span>
-                <span v-else>
-                    Pas de date
-                </span>
-            </v-btn>
+            </v-tooltip>
         </template>
 
         <v-card>
@@ -84,7 +93,6 @@ export default {
         datetime: {
             type: String,
             default: function() {
-                console.log('ppp');
                 return new Date().toISOString();
             }
         }

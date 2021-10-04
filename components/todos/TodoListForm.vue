@@ -23,6 +23,7 @@
                             rows="2"
                             @keyup.ctrl.enter="submit"
                             @keyup.ctrl.delete="remove"
+                            @keydown.ctrl.d.prevent.stop="showDatetimePicker"
                         ></v-textarea>
                     </v-col>
                 </v-row>
@@ -31,6 +32,7 @@
                         <datetime-picker
                             v-model="formData.deadline"
                             :datetime="formData.deadline"
+                            ref="datetimePicker"
                         />
                     </v-col>
                 </v-row>
@@ -82,7 +84,7 @@
                     <span>
                         Supprimer <br />
                         <kbd class="mr-2">
-                            Ctrl. + Suppr.
+                            Ctrl + Suppr
                         </kbd>
                     </span>
                 </v-tooltip>
@@ -139,6 +141,9 @@ export default {
         },
         remove() {
             this.$emit('remove', this.formData);
+        },
+        showDatetimePicker(e) {
+            this.$refs.datetimePicker.open();
         }
     }
 };

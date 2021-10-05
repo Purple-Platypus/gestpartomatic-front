@@ -45,7 +45,8 @@ export default {
         return {
             links: [
                 { target: '/flux1', label: 'Flux 1' },
-                { target: '/glun', label: 'GLUN' }
+                { target: '/glun', label: 'GLUN' },
+                { target: '/kanban', label: 'Kanban' }
             ]
         };
     },

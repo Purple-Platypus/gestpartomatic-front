@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import messages from '~/assets/messages.json';
 
 export const state = () => ({
     id: '',
@@ -37,16 +38,29 @@ export const actions = {
     login(context, user) {
         context.commit('set', user);
     },
-    logout(context) {
-        console.log('logout');
-        const blankUser = {
-            id: '',
-            nickname: '',
-            username: '',
-            avatar: '',
-            email: '',
-            settingDarkMode: false
-        };
-        context.commit('set', blankUser);
+    async logout({ context, commit }) {
+        await this.$axios
+            .$post('/api/auth/logout')
+            .then(() => {
+                const blankUser = {
+                    id: '',
+                    nickname: '',
+                    username: '',
+                    avatar: '',
+                    email: '',
+                    settingDarkMode: false
+                };
+                commit('set', blankUser);
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
     }
 };

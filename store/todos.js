@@ -42,10 +42,14 @@ export const actions = {
                 });
             })
             .catch(err => {
-                this.$store.commit('snackbar/setSnackbar', {
-                    text: messages.errors.generic,
-                    color: 'error'
-                });
+                this.$store.commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
             });
     },
     async create({ commit }, createPayload) {

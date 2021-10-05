@@ -1,22 +1,6 @@
 <template>
     <v-navigation-drawer app class="elevation-0" dark permanent width="180">
         <auth-menu v-if="user.id"></auth-menu>
-        <!-- <v-list v-else dense>
-            <v-list-item to="/auth/login">
-                <v-list-item-icon>
-                    <v-icon>
-                        mdi-account-circle-outline
-                    </v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>
-                        Connexion
-                    </v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider> -->
 
         <v-list dense nav>
             <v-list-item
@@ -36,7 +20,6 @@
 
 <script>
 import AuthMenu from './AuthMenu.vue';
-import messages from '~/assets/messages.json';
 
 export default {
     name: 'mainMenu',
@@ -58,18 +41,9 @@ export default {
     methods: {
         // Déconnexion
         async logout() {
-            await this.$axios
-                .$post('/api/auth/logout')
-                .then(() => {
-                    this.$store.dispatch('auth/logout');
-                    this.$router.push('auth/login');
-                })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
-                });
+            this.$store.dispatch('auth/logout').then(() => {
+                this.$router.push('auth/login');
+            });
         }
     }
 };

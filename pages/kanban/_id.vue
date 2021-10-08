@@ -1,9 +1,7 @@
 <template>
     <v-row class="fill-height">
         <v-col class="pa-0" cols="3">
-            <h1>
-                Kanban
-            </h1>
+            <h1>Kanban {{ $route.params.id }}</h1>
         </v-col>
     </v-row>
 </template>

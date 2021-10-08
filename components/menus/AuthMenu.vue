@@ -45,13 +45,11 @@
 </template>
 
 <script>
+import Auth from '../commons/mixins/Auth.mixin';
+
 export default {
     name: 'authMenu',
-    computed: {
-        user: function() {
-            return this.$store.state.auth;
-        }
-    },
+    mixins: [Auth],
     methods: {
         // Déconnexion
         async logout() {

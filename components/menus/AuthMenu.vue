@@ -25,15 +25,6 @@
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                    <v-btn to="/teams" icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-account-multiple</v-icon>
-                    </v-btn>
-                </template>
-                <span>Gérer les équipes</span>
-            </v-tooltip>
-
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="logout" icon v-bind="attrs" v-on="on">
                         <v-icon>mdi-power</v-icon>
                     </v-btn>

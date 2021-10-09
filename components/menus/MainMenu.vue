@@ -15,7 +15,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <boards-menu />
+            <boards-menu v-if="user.id" />
         </v-list>
     </v-navigation-drawer>
 </template>

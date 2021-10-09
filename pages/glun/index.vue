@@ -1,7 +1,7 @@
 <template>
-    <v-row justify="center" align="center">
+    <v-row>
         <v-col>
-            <v-card>
+            <v-card outlined class="elevation-0">
                 <v-card-title>
                     <h1 class="text-h3 font-weight-light">
                         Glunomatic

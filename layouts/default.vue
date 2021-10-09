@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main>
-            <v-container fill-height fluid class="align-start pt-5 px-6">
+            <v-container fill-height fluid class="align-start pa-3">
                 <main-menu></main-menu>
                 <nuxt />
             </v-container>

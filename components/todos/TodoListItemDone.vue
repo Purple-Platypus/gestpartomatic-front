@@ -25,7 +25,7 @@
             >
                 <v-list-item-title v-text="todo.title"></v-list-item-title>
                 <v-list-item-subtitle
-                    v-text="todo.description"
+                    v-html="md(todo.description)"
                     v-if="todo.description"
                 >
                 </v-list-item-subtitle>
@@ -54,11 +54,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import Markdown from '../commons/mixins/Markdown.mixin';
 import TodoCountdown from './mixins/TodoCountdown.mixin';
 
 export default {
     name: 'todolist--item',
-    mixins: [TodoCountdown],
+    mixins: [TodoCountdown, Markdown],
     props: {
         todoId: Number
     },

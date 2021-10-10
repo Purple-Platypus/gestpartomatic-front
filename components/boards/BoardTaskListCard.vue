@@ -3,17 +3,17 @@
         <v-card-title class="pa-2 font-weight-bold text-body-2">
             {{ todo.title }}
         </v-card-title>
-        <v-card-text class="pb-2">
-            {{ todo.description }}
-        </v-card-text>
+        <v-card-text class="pb-2" v-html="md(todo.description)"></v-card-text>
     </v-card>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Markdown from '../commons/mixins/Markdown.mixin';
 
 export default {
     name: 'board-task-list-card',
+    mixins: [Markdown],
     props: {
         todoId: Number
     },

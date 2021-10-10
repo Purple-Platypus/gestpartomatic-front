@@ -27,8 +27,9 @@
             >
                 <v-list-item-title v-text="todo.title"></v-list-item-title>
                 <v-list-item-subtitle
-                    v-text="todo.description"
+                    v-html="md(todo.description)"
                     v-if="todo.description"
+                    class="dense-description"
                 >
                 </v-list-item-subtitle>
 
@@ -60,11 +61,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import Markdown from '../commons/mixins/Markdown.mixin';
 import TodoCountdown from './mixins/TodoCountdown.mixin';
 
 export default {
     name: 'todolist--item',
-    mixins: [TodoCountdown],
+    mixins: [Markdown, TodoCountdown],
     props: {
         todoId: Number
     },
@@ -132,18 +134,7 @@ export default {
 .progress--no-transition .v-progress-linear__determinate {
     transition: none;
 }
-.todo-content {
-    min-height: 44px;
-}
-.description {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-.no-ellipsis .v-list-item__title,
-.no-ellipsis .v-list-item__subtitle {
-    text-overflow: inherit;
-    overflow: inherit;
-    white-space: inherit;
+.dense-description p {
+    margin: 0;
 }
 </style>

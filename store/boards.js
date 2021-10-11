@@ -16,6 +16,12 @@ export const mutations = {
         board['lists'] = [];
         state.board = board;
     },
+    updateBoard(state, { boardId, board }) {
+        const UpdatedIndex = state.boardsList.findIndex(board => {
+            return board.id == boardId;
+        });
+        Vue.set(state.boardsList, UpdatedIndex, board);
+    },
     addList(state, list) {
         list['todosList'] = [];
         Vue.set(state.board.lists, state.board.lists.length, list.id);
@@ -69,6 +75,30 @@ export const actions = {
                 );
             });
     },
+    archiveBoard({ commit }, boardId) {
+        const patchPayload = {
+            isArchived: true
+        };
+
+        this.$axios
+            .$patch('/api/boards/' + boardId, patchPayload)
+            .then(updatedBoard => {
+                commit('updateBoard', {
+                    boardId,
+                    board: updatedBoard
+                });
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
+    },
     parseLists({ commit }, parsedLists) {
         commit('resetLists');
 
@@ -81,5 +111,14 @@ export const actions = {
                 commit('addTodo', todo);
             });
         });
+    }
+};
+
+export const getters = {
+    activeBoards: state => {
+        return state.boardsList.filter(board => !board.isArchived);
+    },
+    archivedBoards: state => {
+        return state.boardsList.filter(board => board.isArchived);
     }
 };

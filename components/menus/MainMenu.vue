@@ -14,24 +14,22 @@
                     </v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-
-            <boards-menu v-if="user.id" />
         </v-list>
     </v-navigation-drawer>
 </template>
 
 <script>
 import AuthMenu from './AuthMenu.vue';
-import BoardsMenu from './BoardsMenu.vue';
 
 export default {
     name: 'mainMenu',
-    components: { AuthMenu, BoardsMenu },
+    components: { AuthMenu },
     data() {
         return {
             links: [
                 { target: '/flux1', label: 'Flux 1' },
-                { target: '/glun', label: 'GLUN' }
+                { target: '/glun', label: 'GLUN' },
+                { target: '/kanban', label: 'Kanbans' }
             ]
         };
     },

@@ -109,6 +109,13 @@ export default {
     },
     mounted() {
         this.getBoardsList();
+    },
+    watch: {
+        archivedBoards() {
+            if (!this.archivedBoards.length) {
+                this.displayActive = true;
+            }
+        }
     }
 };
 </script>

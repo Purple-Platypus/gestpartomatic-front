@@ -55,46 +55,10 @@
                         <v-divider />
                         <v-list class="pa-0" dense>
                             <template v-for="(board, index) in displayedBoards">
-                                <v-list-item :key="board.id">
-                                    <v-list-item-content>
-                                        <v-list-item-title>
-                                            {{ board.name }}
-                                        </v-list-item-title>
-                                        <v-list-item-subtitle>
-                                            {{ board.description }}
-                                        </v-list-item-subtitle>
-                                    </v-list-item-content>
-
-                                    <v-btn icon small>
-                                        <v-icon size="19px">
-                                            mdi-pencil
-                                        </v-icon>
-                                    </v-btn>
-
-                                    <v-btn
-                                        v-if="!board.isArchived"
-                                        :disabled="board.creatorId != id"
-                                        icon
-                                        small
-                                        @click="archive(board.id)"
-                                    >
-                                        <v-icon size="19px">
-                                            mdi-delete
-                                        </v-icon>
-                                    </v-btn>
-
-                                    <v-btn
-                                        v-else
-                                        :disabled="board.creatorId != id"
-                                        icon
-                                        small
-                                        @click="restore(board.id)"
-                                    >
-                                        <v-icon size="19px">
-                                            mdi-delete-off
-                                        </v-icon>
-                                    </v-btn>
-                                </v-list-item>
+                                <board-list-item
+                                    :boardId="board.id"
+                                    :key="board.id"
+                                />
                                 <v-divider
                                     v-if="index + 1 != displayedBoards.length"
                                     :key="'divider_' + board.id"
@@ -110,11 +74,13 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import BoardListItem from '../../components/boards/BoardListItem.vue';
 
 export default {
     head: () => ({
         title: 'Kanbans'
     }),
+    components: { BoardListItem },
     data: () => {
         return {
             displayActive: true

@@ -120,5 +120,10 @@ export const getters = {
     },
     archivedBoards: state => {
         return state.boardsList.filter(board => board.isArchived);
+    },
+    boardById: state => boardId => {
+        return state.boardsList.find(board => {
+            return board.id == boardId;
+        });
     }
 };

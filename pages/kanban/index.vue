@@ -36,8 +36,9 @@
                                 <v-icon
                                     :color="displayActive ? 'grey' : 'black'"
                                     size="18px"
+                                    left
                                 >
-                                    mdi-check
+                                    mdi-archive
                                 </v-icon>
                                 {{ archivedBoards.length }}
                                 archivé{{
@@ -104,10 +105,7 @@ export default {
         showArchive() {
             this.displayActive = false;
         },
-        archive(boardId) {
-            this.archiveBoard(boardId);
-        },
-        ...mapActions('boards', ['getBoardsList', 'archiveBoard'])
+        ...mapActions('boards', ['getBoardsList'])
     },
     mounted() {
         this.getBoardsList();

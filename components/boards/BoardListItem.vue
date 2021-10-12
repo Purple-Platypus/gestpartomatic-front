@@ -9,7 +9,7 @@
             </v-list-item-subtitle>
         </v-list-item-content>
 
-        <v-btn icon small>
+        <v-btn icon small v-if="!board.isArchived">
             <v-icon size="19px">
                 mdi-pencil
             </v-icon>
@@ -20,10 +20,10 @@
             :disabled="board.creatorId != id"
             icon
             small
-            @click="archive(board.id)"
+            @click="archive()"
         >
             <v-icon size="19px">
-                mdi-delete
+                mdi-archive
             </v-icon>
         </v-btn>
 
@@ -32,17 +32,17 @@
             :disabled="board.creatorId != id"
             icon
             small
-            @click="restore(board.id)"
+            @click="restore()"
         >
             <v-icon size="19px">
-                mdi-delete-off
+                mdi-restore
             </v-icon>
         </v-btn>
     </v-list-item>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
     name: 'board-list-item',
@@ -58,6 +58,15 @@ export default {
         },
         ...mapGetters('boards', ['boardById']),
         ...mapState('auth', ['id'])
+    },
+    methods: {
+        archive() {
+            this.archiveBoard(this.boardId);
+        },
+        restore() {
+            this.restoreBoard(this.boardId);
+        },
+        ...mapActions('boards', ['archiveBoard', 'restoreBoard'])
     }
 };
 </script>

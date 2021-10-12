@@ -99,6 +99,30 @@ export const actions = {
                 );
             });
     },
+    restoreBoard({ commit }, boardId) {
+        const patchPayload = {
+            isArchived: false
+        };
+
+        this.$axios
+            .$patch('/api/boards/' + boardId, patchPayload)
+            .then(updatedBoard => {
+                commit('updateBoard', {
+                    boardId,
+                    board: updatedBoard
+                });
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
+    },
     parseLists({ commit }, parsedLists) {
         commit('resetLists');
 

@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer app class="elevation-0" dark permanent width="180">
-        <auth-menu v-if="user.id"></auth-menu>
+        <auth-menu v-if="auth.id"></auth-menu>
 
         <v-list dense nav>
             <v-list-item
@@ -19,11 +19,13 @@
 </template>
 
 <script>
+import AuthMixin from '../commons/mixins/Auth.mixin';
 import AuthMenu from './AuthMenu.vue';
 
 export default {
     name: 'mainMenu',
     components: { AuthMenu },
+    mixins: [AuthMixin],
     data() {
         return {
             links: [
@@ -32,19 +34,6 @@ export default {
                 { target: '/kanban', label: 'Kanbans' }
             ]
         };
-    },
-    computed: {
-        user: function() {
-            return this.$store.state.auth;
-        }
-    },
-    methods: {
-        // Déconnexion
-        async logout() {
-            this.$store.dispatch('auth/logout').then(() => {
-                this.$router.push('auth/login');
-            });
-        }
     }
 };
 </script>

@@ -1,7 +1,7 @@
+import { mapState } from 'vuex';
+
 export default {
     computed: {
-        user: function() {
-            return this.$store.state.auth;
-        }
+        ...mapState('auth', ['auth'])
     }
 };

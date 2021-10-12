@@ -216,21 +216,9 @@ export default {
         },
         async login() {
             this.loading = true;
-            await this.$axios
-                .$post('/api/auth/login/', {
-                    email: this.input.email,
-                    password: this.input.password
-                })
-                .then(res => {
-                    this.$store.dispatch('auth/login', res);
-                    this.$router.push('/');
-                })
-                .catch(err => {
-                    this.$store.commit('snackbar/setSnackbar', {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    });
-                });
+            this.$store.dispatch('auth/login', this.input).then(() => {
+                this.$router.push('/');
+            });
             this.loading = false;
         }
     },

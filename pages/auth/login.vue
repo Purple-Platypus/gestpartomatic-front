@@ -120,25 +120,20 @@ export default {
     methods: {
         async login() {
             this.loading = true;
-            await this.$axios
-                .$post('/api/auth/login/', this.input)
-                .then(res => {
-                    this.$store.dispatch('auth/login', res);
+
+            this.$store
+                .dispatch('auth/login', this.input)
+                .then(() => {
                     this.$router.push('/');
                 })
                 .catch(err => {
-                    if (err.response.status === 401) {
+                    if (err === 401) {
                         this.$refs.loginForm.setErrors({
                             password: [messages.errors.unauthorised]
                         });
-                    } else {
-                        this.$store.commit('snackbar/setSnackbar', {
-                            text: messages.errors.generic,
-                            color: 'error'
-                        });
                     }
+                    this.loading = false;
                 });
-            this.loading = false;
         }
     },
     computed: {

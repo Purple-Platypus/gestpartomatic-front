@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import messages from '~/assets/messages.json';
 
 export const state = () => ({
     boardsList: [],
@@ -48,15 +47,8 @@ export const actions = {
             .then(boardsList => {
                 commit('setBoardsList', boardsList);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     getBoard({ commit, dispatch }, boardId) {
@@ -67,15 +59,8 @@ export const actions = {
                 commit('setBoard', board);
                 dispatch('parseLists', lists);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     createBoard({ commit }, board) {
@@ -84,18 +69,11 @@ export const actions = {
             .then(res => {
                 commit('addBoard', res);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    archiveBoard({ commit }, boardId) {
+    archiveBoard({ commit, dispatch }, boardId) {
         const patchPayload = {
             isArchived: true
         };
@@ -108,15 +86,8 @@ export const actions = {
                     board: updatedBoard
                 });
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     restoreBoard({ commit }, boardId) {
@@ -132,15 +103,8 @@ export const actions = {
                     board: updatedBoard
                 });
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     parseLists({ commit }, parsedLists) {

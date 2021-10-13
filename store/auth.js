@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import messages from '~/assets/messages.json';
 
 export const state = () => ({
     auth: {
@@ -50,14 +49,7 @@ export const actions = {
             })
             .catch(err => {
                 if (err.response.status !== 401) {
-                    commit(
-                        'snackbar/setSnackbar',
-                        {
-                            text: messages.errors.generic,
-                            color: 'error'
-                        },
-                        { root: true }
-                    );
+                    dispatch('snackbar/showGenericError', null, { root: true });
                 }
                 return err.response.status;
             });
@@ -76,15 +68,8 @@ export const actions = {
                 };
                 commit('set', blankUser);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     }
 };

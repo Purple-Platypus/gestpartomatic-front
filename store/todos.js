@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import messages from '~/assets/messages.json';
 
 export const state = () => ({
     todoList: [],
@@ -41,15 +40,8 @@ export const actions = {
                     context.commit('add', todo);
                 });
             })
-            .catch(err => {
-                this.$store.commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     async create({ commit }, createPayload) {
@@ -58,15 +50,8 @@ export const actions = {
             .then(res => {
                 commit('add', res);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     async modify({ commit }, { todoId, updatePayload }) {
@@ -75,15 +60,8 @@ export const actions = {
             .then(res => {
                 commit('update', res);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     async resetRanking({ commit }, updatedRanking) {
@@ -95,15 +73,8 @@ export const actions = {
                 });
                 commit('setRanking', sortedIds);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
     async remove({ commit, dispatch, getters }, todoId) {
@@ -121,15 +92,8 @@ export const actions = {
 
                 dispatch('resetRanking', updatedRanking);
             })
-            .catch(err => {
-                commit(
-                    'snackbar/setSnackbar',
-                    {
-                        text: messages.errors.generic,
-                        color: 'error'
-                    },
-                    { root: true }
-                );
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
             });
     }
 };

@@ -4,7 +4,7 @@
         class="fill-height cursor-pointer todo-list"
         outlined
         @click.self.native="addTodo"
-        v-click-outside="dismissAll"
+        v-click-outside="hideAll"
     >
         <v-card-title class="text-body-2 font-weight-light text-uppercase">
             <h2 class="mr-8 text-body-2 font-weight-light">
@@ -94,7 +94,7 @@
             <todo-list-form-create
                 v-else
                 ref="todoListFormCreate"
-                @close="dismissCreateForm"
+                @close="hideCreateForm"
             ></todo-list-form-create>
 
             <v-divider></v-divider>
@@ -116,7 +116,7 @@
                         v-else
                         :todoId="todo.id"
                         :key="todo.id"
-                        @dblclick="toggleUpdateForm(todo.id)"
+                        @dblclick="showUpdateForm(todo.id)"
                     ></todo-list-item>
 
                     <v-divider />
@@ -134,7 +134,6 @@ import TodoListItem from './TodoListItem.vue';
 import TodoListItemDone from './TodoListItemDone.vue';
 import TodoListFormCreate from './TodoListFormCreate.vue';
 import TodoListFormUpdate from '../todos/TodoListFormUpdate.vue';
-import messages from '~/assets/messages.json';
 
 export default {
     name: 'todo-list',
@@ -186,7 +185,7 @@ export default {
                     this.addTodo();
                     break;
                 case 'Escape':
-                    this.dismissAll();
+                    this.hideAll();
                     break;
             }
         },
@@ -228,26 +227,26 @@ export default {
         },
         addTodo() {
             this.isVisibleAddForm = true;
-            this.dismissUpdateForm();
+            this.hideUpdateForm();
             this.$nextTick().then(() => {
                 this.$refs.todoListFormCreate.$refs.todoListForm.$refs.inputDescription.focus();
             });
         },
-        toggleUpdateForm(todoId) {
+        showUpdateForm(todoId) {
             this.visibleUpdateForm = todoId;
-            this.dismissCreateForm();
+            this.hideCreateForm();
             this.$nextTick().then(() => {
                 this.$refs.todoListFormUpdate[0].$refs.todoListForm.$refs.inputDescription.focus();
             });
         },
-        dismissAll() {
-            this.dismissCreateForm();
-            this.dismissUpdateForm();
+        hideAll() {
+            this.hideCreateForm();
+            this.hideUpdateForm();
         },
-        dismissCreateForm() {
+        hideCreateForm() {
             this.isVisibleAddForm = false;
         },
-        dismissUpdateForm() {
+        hideUpdateForm() {
             this.visibleUpdateForm = null;
         },
         ...mapActions('todos', ['resetRanking'])

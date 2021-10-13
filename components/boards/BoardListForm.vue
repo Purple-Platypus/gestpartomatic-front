@@ -1,8 +1,9 @@
 <template>
-    <v-form class="pa-2" @submit.prevent="submit">
+    <v-form class="pa-2 grey lighten-4" @submit.prevent="submit">
         <v-row>
             <v-col class="pb-0">
                 <v-text-field
+                    class="white"
                     dense
                     hide-details
                     label="Titre"
@@ -19,7 +20,7 @@
             <v-col>
                 <v-textarea
                     auto-grow
-                    class="input-description"
+                    class="input-description white"
                     dense
                     hide-details
                     label="Description"
@@ -71,8 +72,8 @@ export default {
     data() {
         return {
             formData: {
-                description: '',
-                name: ''
+                description: this.boardData.description,
+                name: this.boardData.name
             }
         };
     },

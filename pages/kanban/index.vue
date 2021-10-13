@@ -47,7 +47,12 @@
                             </span>
 
                             <v-spacer />
-                            <v-btn color="primary" icon small @click="showForm">
+                            <v-btn
+                                color="primary"
+                                icon
+                                small
+                                @click="showAddForm"
+                            >
                                 <v-icon size="19px">
                                     mdi-plus
                                 </v-icon>
@@ -56,17 +61,28 @@
 
                         <v-divider />
 
-                        <board-list-form
-                            v-if="isCreateFormVisible"
-                            @cancel="hideForm"
-                            @submit="create"
+                        <board-list-form-add
+                            v-if="isVisibleAddForm"
+                            @cancel="hideAddForm"
+                            @add="hideAddForm"
+                            ref="boardListAddForm"
                         />
 
                         <v-list class="pa-0" dense>
                             <template v-for="(board, index) in displayedBoards">
+                                <board-list-form-update
+                                    v-if="visibleUpdateForm == board.id"
+                                    :boardData="board"
+                                    :key="'form_' + board.id"
+                                    ref="boardListUpdateForm"
+                                    @cancel="hideUpdateForm"
+                                    @update="hideUpdateForm"
+                                />
                                 <board-list-item
+                                    v-else
                                     :boardId="board.id"
-                                    :key="board.id"
+                                    :key="'item_' + board.id"
+                                    @update="showUpdateForm(board.id)"
                                 />
                                 <v-divider
                                     v-if="index + 1 != displayedBoards.length"
@@ -83,7 +99,7 @@
                                 </p>
                                 <p class="grey--text">
                                     Vous pouvez en
-                                    <a @click="showForm">créer un</a
+                                    <a @click="showAddForm">créer un</a
                                     ><span v-if="archivedBoards.length">
                                         ou restaurer un
                                         <a @click="showArchive"
@@ -102,19 +118,29 @@
 </template>
 
 <script>
-import BoardListForm from '../../components/boards/BoardListForm.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
+import ShortkeysEmitter from '../../components/commons/mixins/ShortkeysEmitter.mixin';
 import BoardListItem from '../../components/boards/BoardListItem.vue';
+import BoardListForm from '../../components/boards/BoardListForm.vue';
+import BoardListFormUpdate from '../../components/boards/BoardListFormUpdate.vue';
+import BoardListFormAdd from '../../components/boards/BoardListFormAdd.vue';
 
 export default {
     head: () => ({
         title: 'Kanbans'
     }),
-    components: { BoardListItem, BoardListForm },
+    components: {
+        BoardListItem,
+        BoardListForm,
+        BoardListFormUpdate,
+        BoardListFormAdd
+    },
+    mixins: [ShortkeysEmitter],
     data: () => {
         return {
             displayActive: true,
-            isCreateFormVisible: false
+            isVisibleAddForm: false,
+            visibleUpdateForm: null
         };
     },
     computed: {
@@ -129,29 +155,54 @@ export default {
             return (
                 !this.activeBoards.length &&
                 this.displayActive &&
-                !this.isCreateFormVisible
+                !this.isVisibleAddForm
             );
         },
         ...mapGetters('boards', ['activeBoards', 'archivedBoards']),
         ...mapState('auth', ['id'])
     },
     methods: {
+        handleShortkey(e) {
+            switch (e.key) {
+                case '+':
+                    this.showAddForm();
+                    break;
+                case 'Escape':
+                    this.hideAll();
+                    break;
+            }
+        },
         showActive() {
             this.displayActive = true;
         },
         showArchive() {
             this.displayActive = false;
         },
-        showForm() {
-            this.isCreateFormVisible = true;
+        showAddForm() {
+            this.isVisibleAddForm = true;
+            this.hideUpdateForm();
+            this.$nextTick().then(() => {
+                this.$refs.boardListAddForm.$refs.boardListForm.$refs.inputName.focus();
+            });
         },
-        hideForm() {
-            this.isCreateFormVisible = false;
+        showUpdateForm(boardId) {
+            this.visibleUpdateForm = boardId;
+            this.hideAddForm();
+            this.$nextTick().then(() => {
+                this.$refs.boardListUpdateForm[0].$refs.boardListForm.$refs.inputName.focus();
+            });
         },
-        create(board) {
-            this.createBoard(board).then(() => this.hideForm());
+        hideAddForm() {
+            this.isVisibleAddForm = false;
         },
-        ...mapActions('boards', ['getBoardsList', 'createBoard'])
+        hideUpdateForm() {
+            this.visibleUpdateForm = null;
+        },
+        hideAll() {
+            this.hideAddForm();
+            this.hideUpdateForm();
+        },
+        ...mapActions('boards', ['getBoardsList'])
     },
     mounted() {
         this.getBoardsList();

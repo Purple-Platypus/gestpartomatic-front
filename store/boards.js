@@ -63,7 +63,7 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    createBoard({ commit }, board) {
+    addBoard({ commit }, board) {
         this.$axios
             .$post('/api/boards', board)
             .then(res => {
@@ -97,6 +97,19 @@ export const actions = {
 
         this.$axios
             .$patch('/api/boards/' + boardId, patchPayload)
+            .then(updatedBoard => {
+                commit('updateBoard', {
+                    boardId,
+                    board: updatedBoard
+                });
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    updateBoard({ commit, dispatch }, { boardId, boardData }) {
+        this.$axios
+            .$patch('/api/boards/' + boardId, boardData)
             .then(updatedBoard => {
                 commit('updateBoard', {
                     boardId,

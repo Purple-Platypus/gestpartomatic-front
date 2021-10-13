@@ -9,7 +9,7 @@
             </v-list-item-subtitle>
         </v-list-item-content>
 
-        <v-btn icon small v-if="!board.isArchived">
+        <v-btn icon small v-if="!board.isArchived" @click="update">
             <v-icon size="19px">
                 mdi-pencil
             </v-icon>
@@ -67,6 +67,9 @@ export default {
         },
         restore() {
             this.restoreBoard(this.boardId);
+        },
+        update(boardData) {
+            this.$emit('update', boardData);
         },
         ...mapActions('boards', ['archiveBoard', 'restoreBoard'])
     }

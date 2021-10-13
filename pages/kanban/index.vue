@@ -206,6 +206,9 @@ export default {
     },
     mounted() {
         this.getBoardsList();
+
+        const shortkeys = [{ keys: '+', label: 'Ajouter un tableau' }];
+        this.$store.commit('help/set', shortkeys);
     },
     watch: {
         archivedBoards() {

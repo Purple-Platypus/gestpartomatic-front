@@ -402,6 +402,9 @@ export default {
                 this.anos.bySip[this.maps.sips[sipName]].count++;
             });
         }
+    },
+    mounted() {
+        this.$store.commit('help/set', []);
     }
 };
 </script>

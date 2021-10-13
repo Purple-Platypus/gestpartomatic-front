@@ -19,7 +19,7 @@
                                     'font-weight-bold': displayActive,
                                     'grey--text': !displayActive
                                 }"
-                                @click="showActive()"
+                                @click="showActive"
                             >
                                 {{ activeBoards.length }}
                                 tableau{{ activeBoards.length > 1 ? 'x' : '' }}
@@ -31,7 +31,7 @@
                                     'font-weight-bold': !displayActive,
                                     'grey--text': displayActive
                                 }"
-                                @click="showArchive()"
+                                @click="showArchive"
                             >
                                 <v-icon
                                     :color="displayActive ? 'grey' : 'black'"
@@ -47,13 +47,21 @@
                             </span>
 
                             <v-spacer />
-                            <v-btn color="primary" icon small>
+                            <v-btn color="primary" icon small @click="showForm">
                                 <v-icon size="19px">
                                     mdi-plus
                                 </v-icon>
                             </v-btn>
                         </div>
+
                         <v-divider />
+
+                        <board-list-form
+                            v-if="isCreateFormVisible"
+                            @cancel="hideForm"
+                            @submit="create"
+                        />
+
                         <v-list class="pa-0" dense>
                             <template v-for="(board, index) in displayedBoards">
                                 <board-list-item
@@ -65,6 +73,26 @@
                                     :key="'divider_' + board.id"
                                 />
                             </template>
+
+                            <div
+                                v-if="isEmptyMessageVisible"
+                                class="pt-4 px-4 text-center"
+                            >
+                                <p class="text-h6">
+                                    Vous n'avez aucun tableau actif.
+                                </p>
+                                <p class="grey--text">
+                                    Vous pouvez en
+                                    <a @click="showForm">créer un</a
+                                    ><span v-if="archivedBoards.length">
+                                        ou restaurer un
+                                        <a @click="showArchive"
+                                            >tableau archivé</a
+                                        >
+                                        tableau archivé </span
+                                    >.
+                                </p>
+                            </div>
                         </v-list>
                     </v-sheet>
                 </v-card-text>
@@ -74,6 +102,7 @@
 </template>
 
 <script>
+import BoardListForm from '../../components/boards/BoardListForm.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import BoardListItem from '../../components/boards/BoardListItem.vue';
 
@@ -81,10 +110,11 @@ export default {
     head: () => ({
         title: 'Kanbans'
     }),
-    components: { BoardListItem },
+    components: { BoardListItem, BoardListForm },
     data: () => {
         return {
-            displayActive: true
+            displayActive: true,
+            isCreateFormVisible: false
         };
     },
     computed: {
@@ -94,6 +124,13 @@ export default {
             } else {
                 return this.archivedBoards;
             }
+        },
+        isEmptyMessageVisible() {
+            return (
+                !this.activeBoards.length &&
+                this.displayActive &&
+                !this.isCreateFormVisible
+            );
         },
         ...mapGetters('boards', ['activeBoards', 'archivedBoards']),
         ...mapState('auth', ['id'])
@@ -105,7 +142,16 @@ export default {
         showArchive() {
             this.displayActive = false;
         },
-        ...mapActions('boards', ['getBoardsList'])
+        showForm() {
+            this.isCreateFormVisible = true;
+        },
+        hideForm() {
+            this.isCreateFormVisible = false;
+        },
+        create(board) {
+            this.createBoard(board).then(() => this.hideForm());
+        },
+        ...mapActions('boards', ['getBoardsList', 'createBoard'])
     },
     mounted() {
         this.getBoardsList();

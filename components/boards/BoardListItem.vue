@@ -4,7 +4,7 @@
             <v-list-item-title>
                 {{ board.name }}
             </v-list-item-title>
-            <v-list-item-subtitle>
+            <v-list-item-subtitle class="font-weight-regular">
                 {{ board.description }}
             </v-list-item-subtitle>
         </v-list-item-content>
@@ -17,7 +17,7 @@
 
         <v-btn
             v-if="!board.isArchived"
-            :disabled="board.creatorId != id"
+            :disabled="board.creatorId != auth.id"
             icon
             small
             @click="archive()"
@@ -29,7 +29,7 @@
 
         <v-btn
             v-else
-            :disabled="board.creatorId != id"
+            :disabled="board.creatorId != auth.id"
             icon
             small
             @click="restore()"
@@ -43,12 +43,14 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import AuthMixin from '../commons/mixins/Auth.mixin';
 
 export default {
     name: 'board-list-item',
     props: {
         boardId: Number
     },
+    mixins: [AuthMixin],
     data() {
         return {};
     },

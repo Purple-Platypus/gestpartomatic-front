@@ -16,6 +16,9 @@ export const mutations = {
         board['lists'] = [];
         state.board = board;
     },
+    addBoard(state, board) {
+        state.boardsList.push(board);
+    },
     updateBoard(state, { boardId, board }) {
         const UpdatedIndex = state.boardsList.findIndex(board => {
             return board.id == boardId;
@@ -63,6 +66,23 @@ export const actions = {
                 const { lists, ...board } = res;
                 commit('setBoard', board);
                 dispatch('parseLists', lists);
+            })
+            .catch(err => {
+                commit(
+                    'snackbar/setSnackbar',
+                    {
+                        text: messages.errors.generic,
+                        color: 'error'
+                    },
+                    { root: true }
+                );
+            });
+    },
+    createBoard({ commit }, board) {
+        this.$axios
+            .$post('/api/boards', board)
+            .then(res => {
+                commit('addBoard', res);
             })
             .catch(err => {
                 commit(

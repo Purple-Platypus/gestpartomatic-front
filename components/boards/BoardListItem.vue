@@ -1,12 +1,14 @@
 <template>
-    <v-list-item :key="board.id">
+    <v-list-item>
         <v-list-item-content>
-            <v-list-item-title>
-                {{ board.name }}
-            </v-list-item-title>
-            <v-list-item-subtitle class="font-weight-regular">
-                {{ board.description }}
-            </v-list-item-subtitle>
+            <nuxt-link :to="'kanban/' + board.id">
+                <v-list-item-title class="black--text">
+                    {{ board.name }}
+                </v-list-item-title>
+                <v-list-item-subtitle class="font-weight-regular">
+                    {{ board.description }}
+                </v-list-item-subtitle>
+            </nuxt-link>
         </v-list-item-content>
 
         <v-btn icon small v-if="!board.isArchived" @click="update">

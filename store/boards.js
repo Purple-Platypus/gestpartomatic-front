@@ -132,6 +132,21 @@ export const actions = {
                 commit('addTodo', todo);
             });
         });
+    },
+    addList({ commit, dispatch, state }, list) {
+        Object.assign(list, {
+            boardId: state.board.id,
+            rank: state.board.lists.length
+        });
+        console.log(list);
+        this.$axios
+            .$post('/api/lists/', list)
+            .then(res => {
+                commit('addList', res);
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
     }
 };
 

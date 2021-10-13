@@ -1,10 +1,5 @@
 <template>
-    <board-list-form
-        ref="boardListForm"
-        :boardData="boardData"
-        @submit="submit"
-        @cancel="cancel"
-    />
+    <board-list-form ref="boardListForm" @submit="submit" @cancel="cancel" />
 </template>
 
 <script>
@@ -14,17 +9,6 @@ import BoardListForm from './BoardListForm.vue';
 export default {
     name: 'board-list-form-add',
     components: { BoardListForm },
-    props: {
-        boardData: {
-            type: Object,
-            default: () => {
-                return {
-                    name: '',
-                    description: ''
-                };
-            }
-        }
-    },
     methods: {
         submit(newBoard) {
             this.addBoard(newBoard).then(() => this.$emit('add'));

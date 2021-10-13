@@ -15,6 +15,8 @@
                             :key="listId"
                             :list-id="listId"
                         />
+
+                        <board-task-list-add />
                     </v-row>
                 </v-card-text>
             </v-card>
@@ -25,9 +27,10 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
+import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
 
 export default {
-    components: { BoardTaskList },
+    components: { BoardTaskList, BoardTaskListAdd },
     data() {
         return {};
     },

@@ -1,3 +1,6 @@
 .border-dashed {
     border-style: dashed !important;
 }
+.v-menu__content .v-list-item {
+    min-height: 32px;
+}

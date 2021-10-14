@@ -29,14 +29,21 @@ export const mutations = {
         Vue.set(state.board.lists, state.board.lists.length, list.id);
         Vue.set(state.lists, list.id, list);
     },
-    addTodo(state, todo) {
-        const listId = todo.listId;
-        state.lists[listId].todosList.push(todo.id);
-        Vue.set(state.todos, todo.id, todo);
+    removeList(state, listId) {
+        const removedListIndex = state.board.lists.findIndex(
+            list => list === listId
+        );
+        console.log(removedListIndex);
+        Vue.delete(state.board.lists, removedListIndex);
     },
     resetLists(state) {
         state.board.lists = [];
         state.lists = {};
+    },
+    addTodo(state, todo) {
+        const listId = todo.listId;
+        state.lists[listId].todosList.push(todo.id);
+        Vue.set(state.todos, todo.id, todo);
     }
 };
 
@@ -138,11 +145,21 @@ export const actions = {
             boardId: state.board.id,
             rank: state.board.lists.length
         });
-        console.log(list);
+
         this.$axios
             .$post('/api/lists/', list)
             .then(res => {
                 commit('addList', res);
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    removeList({ commit }, listId) {
+        this.$axios
+            .$delete('/api/lists/' + listId)
+            .then(res => {
+                commit('removeList', listId);
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });

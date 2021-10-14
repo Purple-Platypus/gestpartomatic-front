@@ -1,5 +1,5 @@
 <template>
-    <v-form class="pa-2 grey lighten-4" @submit.prevent="submit">
+    <v-form class="pa-2" @submit.prevent="submit">
         <v-row>
             <v-col class="pb-0">
                 <v-text-field

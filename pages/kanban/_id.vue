@@ -1,15 +1,15 @@
 <template>
     <v-row class="align-self-stretch">
         <v-col cols="12" class="d-flex">
-            <v-card class="align-stretch flex-grow-1" flat outlined>
+            <v-card class="flex-grow-1 d-flex flex-column" flat outlined>
                 <v-card-title class="pa-2">
                     <h1 class="mb-4 text-h3 font-weight-light">
                         {{ board.name }}
                     </h1>
                 </v-card-title>
 
-                <v-card-text class="px-2">
-                    <v-row>
+                <v-card-text class="pa-2 flex-grow-1 d-flex">
+                    <v-row class="task-list-row flex-nowrap">
                         <board-task-list
                             v-for="listId in board.lists"
                             :key="listId"
@@ -46,3 +46,9 @@ export default {
     methods: { ...mapActions('boards', ['getBoard']) }
 };
 </script>
+
+<style>
+.task-list-row {
+    overflow: scroll;
+}
+</style>

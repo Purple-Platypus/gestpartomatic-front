@@ -1,5 +1,11 @@
 <template>
     <v-sheet outlined rounded>
+        <h2 class="py-2 px-3 text-body-2 font-weight-bold grey lighten-4">
+            Ajouter une colonne
+        </h2>
+
+        <v-divider />
+
         <board-task-list-form
             ref="boardListForm"
             @submit="submit"

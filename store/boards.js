@@ -29,6 +29,11 @@ export const mutations = {
         Vue.set(state.board.lists, state.board.lists.length, list.id);
         Vue.set(state.lists, list.id, list);
     },
+    updateList(state, list) {
+        Object.keys(list).forEach(prop => {
+            Vue.set(state.lists[list.id], prop, list[prop]);
+        });
+    },
     removeList(state, listId) {
         const removedListIndex = state.board.lists.findIndex(
             list => list === listId
@@ -150,6 +155,17 @@ export const actions = {
             .$post('/api/lists/', list)
             .then(res => {
                 commit('addList', res);
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+
+    updateList({ commit, dispatch }, { listId, listData }) {
+        this.$axios
+            .$patch('/api/lists/' + listId, listData)
+            .then(updatedList => {
+                commit('updateList', updatedList);
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });

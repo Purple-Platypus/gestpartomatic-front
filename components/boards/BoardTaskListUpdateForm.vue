@@ -1,18 +1,10 @@
 <template>
-    <v-sheet outlined rounded>
-        <h2 class="py-2 px-3 text-body-2 font-weight-bold grey lighten-4">
-            Ajouter une colonne
-        </h2>
-
-        <v-divider />
-
-        <board-task-list-form
-            ref="boardListForm"
-            showProgression
-            @submit="submit"
-            @cancel="cancel"
-        />
-    </v-sheet>
+    <board-task-list-form
+        ref="boardTaskListForm"
+        :listData="listData"
+        @submit="submit"
+        @cancel="cancel"
+    />
 </template>
 
 <script>
@@ -20,7 +12,7 @@ import { mapActions } from 'vuex';
 import BoardTaskListForm from './BoardTaskListForm.vue';
 
 export default {
-    name: 'board-list-form-add',
+    name: 'board-list-form-update',
     components: { BoardTaskListForm },
     props: {
         listData: {
@@ -34,13 +26,16 @@ export default {
         }
     },
     methods: {
-        submit(newList) {
-            this.addList(newList).then(() => this.$emit('add'));
+        submit(updatedList) {
+            this.updateList({
+                listId: this.listData.id,
+                listData: updatedList
+            }).then(() => this.$emit('update'));
         },
         cancel() {
             this.$emit('cancel');
         },
-        ...mapActions('boards', ['addList'])
+        ...mapActions('boards', ['updateList'])
     }
 };
 </script>

@@ -3,10 +3,14 @@
         <v-sheet class="fill-height" outlined rounded>
             <v-card class="fill-height grey lighten-5" flat>
                 <v-card-title
+                    v-if="!isUpdateFormVisible"
                     class="py-1 px-2 text-body-2 font-weight-light text-uppercase"
                 >
                     <h2 class="mr-8 text-body-2 font-weight-light">
                         {{ list.name }}
+                        <span class="ml-4 grey--text text--darken-1">
+                            {{ list.todosList.length }}
+                        </span>
                     </h2>
 
                     <v-spacer />
@@ -34,6 +38,14 @@
                         </v-list>
                     </v-menu>
                 </v-card-title>
+
+                <board-task-list-update-form
+                    v-else
+                    :list-data="list"
+                    v-click-outside="hideUpdateForm"
+                    @update="hideUpdateForm"
+                    @cancel="hideUpdateForm"
+                />
 
                 <v-card-text class="px-2 pb-2">
                     <board-task-list-card
@@ -80,12 +92,14 @@ import { mapActions, mapState } from 'vuex';
 import draggable from 'vuedraggable';
 import ShortkeysEmitter from '../commons/mixins/ShortkeysEmitter.mixin';
 import BoardTaskListCard from './BoardTaskListCard.vue';
+import BoardTaskListUpdateForm from './BoardTaskListUpdateForm.vue';
 
 export default {
     name: 'board-task-list',
     components: {
         draggable,
-        BoardTaskListCard
+        BoardTaskListCard,
+        BoardTaskListUpdateForm
     },
     mixins: [ShortkeysEmitter],
     props: {
@@ -93,6 +107,7 @@ export default {
     },
     data() {
         return {
+            isUpdateFormVisible: false,
             isRemoveDialogVisible: false
         };
     },
@@ -103,7 +118,12 @@ export default {
         ...mapState('boards', ['lists'])
     },
     methods: {
-        showUpdateForm() {},
+        showUpdateForm() {
+            this.isUpdateFormVisible = true;
+        },
+        hideUpdateForm() {
+            this.isUpdateFormVisible = false;
+        },
         showRemoveModal() {
             this.isRemoveDialogVisible = true;
         },

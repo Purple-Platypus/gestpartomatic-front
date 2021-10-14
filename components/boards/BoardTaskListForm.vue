@@ -16,7 +16,7 @@
             </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="showProgression">
             <v-col>
                 <v-select
                     class="white"
@@ -66,6 +66,10 @@ export default {
                     progression: 'TODO'
                 };
             }
+        },
+        showProgression: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

@@ -228,16 +228,10 @@ export default {
         addTodo() {
             this.isVisibleAddForm = true;
             this.hideUpdateForm();
-            this.$nextTick().then(() => {
-                this.$refs.todoListFormCreate.$refs.todoListForm.$refs.inputDescription.focus();
-            });
         },
         showUpdateForm(todoId) {
             this.visibleUpdateForm = todoId;
             this.hideCreateForm();
-            this.$nextTick().then(() => {
-                this.$refs.todoListFormUpdate[0].$refs.todoListForm.$refs.inputDescription.focus();
-            });
         },
         hideAll() {
             this.hideCreateForm();

@@ -11,6 +11,7 @@
                 <v-row>
                     <v-col class="pt-3 pb-0">
                         <v-textarea
+                            autofocus
                             auto-grow
                             class="input-description"
                             dense

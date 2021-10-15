@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { get } from 'http';
 import draggable from 'vuedraggable';
 import { mapActions, mapState } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
@@ -63,7 +62,9 @@ export default {
     mounted() {
         this.getBoard(this.$route.params.id);
     },
-    methods: { ...mapActions('boards', ['getBoard', 'updateListsRanking']) }
+    methods: {
+        ...mapActions('boards', ['getBoard', 'updateListsRanking'])
+    }
 };
 </script>
 

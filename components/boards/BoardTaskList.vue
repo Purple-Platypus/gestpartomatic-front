@@ -90,7 +90,6 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import draggable from 'vuedraggable';
-import ShortkeysEmitter from '../commons/mixins/ShortkeysEmitter.mixin';
 import BoardTaskListCard from './BoardTaskListCard.vue';
 import BoardTaskListUpdateForm from './BoardTaskListUpdateForm.vue';
 
@@ -101,7 +100,6 @@ export default {
         BoardTaskListCard,
         BoardTaskListUpdateForm
     },
-    mixins: [ShortkeysEmitter],
     props: {
         listId: Number
     },

@@ -22,18 +22,30 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import ShortkeysEmitterMixin from '../commons/mixins/ShortkeysEmitter.mixin';
 import BoardTaskListAddForm from './BoardTaskListAddForm.vue';
 
 export default {
     components: { BoardTaskListAddForm },
     name: 'board-task-list-add',
+    mixins: [ShortkeysEmitterMixin],
     data() {
         return {
             isVisibleAddForm: false
         };
     },
+    mounted() {
+        const shortkeys = [{ keys: '+', label: 'Ajouter une colonne' }];
+        this.$store.commit('help/set', shortkeys);
+    },
     methods: {
+        handleShortkey(e) {
+            switch (e.key) {
+                case '+':
+                    this.showAddForm();
+                    break;
+            }
+        },
         showAddForm() {
             this.isVisibleAddForm = true;
         },

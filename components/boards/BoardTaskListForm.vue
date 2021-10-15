@@ -7,6 +7,7 @@
         <v-row>
             <v-col class="pb-0">
                 <v-text-field
+                    autofocus
                     class="white"
                     dense
                     hide-details

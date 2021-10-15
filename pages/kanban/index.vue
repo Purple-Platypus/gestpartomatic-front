@@ -181,16 +181,10 @@ export default {
         showAddForm() {
             this.isVisibleAddForm = true;
             this.hideUpdateForm();
-            this.$nextTick().then(() => {
-                this.$refs.boardListAddForm.$refs.boardListForm.$refs.inputName.focus();
-            });
         },
         showUpdateForm(boardId) {
             this.visibleUpdateForm = boardId;
             this.hideAddForm();
-            this.$nextTick().then(() => {
-                this.$refs.boardListUpdateForm[0].$refs.boardListForm.$refs.inputName.focus();
-            });
         },
         hideAddForm() {
             this.isVisibleAddForm = false;

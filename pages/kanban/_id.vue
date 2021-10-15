@@ -9,15 +9,20 @@
                 </v-card-title>
 
                 <v-card-text class="pa-2 flex-grow-1 d-flex">
-                    <v-row class="task-list-row flex-nowrap">
+                    <draggable
+                        class="d-flex task-list-row flex-nowrap"
+                        handle=".task-list-title"
+                        tag=""
+                        v-model="taskLists"
+                    >
                         <board-task-list
-                            v-for="listId in board.lists"
+                            v-for="listId in taskLists"
                             :key="listId"
                             :list-id="listId"
                         />
+                    </draggable>
 
-                        <board-task-list-add />
-                    </v-row>
+                    <board-task-list-add />
                 </v-card-text>
             </v-card>
         </v-col>
@@ -25,12 +30,14 @@
 </template>
 
 <script>
+import { get } from 'http';
+import draggable from 'vuedraggable';
 import { mapActions, mapState } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
 import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
 
 export default {
-    components: { BoardTaskList, BoardTaskListAdd },
+    components: { draggable, BoardTaskList, BoardTaskListAdd },
     data() {
         return {};
     },
@@ -38,12 +45,26 @@ export default {
         title: 'Kanban'
     }),
     computed: {
+        taskLists: {
+            get() {
+                return this.board.lists;
+            },
+            set(newList) {
+                const updatedListsRanking = newList.map((listId, index) => {
+                    return {
+                        id: listId,
+                        rank: index
+                    };
+                });
+                this.updateListsRanking(updatedListsRanking);
+            }
+        },
         ...mapState('boards', ['board'])
     },
     mounted() {
         this.getBoard(this.$route.params.id);
     },
-    methods: { ...mapActions('boards', ['getBoard']) }
+    methods: { ...mapActions('boards', ['getBoard', 'updateListsRanking']) }
 };
 </script>
 

@@ -34,6 +34,9 @@ export const mutations = {
             Vue.set(state.lists[list.id], prop, list[prop]);
         });
     },
+    updateListsRanking(state, listsArray) {
+        Vue.set(state.board, 'lists', listsArray);
+    },
     removeList(state, listId) {
         const removedListIndex = state.board.lists.findIndex(
             list => list === listId
@@ -160,7 +163,6 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-
     updateList({ commit, dispatch }, { listId, listData }) {
         this.$axios
             .$patch('/api/lists/' + listId, listData)
@@ -171,10 +173,20 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
+    updateListsRanking({ commit, dispatch }, listsArray) {
+        const sortedIds = listsArray.map(item => {
+            return item.id;
+        });
+        commit('updateListsRanking', sortedIds);
+
+        this.$axios.$patch('/api/lists/', listsArray).catch(() => {
+            dispatch('snackbar/showGenericError', null, { root: true });
+        });
+    },
     removeList({ commit }, listId) {
         this.$axios
             .$delete('/api/lists/' + listId)
-            .then(res => {
+            .then(() => {
                 commit('removeList', listId);
             })
             .catch(() => {

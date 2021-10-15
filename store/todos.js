@@ -65,17 +65,14 @@ export const actions = {
             });
     },
     async resetRanking({ commit }, updatedRanking) {
-        await this.$axios
-            .$patch('/api/todos/', updatedRanking)
-            .then(() => {
-                const sortedIds = updatedRanking.map(item => {
-                    return item.id;
-                });
-                commit('setRanking', sortedIds);
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
+        const sortedIds = updatedRanking.map(item => {
+            return item.id;
+        });
+        commit('setRanking', sortedIds);
+
+        await this.$axios.$patch('/api/todos/', updatedRanking).catch(() => {
+            dispatch('snackbar/showGenericError', null, { root: true });
+        });
     },
     async remove({ commit, dispatch, getters }, todoId) {
         await this.$axios

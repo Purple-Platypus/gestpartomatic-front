@@ -72,7 +72,7 @@ export default {
             };
 
             this.$store
-                .dispatch('todos/modify', {
+                .dispatch('todos/update', {
                     updatePayload,
                     todoId: this.todoId
                 })

@@ -18,7 +18,7 @@ export const mutations = {
         const updatedId = updatedTodo.id;
         Vue.set(state.todos, updatedId, updatedTodo);
     },
-    setRanking(state, sortedIds) {
+    updateTodosRanking(state, sortedIds) {
         sortedIds.forEach((id, index) => {
             state.todos[id].rank = index;
         });
@@ -54,7 +54,7 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    async modify({ commit }, { todoId, updatePayload }) {
+    async update({ commit, dispatch }, { todoId, updatePayload }) {
         await this.$axios
             .$patch('/api/todos/' + todoId, updatePayload)
             .then(res => {
@@ -64,11 +64,11 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    async resetRanking({ commit }, updatedRanking) {
+    async updateTodosRanking({ commit }, updatedRanking) {
         const sortedIds = updatedRanking.map(item => {
             return item.id;
         });
-        commit('setRanking', sortedIds);
+        commit('updateTodosRanking', sortedIds);
 
         await this.$axios.$patch('/api/todos/', updatedRanking).catch(() => {
             dispatch('snackbar/showGenericError', null, { root: true });
@@ -87,7 +87,7 @@ export const actions = {
                     };
                 });
 
-                dispatch('resetRanking', updatedRanking);
+                dispatch('updateTodosRanking', updatedRanking);
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });

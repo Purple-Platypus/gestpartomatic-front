@@ -163,14 +163,14 @@ export default {
             get() {
                 return this.sortTodosList(this.activeTodos);
             },
-            set(list) {
-                const newTodosSorting = list.map((todo, index) => {
+            set(updatedList) {
+                const updatedTodosRanking = updatedList.map((todo, index) => {
                     return {
                         id: todo.id,
                         rank: index
                     };
                 });
-                this.resetRanking(newTodosSorting);
+                this.updateTodosRanking(updatedTodosRanking);
             }
         },
         ...mapGetters('todos', ['activeTodos', 'doneTodos'])
@@ -249,7 +249,7 @@ export default {
         hideUpdateForm() {
             this.visibleUpdateForm = null;
         },
-        ...mapActions('todos', ['resetRanking'])
+        ...mapActions('todos', ['updateTodosRanking'])
     }
 };
 </script>

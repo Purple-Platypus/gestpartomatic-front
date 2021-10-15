@@ -1,7 +1,8 @@
 <template>
     <board-list-form
-        ref="boardListForm"
         :boardData="boardData"
+        ref="boardListForm"
+        submit-label="Modifier"
         @submit="submit"
         @cancel="cancel"
     />

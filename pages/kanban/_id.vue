@@ -20,9 +20,8 @@
                             :key="listId"
                             :list-id="listId"
                         />
+                        <board-task-list-add slot="footer" />
                     </draggable>
-
-                    <board-task-list-add />
                 </v-card-text>
             </v-card>
         </v-col>

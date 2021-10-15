@@ -1,5 +1,10 @@
 <template>
-    <board-list-form ref="boardListForm" @submit="submit" @cancel="cancel" />
+    <board-list-form
+        ref="boardListForm"
+        submit-label="Ajouter"
+        @submit="submit"
+        @cancel="cancel"
+    />
 </template>
 
 <script>

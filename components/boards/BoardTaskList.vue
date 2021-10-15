@@ -12,7 +12,6 @@
                             {{ list.todosList.length }}
                         </span>
                     </h2>
-                    {{ list.id }}
 
                     <v-spacer />
 

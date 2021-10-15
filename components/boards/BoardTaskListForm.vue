@@ -46,7 +46,7 @@
                     :disabled="!formData.name"
                     type="submit"
                 >
-                    Ajouter
+                    {{ submitLabel }}
                 </v-btn>
             </v-col>
             <v-col cols="6">
@@ -71,6 +71,10 @@ export default {
                     progression: 'TODO'
                 };
             }
+        },
+        submitLabel: {
+            type: String,
+            default: 'Valider'
         }
     },
     data() {

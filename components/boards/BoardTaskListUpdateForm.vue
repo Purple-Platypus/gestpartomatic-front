@@ -2,6 +2,7 @@
     <board-task-list-form
         ref="boardTaskListForm"
         :listData="listData"
+        submit-label="Modifier"
         @submit="submit"
         @cancel="cancel"
     />

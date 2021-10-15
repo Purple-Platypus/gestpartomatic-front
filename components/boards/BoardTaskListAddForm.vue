@@ -8,6 +8,7 @@
 
         <board-task-list-form
             ref="boardListForm"
+            submit-label="Ajouter"
             @submit="submit"
             @cancel="cancel"
         />

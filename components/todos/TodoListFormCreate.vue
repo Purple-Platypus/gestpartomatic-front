@@ -23,8 +23,9 @@ export default {
             const createPayload = {
                 title: sentTitle,
                 description: sentDescription,
+                isPrivate: true,
                 deadline: todo.deadline,
-                rank: this.$store.state.todos.todosList.length
+                rank: this.$store.state.todos.todoList.length
             };
 
             this.$store.dispatch('todos/create', createPayload).then(() => {

@@ -1,10 +1,5 @@
 <template>
-    <v-menu
-        attach="#todo-list"
-        class="inside-todo-list"
-        :close-on-content-click="false"
-        :value="isOpen"
-    >
+    <v-menu :attach="attach" :close-on-content-click="false" :value="isOpen">
         <template #activator="{ on: onMenu }">
             <v-tooltip bottom>
                 <template #activator="{ on: onTooltip }">
@@ -95,6 +90,10 @@ export default {
             default: function() {
                 return new Date().toISOString();
             }
+        },
+        attach: {
+            type: String,
+            default: ''
         }
     },
     data() {

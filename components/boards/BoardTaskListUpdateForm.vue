@@ -20,7 +20,7 @@ export default {
             default: () => {
                 return {
                     name: '',
-                    description: ''
+                    progression: ''
                 };
             }
         }

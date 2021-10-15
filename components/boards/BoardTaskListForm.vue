@@ -1,5 +1,9 @@
 <template>
-    <v-form class="pa-2" @submit.prevent="submit">
+    <v-form
+        id="board-task-list-update-form"
+        class="pa-2"
+        @submit.prevent="submit"
+    >
         <v-row>
             <v-col class="pb-0">
                 <v-text-field
@@ -16,9 +20,10 @@
             </v-col>
         </v-row>
 
-        <v-row v-if="showProgression">
+        <v-row>
             <v-col>
                 <v-select
+                    attach="#board-task-list-update-form"
                     class="white"
                     dense
                     hide-details
@@ -66,10 +71,6 @@ export default {
                     progression: 'TODO'
                 };
             }
-        },
-        showProgression: {
-            type: Boolean,
-            default: false
         }
     },
     data() {

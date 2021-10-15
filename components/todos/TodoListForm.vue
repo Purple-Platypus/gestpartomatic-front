@@ -30,6 +30,7 @@
                 <v-row>
                     <v-col class="py-0 text-body-2">
                         <datetime-picker
+                            attach="#todo-list"
                             v-model="formData.deadline"
                             :datetime="formData.deadline"
                             ref="datetimePicker"

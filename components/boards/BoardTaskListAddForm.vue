@@ -8,7 +8,6 @@
 
         <board-task-list-form
             ref="boardListForm"
-            showProgression
             @submit="submit"
             @cancel="cancel"
         />

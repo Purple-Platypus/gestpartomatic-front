@@ -118,7 +118,7 @@ export default {
                 isDone: true,
                 rank: -1
             };
-            this.$store.dispatch('todos/modify', {
+            this.$store.dispatch('todos/update', {
                 updatePayload,
                 todoId: this.todoId
             });

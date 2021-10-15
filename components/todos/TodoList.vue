@@ -3,7 +3,7 @@
         id="todo-list"
         class="fill-height cursor-pointer todo-list"
         outlined
-        @click.self.native="addTodo"
+        @dblclick.self.native="addTodo"
         v-click-outside="hideAll"
     >
         <v-card-title class="text-body-2 font-weight-light text-uppercase">

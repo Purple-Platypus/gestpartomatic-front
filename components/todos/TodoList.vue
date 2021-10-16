@@ -18,7 +18,6 @@
             <v-tooltip v-if="!showDone" bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                        class="mr-2"
                         icon
                         small
                         @click="switchSort"
@@ -36,9 +35,10 @@
                 <span>Trier</span>
             </v-tooltip>
 
-            <v-tooltip bottom>
+            <v-tooltip v-if="doneTodos.length" bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
+                        class="ml-2"
                         icon
                         small
                         @click="toggleShowDone"
@@ -62,10 +62,7 @@
 
         <v-card-text class="pa-0" v-if="showDone">
             <div v-for="doneTodo in doneTodos" :key="doneTodo.id">
-                <todo-list-item-done
-                    :todoId="doneTodo.id"
-                    :key="doneTodo.id"
-                ></todo-list-item-done>
+                <todo-list-item-done :todoId="doneTodo.id" :key="doneTodo.id" />
 
                 <v-divider />
             </div>
@@ -110,7 +107,7 @@
                         v-if="visibleUpdateForm == todo.id"
                         :todoId="todo.id"
                         ref="todoListFormUpdate"
-                        @close="visibleUpdateForm = null"
+                        @close="hideUpdateForm"
                     />
                     <todo-list-item
                         v-else
@@ -243,7 +240,18 @@ export default {
         hideUpdateForm() {
             this.visibleUpdateForm = null;
         },
+        handleUndone() {
+            console.log('plop');
+            this.showDone = this.doneTodos > 0;
+        },
         ...mapActions('todos', ['updateTodosRanking'])
+    },
+    watch: {
+        doneTodos(doneTodos) {
+            if (!doneTodos.length) {
+                this.showDone = false;
+            }
+        }
     }
 };
 </script>

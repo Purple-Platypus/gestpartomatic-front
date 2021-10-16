@@ -1,6 +1,11 @@
 <template>
     <v-container class="px-0 pb-1">
-        <todo-list-form v-on="$listeners" ref="todoListForm" @submit="submit" />
+        <todo-list-form
+            v-on="$listeners"
+            ref="todoListForm"
+            @submit="submit"
+            @close="close"
+        />
     </v-container>
 </template>
 
@@ -31,6 +36,9 @@ export default {
             this.$store.dispatch('todos/create', createPayload).then(() => {
                 this.$emit('close');
             });
+        },
+        close() {
+            this.$emit('close');
         }
     }
 };

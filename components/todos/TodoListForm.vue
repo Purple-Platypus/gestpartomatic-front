@@ -66,10 +66,9 @@
                     </span>
                 </v-tooltip>
 
-                <v-tooltip bottom>
+                <v-tooltip v-if="removable" bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
-                            v-if="removable"
                             fab
                             color="error"
                             icon
@@ -87,6 +86,30 @@
                         Supprimer <br />
                         <kbd class="mr-2">
                             Ctrl + Suppr
+                        </kbd>
+                    </span>
+                </v-tooltip>
+
+                <v-tooltip v-else bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            fab
+                            color="error"
+                            icon
+                            x-small
+                            @click="close"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon size="24px">
+                                mdi-close-circle
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>
+                        Annuler <br />
+                        <kbd class="mr-2">
+                            Echap.
                         </kbd>
                     </span>
                 </v-tooltip>
@@ -143,6 +166,9 @@ export default {
         },
         remove() {
             this.$emit('remove', this.formData);
+        },
+        close() {
+            this.$emit('close');
         },
         showDatetimePicker(e) {
             this.$refs.datetimePicker.open();

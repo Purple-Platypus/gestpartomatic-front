@@ -5,6 +5,7 @@
                 {{ board.isPrivate ? 'mdi-lock' : 'mdi-lock-open-outline' }}
             </v-icon>
         </v-list-item-icon>
+
         <v-list-item-content>
             <nuxt-link :to="'kanban/' + board.id">
                 <v-list-item-title class="black--text">
@@ -16,35 +17,58 @@
             </nuxt-link>
         </v-list-item-content>
 
-        <v-btn icon small v-if="!board.isArchived" @click="update">
-            <v-icon size="19px">
-                mdi-pencil
-            </v-icon>
-        </v-btn>
+        <v-tooltip v-if="!board.isArchived" bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn icon small @click="update" v-bind="attrs" v-on="on">
+                    <v-icon size="19px">
+                        mdi-pencil
+                    </v-icon>
+                </v-btn>
+            </template>
+            <span>
+                Modifier
+            </span>
+        </v-tooltip>
 
-        <v-btn
-            v-if="!board.isArchived"
-            :disabled="board.creatorId != auth.id"
-            icon
-            small
-            @click="archive()"
-        >
-            <v-icon size="19px">
-                mdi-archive
-            </v-icon>
-        </v-btn>
+        <v-tooltip v-if="!board.isArchived" bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    :disabled="board.creatorId != auth.id"
+                    icon
+                    small
+                    @click="archive()"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                    <v-icon size="19px">
+                        mdi-archive
+                    </v-icon>
+                </v-btn>
+            </template>
+            <span>
+                Archiver
+            </span>
+        </v-tooltip>
 
-        <v-btn
-            v-else
-            :disabled="board.creatorId != auth.id"
-            icon
-            small
-            @click="restore()"
-        >
-            <v-icon size="19px">
-                mdi-restore
-            </v-icon>
-        </v-btn>
+        <v-tooltip v-else bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    :disabled="board.creatorId != auth.id"
+                    icon
+                    small
+                    @click="restore()"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                    <v-icon size="19px">
+                        mdi-restore
+                    </v-icon>
+                </v-btn>
+            </template>
+            <span>
+                Restaurer
+            </span>
+        </v-tooltip>
     </v-list-item>
 </template>
 

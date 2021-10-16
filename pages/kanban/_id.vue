@@ -8,7 +8,7 @@
                     </h1>
                 </v-card-title>
 
-                <v-card-text class="pa-2 flex-grow-1 d-flex">
+                <v-card-text class="pa-0 flex-grow-1 d-flex">
                     <draggable
                         class="d-flex task-list-row flex-nowrap"
                         handle=".task-list-title"
@@ -51,7 +51,7 @@ export default {
                 const updatedListsRanking = newList.map((listId, index) => {
                     return {
                         id: listId,
-                        rank: index
+                        data: { rank: index }
                     };
                 });
                 this.updateListsRanking(updatedListsRanking);
@@ -70,6 +70,6 @@ export default {
 
 <style>
 .task-list-row {
-    overflow: scroll;
+    overflow-x: scroll;
 }
 </style>

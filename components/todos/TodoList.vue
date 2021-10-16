@@ -167,7 +167,7 @@ export default {
                 const updatedTodosRanking = updatedList.map((todo, index) => {
                     return {
                         id: todo.id,
-                        rank: index
+                        data: { rank: index }
                     };
                 });
                 this.updateTodosRanking(updatedTodosRanking);

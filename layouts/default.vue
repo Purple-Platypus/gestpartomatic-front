@@ -6,7 +6,7 @@
                 <nuxt />
             </v-container>
         </v-main>
-        <v-footer v-if="shortkeys.length" app inset>
+        <v-footer v-if="shortkeys.length" app class="pt-0" inset>
             <ul
                 class="shortkeys-list blue-grey--text text--lighten-1 text-body-2 pl-0"
             >

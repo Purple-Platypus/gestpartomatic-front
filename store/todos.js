@@ -64,7 +64,7 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    async updateTodosRanking({ commit }, updatedRanking) {
+    async updateTodosRanking({ commit, dispatch }, updatedRanking) {
         const sortedIds = updatedRanking.map(item => {
             return item.id;
         });

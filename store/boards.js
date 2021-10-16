@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 export const state = () => ({
     boardsList: [],
-    board: {},
+    board: { lists: [] },
     lists: {},
     todos: {}
 });
@@ -137,6 +137,10 @@ export const actions = {
     },
     parseLists({ commit }, parsedLists) {
         commit('resetLists');
+        console.log(parsedLists);
+        parsedLists.sort((a, b) => {
+            return a.rank > b.rank;
+        });
 
         parsedLists.forEach(parsedList => {
             const { todos, ...list } = parsedList;

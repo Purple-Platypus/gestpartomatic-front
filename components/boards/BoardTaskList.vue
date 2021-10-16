@@ -4,7 +4,7 @@
             <v-card class="fill-height grey lighten-5" flat>
                 <v-card-title
                     v-if="!isUpdateFormVisible"
-                    class="task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase"
+                    class="task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase cursor-drag"
                 >
                     <h2 class="mr-8 text-body-2 font-weight-light">
                         {{ list.name }}

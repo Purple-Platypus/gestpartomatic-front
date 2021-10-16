@@ -1,5 +1,10 @@
 <template>
     <v-list-item>
+        <v-list-item-icon class="mr-3 align-self-center">
+            <v-icon color="grey lighten-1" size="18px">
+                {{ board.isPrivate ? 'mdi-lock' : 'mdi-lock-open-outline' }}
+            </v-icon>
+        </v-list-item-icon>
         <v-list-item-content>
             <nuxt-link :to="'kanban/' + board.id">
                 <v-list-item-title class="black--text">

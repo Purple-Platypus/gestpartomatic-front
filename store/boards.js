@@ -201,10 +201,18 @@ export const actions = {
 
 export const getters = {
     activeBoards: state => {
-        return state.boardsList.filter(board => !board.isArchived);
+        return state.boardsList
+            .filter(board => !board.isArchived)
+            .sort((a, b) => {
+                return a.name.toLowerCase() > b.name.toLowerCase();
+            });
     },
     archivedBoards: state => {
-        return state.boardsList.filter(board => board.isArchived);
+        return state.boardsList
+            .filter(board => board.isArchived)
+            .sort((a, b) => {
+                return a.name.toLowerCase() > b.name.toLowerCase();
+            });
     },
     boardById: state => boardId => {
         return state.boardsList.find(board => {

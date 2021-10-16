@@ -119,6 +119,14 @@
                     <v-divider />
                 </div>
             </draggable>
+
+            <p
+                v-if="!todosList.length"
+                class="mt-8 text-center grey--text text-body-1"
+            >
+                Votre liste est vide. <br />
+                Vous pouvez souffler un peu :)
+            </p>
         </v-card-text>
     </v-card>
 </template>

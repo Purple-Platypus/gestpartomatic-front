@@ -18,7 +18,7 @@
         </v-row>
 
         <v-row>
-            <v-col>
+            <v-col class="pb-0">
                 <v-textarea
                     auto-grow
                     class="input-description white"
@@ -30,6 +30,19 @@
                     ref="inputDescription"
                     rows="2"
                     @keyup.ctrl.enter="submit"
+                />
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col>
+                <v-switch
+                    class="mt-0 bordered-switch"
+                    dense
+                    flat
+                    hide-details
+                    label="Tableau privé"
+                    v-model="formData.isPrivate"
                 />
             </v-col>
         </v-row>
@@ -65,7 +78,8 @@ export default {
             default: () => {
                 return {
                     name: '',
-                    description: ''
+                    description: '',
+                    isPrivate: true
                 };
             }
         },
@@ -78,7 +92,8 @@ export default {
         return {
             formData: {
                 description: this.boardData.description,
-                name: this.boardData.name
+                name: this.boardData.name,
+                isPrivate: this.boardData.isPrivate
             }
         };
     },
@@ -92,3 +107,12 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.bordered-switch >>> .v-input--switch__thumb {
+    border: 1px solid #bdbdbd !important;
+}
+.bordered-switch >>> .v-input--switch__thumb.primary--text {
+    border-color: transparent !important;
+}
+</style>

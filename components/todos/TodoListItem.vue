@@ -115,7 +115,7 @@ export default {
         },
         async setDone() {
             const updatePayload = {
-                isDone: true,
+                progression: 'DONE',
                 rank: -1
             };
             this.$store.dispatch('todos/update', {

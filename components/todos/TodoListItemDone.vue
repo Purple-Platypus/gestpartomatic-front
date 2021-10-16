@@ -10,10 +10,7 @@
                 class="ma-0 pt-1 pr-4 align-self-center"
                 @click="handleToggle"
             >
-                <v-icon v-if="!todo.isDone" color="grey">
-                    mdi-checkbox-blank-circle-outline
-                </v-icon>
-                <v-icon v-else color="grey">
+                <v-icon color="grey">
                     mdi-checkbox-marked-circle-outline
                 </v-icon>
             </v-list-item-icon>
@@ -97,10 +94,10 @@ export default {
         },
         async setNotDone() {
             const updatePayload = {
-                isDone: false,
+                progression: 'TODO',
                 rank: -1
             };
-            this.$store.dispatch('todos/modify', {
+            this.$store.dispatch('todos/update', {
                 updatePayload,
                 todoId: this.todoId
             });

@@ -101,7 +101,7 @@ export const getters = {
             .map(todoId => {
                 return {
                     id: todoId,
-                    isDone: state.todos[todoId].isDone,
+                    progression: state.todos[todoId].progression,
                     rank: state.todos[todoId].rank,
                     deadline: state.todos[todoId].deadline,
                     updatedAt: state.todos[todoId].updatedAt
@@ -112,11 +112,11 @@ export const getters = {
             });
     },
     activeTodos: (state, getters) => {
-        return getters.allTodos.filter(todo => !todo.isDone);
+        return getters.allTodos.filter(todo => todo.progression == 'TODO');
     },
     doneTodos: (state, getters) => {
         return getters.allTodos
-            .filter(todo => todo.isDone)
+            .filter(todo => todo.progression == 'DONE')
             .sort((a, b) => {
                 return a.updatedAt > b.updatedAt;
             });

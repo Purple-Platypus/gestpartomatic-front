@@ -43,9 +43,11 @@ export default {
     },
     async fetch() {
         this.getUser();
+        this.getUsers();
     },
     methods: {
-        ...mapActions('auth', ['getUser'])
+        ...mapActions('auth', ['getUser']),
+        ...mapActions('users', ['getUsers'])
     },
     watch: {
         darkMode(newValue) {

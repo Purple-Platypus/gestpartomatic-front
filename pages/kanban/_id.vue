@@ -6,6 +6,23 @@
                     <h1 class="mb-4 text-h3 font-weight-light">
                         {{ board.name }}
                     </h1>
+
+                    <v-spacer />
+
+                    <v-btn class="mr-2" icon large @click="showMembersModal">
+                        <v-icon>
+                            {{
+                                board.isPrivate
+                                    ? 'mdi-lock'
+                                    : 'mdi-lock-open-outline'
+                            }}
+                        </v-icon>
+                    </v-btn>
+
+                    <board-task-list-members-modal
+                        :is-visible="isMembersModalVisible"
+                        @close="hideMembersModal"
+                    />
                 </v-card-title>
 
                 <v-card-text class="pa-0 flex-grow-1 d-flex">
@@ -33,15 +50,23 @@ import draggable from 'vuedraggable';
 import { mapActions, mapState } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
 import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
+import BoardTaskListMembersModal from '../../components/boards/BoardTaskListMembersModal';
 
 export default {
-    components: { draggable, BoardTaskList, BoardTaskListAdd },
-    data() {
-        return {};
+    components: {
+        draggable,
+        BoardTaskList,
+        BoardTaskListAdd,
+        BoardTaskListMembersModal
     },
     head: () => ({
         title: 'Kanban'
     }),
+    data() {
+        return {
+            isMembersModalVisible: false
+        };
+    },
     computed: {
         taskLists: {
             get() {
@@ -63,6 +88,12 @@ export default {
         this.getBoard(this.$route.params.id);
     },
     methods: {
+        showMembersModal() {
+            this.isMembersModalVisible = true;
+        },
+        hideMembersModal() {
+            this.isMembersModalVisible = false;
+        },
         ...mapActions('boards', ['getBoard', 'updateListsRanking'])
     }
 };

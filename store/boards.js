@@ -23,6 +23,11 @@ export const mutations = {
             return board.id == boardId;
         });
         Vue.set(state.boardsList, UpdatedIndex, board);
+        if (boardId == state.board.id) {
+            Object.keys(board).forEach(prop => {
+                Vue.set(state.board, prop, board[prop]);
+            });
+        }
     },
     addList(state, list) {
         list['todosList'] = [];
@@ -41,7 +46,6 @@ export const mutations = {
         const removedListIndex = state.board.lists.findIndex(
             list => list === listId
         );
-        console.log(removedListIndex);
         Vue.delete(state.board.lists, removedListIndex);
     },
     resetLists(state) {
@@ -137,7 +141,7 @@ export const actions = {
     },
     parseLists({ commit }, parsedLists) {
         commit('resetLists');
-        console.log(parsedLists);
+
         parsedLists.sort((a, b) => {
             return a.rank > b.rank;
         });

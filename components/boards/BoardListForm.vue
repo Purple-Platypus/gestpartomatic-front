@@ -107,12 +107,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.bordered-switch >>> .v-input--switch__thumb {
-    border: 1px solid #bdbdbd !important;
-}
-.bordered-switch >>> .v-input--switch__thumb.primary--text {
-    border-color: transparent !important;
-}
-</style>

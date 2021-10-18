@@ -58,6 +58,12 @@ export const mutations = {
     addGuest(state, guest) {
         Vue.set(state.board.guests, state.board.guests.length, guest.userId);
     },
+    removeGuest(state, removedId) {
+        const removedGuestIndex = state.board.guests.findIndex(
+            guestId => guestId === removedId
+        );
+        Vue.delete(state.board.guests, removedGuestIndex);
+    },
     addTodo(state, todo) {
         const listId = todo.listId;
         state.lists[listId].todosList.push(todo.id);
@@ -155,10 +161,13 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    removeGuest({ state, dispatch }, guest) {
+    removeGuest({ state, dispatch, commit }, guest) {
         this.$axios
             .$delete('/api/boards/' + state.board.id + '/guest/' + guest.id)
-            .catch(() => {
+            .then(() => {
+                commit('removeGuest', guest.id);
+            })
+            .catch(err => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },

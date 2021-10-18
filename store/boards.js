@@ -52,6 +52,12 @@ export const mutations = {
         state.board.lists = [];
         state.lists = {};
     },
+    resetGuests(state) {
+        state.board.guests = [];
+    },
+    addGuest(state, guest) {
+        Vue.set(state.board.guests, state.board.guests.length, guest.userId);
+    },
     addTodo(state, todo) {
         const listId = todo.listId;
         state.lists[listId].todosList.push(todo.id);
@@ -74,9 +80,10 @@ export const actions = {
         this.$axios
             .$get('/api/boards/' + boardId + '?deep=true')
             .then(res => {
-                const { lists, ...board } = res;
+                const { lists, guests, ...board } = res;
                 commit('setBoard', board);
                 dispatch('parseLists', lists);
+                dispatch('parseGuests', guests);
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
@@ -135,6 +142,22 @@ export const actions = {
                     board: updatedBoard
                 });
             })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    addGuest({ state, dispatch }, guestId) {
+        this.$axios
+            .$post('/api/boards/' + state.board.id + '/guest', {
+                id: guestId
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    removeGuest({ state, dispatch }, guest) {
+        this.$axios
+            .$delete('/api/boards/' + state.board.id + '/guest/' + guest.id)
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
@@ -200,6 +223,14 @@ export const actions = {
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
+    },
+
+    parseGuests({ commit }, parsedGuests) {
+        commit('resetGuests');
+
+        parsedGuests.forEach(parsedGuest => {
+            commit('addGuest', parsedGuest);
+        });
     }
 };
 

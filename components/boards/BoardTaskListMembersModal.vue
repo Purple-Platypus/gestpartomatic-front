@@ -28,29 +28,41 @@
             <v-divider />
 
             <v-card-text class="pa-4">
-                <v-form :disabled="!isPrivate" @submit.prevent>
+                <v-form @submit.prevent>
                     <p>
                         Les personnes suivantes pourront consulter et modifier
                         ce tableau.
                     </p>
                     <v-autocomplete
+                        chips
                         deletable-chips
                         dense
+                        :disabled="!isPrivate"
                         hide-selected
                         item-text="name"
                         item-value="id"
+                        :items="usersList"
                         multiple
                         outlined
-                        chips
-                        :items="usersList"
+                        v-model="guestsList"
                     >
+                        <template v-slot:no-data>
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>
+                                        Mmmmh... Il ne reste plus personne.
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template>
+
                         <template v-slot:selection="data">
                             <v-chip
+                                label
                                 v-bind="data.attrs"
                                 :input-value="data.selected"
                                 close
-                                @click="data.select"
-                                @click:close="remove(data.item)"
+                                @click:close="removeGuest(data.item)"
                             >
                                 <v-avatar left>
                                     <v-img :src="data.item.avatar"></v-img>
@@ -58,6 +70,7 @@
                                 {{ data.item.name }}
                             </v-chip>
                         </template>
+
                         <template v-slot:item="data">
                             <v-list-item-avatar>
                                 <img :src="data.item.avatar" />
@@ -84,7 +97,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
     name: 'board-task-list-members-modal',
@@ -106,23 +119,46 @@ export default {
                 });
             }
         },
+        guestsList: {
+            get: function() {
+                return this.board.guests;
+            },
+            set: function(guestsIds) {
+                const guestId = guestsIds[guestsIds.length - 1];
+                this.addGuest(guestId);
+            }
+        },
         usersList() {
-            return this.users.map(user => {
-                return {
-                    id: user.id,
-                    name: user.nickname || user.username,
-                    avatar: user.avatar
-                };
-            });
+            return this.users
+                .map(user => {
+                    return {
+                        id: user.id,
+                        name: user.nickname || user.username,
+                        avatar: user.avatar
+                    };
+                })
+                .filter(user => {
+                    return user.id !== this.auth.id;
+                });
         },
         ...mapState('boards', ['board']),
-        ...mapState('users', ['users'])
+        ...mapState('users', ['users']),
+        ...mapState('auth', ['auth'])
     },
     methods: {
         close() {
             this.$emit('close');
         },
-        ...mapActions('boards', ['updateBoard'])
+        ...mapMutations('boards', ['updateBoard']),
+        ...mapActions('boards', ['updateBoard', 'addGuest', 'removeGuest'])
+    },
+    watch: {
+        // guestsList(newList, oldList) {
+        //     if (newList.length > oldList.length) {
+        //         const guestId = newList[newList.length - 1];
+        //         this.addGuest(guestId);
+        //     }
+        // }
     }
 };
 </script>

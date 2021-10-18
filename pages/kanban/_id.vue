@@ -6,6 +6,7 @@
                     <h1 class="mb-4 text-h3 font-weight-light">
                         {{ board.name }}
                     </h1>
+                    {{ board.guests }}
 
                     <v-spacer />
 

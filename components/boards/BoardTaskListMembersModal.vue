@@ -151,14 +151,6 @@ export default {
         },
         ...mapMutations('boards', ['updateBoard']),
         ...mapActions('boards', ['updateBoard', 'addGuest', 'removeGuest'])
-    },
-    watch: {
-        // guestsList(newList, oldList) {
-        //     if (newList.length > oldList.length) {
-        //         const guestId = newList[newList.length - 1];
-        //         this.addGuest(guestId);
-        //     }
-        // }
     }
 };
 </script>

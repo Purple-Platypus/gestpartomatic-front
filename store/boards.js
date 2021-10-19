@@ -13,6 +13,7 @@ export const mutations = {
     },
     setBoard(state, board) {
         board['lists'] = [];
+        board['guests'] = [];
         state.board = board;
     },
     addBoard(state, board) {

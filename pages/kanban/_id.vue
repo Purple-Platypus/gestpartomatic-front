@@ -6,11 +6,28 @@
                     <h1 class="mb-4 text-h3 font-weight-light">
                         {{ board.name }}
                     </h1>
-                    {{ board.guests }}
 
                     <v-spacer />
 
-                    <v-btn class="mr-2" icon large @click="showMembersModal">
+                    <v-tooltip
+                        v-for="guest in guestDetails"
+                        :key="guest.id"
+                        bottom
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-avatar v-bind="attrs" v-on="on" size="36">
+                                <v-img :src="guest.avatar" />
+                            </v-avatar>
+                        </template>
+                        <span>{{ guest.nickname || guest.username }}</span>
+                    </v-tooltip>
+
+                    <v-btn
+                        class="mr-2 ml-4"
+                        icon
+                        large
+                        @click="showMembersModal"
+                    >
                         <v-icon>
                             {{
                                 board.isPrivate
@@ -83,6 +100,15 @@ export default {
                 this.updateListsRanking(updatedListsRanking);
             }
         },
+        guestDetails() {
+            if (this.board.isPrivate) {
+                return this.board.guests.map(guest => {
+                    return this.users.find(user => user.id === guest);
+                });
+            }
+            return [];
+        },
+        ...mapState('users', ['users']),
         ...mapState('boards', ['board'])
     },
     mounted() {

@@ -3,6 +3,7 @@ import Vue from 'vue';
 export const state = () => ({
     boardsList: [],
     board: { lists: [] },
+    guests: {},
     lists: {},
     todos: {}
 });
@@ -55,15 +56,19 @@ export const mutations = {
     },
     resetGuests(state) {
         state.board.guests = [];
+        state.guests = {};
     },
     addGuest(state, guest) {
-        Vue.set(state.board.guests, state.board.guests.length, guest.userId);
+        const flatGuest = Object.assign(guest.user, { role: guest.role });
+        Vue.set(state.board.guests, state.board.guests.length, flatGuest.id);
+        Vue.set(state.guests, flatGuest.id, flatGuest);
     },
     removeGuest(state, removedId) {
         const removedGuestIndex = state.board.guests.findIndex(
             guestId => guestId === removedId
         );
         Vue.delete(state.board.guests, removedGuestIndex);
+        Vue.delete(state.guests, removedId);
     },
     addTodo(state, todo) {
         const listId = todo.listId;
@@ -153,22 +158,43 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    addGuest({ state, dispatch }, guestId) {
+    addGuest({ state, commit, dispatch }, { userId, role }) {
         this.$axios
             .$post('/api/boards/' + state.board.id + '/guest', {
-                id: guestId
+                userId,
+                role
             })
-            .catch(() => {
+            .then(res => {
+                commit('addGuest', res);
+            })
+            .catch(e => {
+                console.log(e);
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    removeGuest({ state, dispatch, commit }, guest) {
+    updateGuestRole({ state, dispatch, commit }, { userId, role }) {
         this.$axios
-            .$delete('/api/boards/' + state.board.id + '/guest/' + guest.id)
-            .then(() => {
-                commit('removeGuest', guest.id);
+            .$patch('/api/boards/' + state.board.id + '/guest/' + userId, {
+                role
             })
-            .catch(err => {
+            .then(updatedBoard => {
+                commit('updateBoard', {
+                    boardId: state.board.id,
+                    board: updatedBoard
+                });
+            })
+            .catch(e => {
+                console.log(e);
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    removeGuest({ state, dispatch, commit }, guestId) {
+        this.$axios
+            .$delete('/api/boards/' + state.board.id + '/guest/' + guestId)
+            .then(() => {
+                commit('removeGuest', guestId);
+            })
+            .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },

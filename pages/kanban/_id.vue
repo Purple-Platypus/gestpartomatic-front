@@ -9,13 +9,14 @@
 
                     <v-spacer />
 
-                    <v-tooltip
-                        v-for="guest in guestDetails"
-                        :key="guest.id"
-                        bottom
-                    >
+                    <v-tooltip v-for="guest in guests" :key="guest.id" bottom>
                         <template v-slot:activator="{ on, attrs }">
-                            <v-avatar v-bind="attrs" v-on="on" size="36">
+                            <v-avatar
+                                class="ml-1"
+                                v-bind="attrs"
+                                v-on="on"
+                                size="32"
+                            >
                                 <v-img :src="guest.avatar" />
                             </v-avatar>
                         </template>
@@ -100,16 +101,8 @@ export default {
                 this.updateListsRanking(updatedListsRanking);
             }
         },
-        guestDetails() {
-            if (this.board.isPrivate) {
-                return this.board.guests.map(guest => {
-                    return this.users.find(user => user.id === guest);
-                });
-            }
-            return [];
-        },
         ...mapState('users', ['users']),
-        ...mapState('boards', ['board'])
+        ...mapState('boards', ['board', 'guests'])
     },
     mounted() {
         this.getBoard(this.$route.params.id);

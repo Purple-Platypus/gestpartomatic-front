@@ -289,5 +289,12 @@ export const getters = {
         return state.boardsList.find(board => {
             return board.id == boardId;
         });
+    },
+    isAdmin: (state, getters, rootState) => {
+        const authId = rootState.auth.auth.id;
+        return (
+            state.guests.hasOwnProperty(authId) &&
+            state.guests[authId].role == 'ADMIN'
+        );
     }
 };

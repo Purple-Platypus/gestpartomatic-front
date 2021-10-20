@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions, maGetters } from 'vuex';
 
 export default {
     name: 'board-task-list-members-modal',

@@ -47,8 +47,8 @@
                 <v-card-text class="pa-0 flex-grow-1 d-flex">
                     <draggable
                         class="d-flex task-list-row flex-nowrap"
+                        :disabled="!isAdmin"
                         handle=".task-list-title"
-                        tag=""
                         v-model="taskLists"
                     >
                         <board-task-list
@@ -66,7 +66,7 @@
 
 <script>
 import draggable from 'vuedraggable';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
 import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
 import BoardTaskListMembersModal from '../../components/boards/BoardTaskListMembersModal';
@@ -101,15 +101,11 @@ export default {
                 this.updateListsRanking(updatedListsRanking);
             }
         },
-        isAdmin() {
-            return (
-                this.guests.hasOwnProperty(this.auth.id) &&
-                this.guests[this.auth.id].role == 'ADMIN'
-            );
-        },
+
         ...mapState('auth', ['auth']),
         ...mapState('users', ['users']),
-        ...mapState('boards', ['board', 'guests'])
+        ...mapState('boards', ['board', 'guests']),
+        ...mapGetters('boards', ['isAdmin'])
     },
     mounted() {
         this.getBoard(this.$route.params.id);

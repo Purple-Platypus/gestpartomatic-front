@@ -103,9 +103,6 @@ export default {
         ...mapState('users', ['users'])
     },
     methods: {
-        changeRole(e) {
-            console.log(e);
-        },
         close() {
             this.$emit('close');
         },

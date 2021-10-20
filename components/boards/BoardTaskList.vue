@@ -4,7 +4,8 @@
             <v-card class="fill-height grey lighten-5" flat>
                 <v-card-title
                     v-if="!isUpdateFormVisible"
-                    class="task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase cursor-drag"
+                    class="task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase"
+                    :class="{ 'cursor-drag': isAdmin }"
                 >
                     <h2 class="mr-8 text-body-2 font-weight-light">
                         {{ list.name }}
@@ -88,7 +89,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import draggable from 'vuedraggable';
 import BoardTaskListCard from './BoardTaskListCard.vue';
 import BoardTaskListUpdateForm from './BoardTaskListUpdateForm.vue';
@@ -113,7 +114,8 @@ export default {
         list() {
             return this.lists[this.listId];
         },
-        ...mapState('boards', ['lists'])
+        ...mapState('boards', ['lists']),
+        ...mapGetters('boards', ['isAdmin'])
     },
     methods: {
         showUpdateForm() {

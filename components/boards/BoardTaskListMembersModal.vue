@@ -88,24 +88,19 @@ export default {
             }
         },
         privileges() {
-            return this.users
-                .map(user => {
-                    return {
-                        id: user.id,
-                        name: user.nickname || user.username,
-                        avatar: user.avatar,
-                        role: this.guests.hasOwnProperty(user.id)
-                            ? this.guests[user.id].role
-                            : 'NONE'
-                    };
-                })
-                .filter(user => {
-                    return user.id !== this.auth.id;
-                });
+            return this.users.map(user => {
+                return {
+                    id: user.id,
+                    name: user.nickname || user.username,
+                    avatar: user.avatar,
+                    role: this.guests.hasOwnProperty(user.id)
+                        ? this.guests[user.id].role
+                        : 'NONE'
+                };
+            });
         },
         ...mapState('boards', ['board', 'guests']),
-        ...mapState('users', ['users']),
-        ...mapState('auth', ['auth'])
+        ...mapState('users', ['users'])
     },
     methods: {
         changeRole(e) {

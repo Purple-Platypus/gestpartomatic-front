@@ -14,13 +14,13 @@
                 v-model="user.role"
                 @change="changeRole"
             >
-                <v-btn :disabled="!board.isPrivate" value="NONE">
+                <v-btn :disabled="disableChange" value="NONE">
                     Pas d'accès
                 </v-btn>
-                <v-btn :disabled="!board.isPrivate" value="USER">
+                <v-btn :disabled="disableChange" value="USER">
                     Lecture
                 </v-btn>
-                <v-btn :disabled="!board.isPrivate" value="ADMIN">
+                <v-btn :disabled="disableChange" value="ADMIN">
                     Ecriture
                 </v-btn>
             </v-btn-toggle>
@@ -43,6 +43,10 @@ export default {
         isGuest() {
             return this.guests.hasOwnProperty(this.user.id);
         },
+        disableChange() {
+            return !this.board.isPrivate || this.auth.id == this.user.id;
+        },
+        ...mapState('auth', ['auth']),
         ...mapState('boards', ['board', 'guests'])
     },
     methods: {

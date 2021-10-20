@@ -101,6 +101,13 @@ export default {
                 this.updateListsRanking(updatedListsRanking);
             }
         },
+        isAdmin() {
+            return (
+                this.guests.hasOwnProperty(this.auth.id) &&
+                this.guests[this.auth.id].role == 'ADMIN'
+            );
+        },
+        ...mapState('auth', ['auth']),
         ...mapState('users', ['users']),
         ...mapState('boards', ['board', 'guests'])
     },
@@ -109,7 +116,9 @@ export default {
     },
     methods: {
         showMembersModal() {
-            this.isMembersModalVisible = true;
+            if (this.isAdmin) {
+                this.isMembersModalVisible = true;
+            }
         },
         hideMembersModal() {
             this.isMembersModalVisible = false;

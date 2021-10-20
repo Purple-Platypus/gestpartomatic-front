@@ -17,58 +17,60 @@
             </nuxt-link>
         </v-list-item-content>
 
-        <v-tooltip v-if="!board.isArchived" bottom>
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn icon small @click="update" v-bind="attrs" v-on="on">
-                    <v-icon size="19px">
-                        mdi-pencil
-                    </v-icon>
-                </v-btn>
-            </template>
-            <span>
-                Modifier
-            </span>
-        </v-tooltip>
+        <v-list-item-action v-if="isAdmin" class="d-flex flex-row">
+            <v-tooltip v-if="!board.isArchived" bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon small @click="update" v-bind="attrs" v-on="on">
+                        <v-icon size="19px">
+                            mdi-pencil
+                        </v-icon>
+                    </v-btn>
+                </template>
+                <span>
+                    Modifier
+                </span>
+            </v-tooltip>
 
-        <v-tooltip v-if="!board.isArchived" bottom>
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    :disabled="board.creatorId != auth.id"
-                    icon
-                    small
-                    @click="archive()"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    <v-icon size="19px">
-                        mdi-archive
-                    </v-icon>
-                </v-btn>
-            </template>
-            <span>
-                Archiver
-            </span>
-        </v-tooltip>
+            <v-tooltip v-if="!board.isArchived" bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        :disabled="board.creatorId != auth.id"
+                        icon
+                        small
+                        @click="archive()"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon size="19px">
+                            mdi-archive
+                        </v-icon>
+                    </v-btn>
+                </template>
+                <span>
+                    Archiver
+                </span>
+            </v-tooltip>
 
-        <v-tooltip v-else bottom>
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    :disabled="board.creatorId != auth.id"
-                    icon
-                    small
-                    @click="restore()"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    <v-icon size="19px">
-                        mdi-restore
-                    </v-icon>
-                </v-btn>
-            </template>
-            <span>
-                Restaurer
-            </span>
-        </v-tooltip>
+            <v-tooltip v-else bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        :disabled="board.creatorId != auth.id"
+                        icon
+                        small
+                        @click="restore()"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon size="19px">
+                            mdi-restore
+                        </v-icon>
+                    </v-btn>
+                </template>
+                <span>
+                    Restaurer
+                </span>
+            </v-tooltip>
+        </v-list-item-action>
     </v-list-item>
 </template>
 
@@ -89,7 +91,7 @@ export default {
         board() {
             return this.boardById(this.boardId);
         },
-        ...mapGetters('boards', ['boardById']),
+        ...mapGetters('boards', ['boardById', 'isAdmin']),
         ...mapState('auth', ['id'])
     },
     methods: {

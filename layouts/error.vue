@@ -1,15 +1,23 @@
 <template>
-    <v-app dark>
-        <h1 v-if="error.statusCode === 404">
-            {{ pageNotFound }}
-        </h1>
-        <h1 v-else>
-            {{ otherError }}
-        </h1>
-        <NuxtLink to="/">
-            Revenir à l'accueil
-        </NuxtLink>
-    </v-app>
+    <v-container>
+        <v-card class="flex-grow-1" outlined>
+            <v-card-title>
+                <h1 class="text-h3 font-weight-light">
+                    {{ message.title }}
+                </h1>
+            </v-card-title>
+            <v-card-text>
+                <p>
+                    {{ message.text }}
+                </p>
+            </v-card-text>
+            <v-card-text>
+                <NuxtLink to="/">
+                    Revenir à l'accueil
+                </NuxtLink>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -21,24 +29,30 @@ export default {
             default: null
         }
     },
-    data() {
-        return {
-            pageNotFound: 'Félicitations : vous êtes complètement perdu !',
-            otherError: 'Allo Houston... On a un problème'
-        };
+    computed: {
+        message() {
+            switch (this.error.statusCode) {
+                case 404:
+                    return {
+                        title: 'Félicitations : vous êtes complètement perdu !',
+                        text: `La page que vous recherchez n'existe malheureusement pas.`
+                    };
+                case 403:
+                    return {
+                        title: `Désolé`,
+                        text: `Vous ne pouvez pas accéder à cette page.`
+                    };
+
+                default:
+                    return {
+                        title: 'Allo Houston... On a un problème',
+                        text: `Une erreur mystérieuse est survenue. Merci d'arrêter de tout casser.`
+                    };
+            }
+        }
     },
     head() {
-        const title =
-            this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
-        return {
-            title
-        };
+        return { title: 'Arg... Une erreur est survenue' };
     }
 };
 </script>
-
-<style scoped>
-h1 {
-    font-size: 20px;
-}
-</style>

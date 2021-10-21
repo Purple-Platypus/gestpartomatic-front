@@ -89,17 +89,20 @@ export const actions = {
             });
     },
     getBoard({ commit, dispatch }, boardId) {
-        this.$axios
-            .$get('/api/boards/' + boardId + '?deep=true')
-            .then(res => {
-                const { lists, guests, ...board } = res;
-                commit('setBoard', board);
-                dispatch('parseLists', lists);
-                dispatch('parseGuests', guests);
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
+        return new Promise((resolve, reject) => {
+            this.$axios
+                .$get('/api/boards/' + boardId + '?deep=true')
+                .then(res => {
+                    const { lists, guests, ...board } = res;
+                    commit('setBoard', board);
+                    dispatch('parseLists', lists);
+                    dispatch('parseGuests', guests);
+                    resolve();
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        });
     },
     addBoard({ commit }, board) {
         this.$axios

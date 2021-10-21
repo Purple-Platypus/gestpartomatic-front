@@ -16,7 +16,7 @@
 
                     <v-spacer />
 
-                    <v-menu offset-y>
+                    <v-menu v-if="isAdmin" offset-y>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn icon small v-bind="attrs" v-on="on">
                                 <v-icon>

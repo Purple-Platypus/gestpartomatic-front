@@ -108,7 +108,9 @@ export default {
         ...mapGetters('boards', ['isAdmin'])
     },
     mounted() {
-        this.getBoard(this.$route.params.id);
+        this.getBoard(this.$route.params.id).catch(err => {
+            this.$nuxt.error(err);
+        });
     },
     methods: {
         showMembersModal() {

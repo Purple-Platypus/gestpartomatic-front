@@ -55,12 +55,18 @@
                             v-for="listId in taskLists"
                             :key="listId"
                             :list-id="listId"
+                            @showAddTaskForm="showAddTaskForm"
                         />
                         <board-task-list-add slot="footer" />
                     </draggable>
                 </v-card-text>
             </v-card>
         </v-col>
+        <task-form-add
+            :listId="addTaskListId"
+            :isVisible="isAddTaskFormVisible"
+            @close="hideAddTaskForm"
+        />
     </v-row>
 </template>
 
@@ -70,20 +76,24 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
 import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
 import BoardTaskListMembersModal from '../../components/boards/BoardTaskListMembersModal';
+import TaskFormAdd from '../../components/boards/TaskFormAdd.vue';
 
 export default {
     components: {
         draggable,
         BoardTaskList,
         BoardTaskListAdd,
-        BoardTaskListMembersModal
+        BoardTaskListMembersModal,
+        TaskFormAdd
     },
     head: () => ({
         title: 'Kanban'
     }),
     data() {
         return {
-            isMembersModalVisible: false
+            isMembersModalVisible: false,
+            isAddTaskFormVisible: false,
+            addTaskListId: null
         };
     },
     computed: {
@@ -120,6 +130,14 @@ export default {
         },
         hideMembersModal() {
             this.isMembersModalVisible = false;
+        },
+        showAddTaskForm(list) {
+            this.addTaskListId = list.listId;
+            this.isAddTaskFormVisible = true;
+        },
+        hideAddTaskForm() {
+            this.addTaskListId = null;
+            this.isAddTaskFormVisible = false;
         },
         ...mapActions('boards', ['getBoard', 'updateListsRanking'])
     }

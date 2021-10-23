@@ -5,13 +5,17 @@ export const state = () => ({
     board: { lists: [] },
     guests: {},
     lists: {},
-    todos: {}
+    todos: {},
+    tags: {}
 });
 
 export const mutations = {
+    // BoardsList
     setBoardsList(state, boardsList) {
         state.boardsList = boardsList;
     },
+
+    // Board
     setBoard(state, board) {
         board['lists'] = [];
         board['guests'] = [];
@@ -31,6 +35,8 @@ export const mutations = {
             });
         }
     },
+
+    // Lists
     addList(state, list) {
         list['todosList'] = [];
         Vue.set(state.board.lists, state.board.lists.length, list.id);
@@ -54,6 +60,8 @@ export const mutations = {
         state.board.lists = [];
         state.lists = {};
     },
+
+    // Guests
     resetGuests(state) {
         state.board.guests = [];
         state.guests = {};
@@ -70,6 +78,13 @@ export const mutations = {
         Vue.delete(state.board.guests, removedGuestIndex);
         Vue.delete(state.guests, removedId);
     },
+
+    // Tags
+    addTag(state, tag) {
+        Vue.set(state.tags, tag.id, tag);
+    },
+
+    // Todo
     addTodo(state, todo) {
         const listId = todo.listId;
         state.lists[listId].todosList.push(todo.id);
@@ -78,6 +93,7 @@ export const mutations = {
 };
 
 export const actions = {
+    // BoardsList
     async getBoardsList({ commit }) {
         await this.$axios
             .$get('/api/boards')
@@ -88,6 +104,8 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
+
+    // Board
     getBoard({ commit, dispatch }, boardId) {
         return new Promise((resolve, reject) => {
             this.$axios
@@ -97,6 +115,7 @@ export const actions = {
                     commit('setBoard', board);
                     dispatch('parseLists', lists);
                     dispatch('parseGuests', guests);
+                    dispatch('getTags');
                     resolve();
                 })
                 .catch(err => {
@@ -161,46 +180,8 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    addGuest({ state, commit, dispatch }, { userId, role }) {
-        this.$axios
-            .$post('/api/boards/' + state.board.id + '/guest', {
-                userId,
-                role
-            })
-            .then(res => {
-                commit('addGuest', res);
-            })
-            .catch(e => {
-                console.log(e);
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
-    },
-    updateGuestRole({ state, dispatch, commit }, { userId, role }) {
-        this.$axios
-            .$patch('/api/boards/' + state.board.id + '/guest/' + userId, {
-                role
-            })
-            .then(updatedBoard => {
-                commit('updateBoard', {
-                    boardId: state.board.id,
-                    board: updatedBoard
-                });
-            })
-            .catch(e => {
-                console.log(e);
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
-    },
-    removeGuest({ state, dispatch, commit }, guestId) {
-        this.$axios
-            .$delete('/api/boards/' + state.board.id + '/guest/' + guestId)
-            .then(() => {
-                commit('removeGuest', guestId);
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
-    },
+
+    // Lists
     parseLists({ commit }, parsedLists) {
         commit('resetLists');
 
@@ -264,6 +245,75 @@ export const actions = {
             });
     },
 
+    // Tasks
+    addTask({ commit, dispatch, state }, { task, listId }) {
+        console.log(listId);
+    },
+
+    // Tags
+    getTags({ commit, dispatch }) {
+        this.$axios
+            .$get('/api/tags')
+            .then(res => {
+                res.forEach(tag => {
+                    commit('addTag', tag);
+                });
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    addTag({ commit, dispatch }, tag) {
+        this.$axios
+            .$post('/api/tags/', tag)
+            .then(res => {
+                commit('addTag', res);
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+
+    // Guests
+    addGuest({ state, commit, dispatch }, { userId, role }) {
+        this.$axios
+            .$post('/api/boards/' + state.board.id + '/guest', {
+                userId,
+                role
+            })
+            .then(res => {
+                commit('addGuest', res);
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    updateGuestRole({ state, dispatch, commit }, { userId, role }) {
+        this.$axios
+            .$patch('/api/boards/' + state.board.id + '/guest/' + userId, {
+                role
+            })
+            .then(updatedBoard => {
+                commit('updateBoard', {
+                    boardId: state.board.id,
+                    board: updatedBoard
+                });
+            })
+            .catch(e => {
+                console.log(e);
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
+    removeGuest({ state, dispatch, commit }, guestId) {
+        this.$axios
+            .$delete('/api/boards/' + state.board.id + '/guest/' + guestId)
+            .then(() => {
+                commit('removeGuest', guestId);
+            })
+            .catch(() => {
+                dispatch('snackbar/showGenericError', null, { root: true });
+            });
+    },
     parseGuests({ commit }, parsedGuests) {
         commit('resetGuests');
 

@@ -39,11 +39,23 @@ export default {
     ],
 
     // Modules (https://go.nuxtjs.dev/config-modules)
-    modules: ['@nuxtjs/axios'],
+    modules: ['@nuxtjs/axios', 'nuxt-socket-io'],
 
     axios: {
         credentials: true,
         proxy: true
+    },
+
+    io: {
+        sockets: [
+            {
+                default: true,
+                name: 'gestpartomatic',
+                url: '/api',
+                vuex: {},
+                namespaces: {}
+            }
+        ]
     },
 
     proxy: {

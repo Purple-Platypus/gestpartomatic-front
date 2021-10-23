@@ -16,6 +16,12 @@
 
                     <v-spacer />
 
+                    <v-btn icon small @click="showAddTaskForm">
+                        <v-icon size="18">
+                            mdi-plus
+                        </v-icon>
+                    </v-btn>
+
                     <v-menu v-if="isAdmin" offset-y>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn icon small v-bind="attrs" v-on="on">
@@ -117,7 +123,16 @@ export default {
         ...mapState('boards', ['lists']),
         ...mapGetters('boards', ['isAdmin'])
     },
+    mounted() {
+        // this.socket = this.$nuxtSocket({
+        //     name: 'gestpartomatic',
+        //     channel: '/tasks'
+        // });
+    },
     methods: {
+        showAddTaskForm() {
+            this.$emit('showAddTaskForm', { listId: this.listId });
+        },
         showUpdateForm() {
             this.isUpdateFormVisible = true;
         },

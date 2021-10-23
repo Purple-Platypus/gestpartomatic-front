@@ -15,6 +15,7 @@
         "dompurify": "^2.3.3",
         "marked": "^3.0.7",
         "nuxt": "^2.15.7",
+        "nuxt-socket-io": "^1.1.24",
         "papaparse": "^5.3.1",
         "vee-validate": "^3.4.10",
         "vuedraggable": "^2.24.3",

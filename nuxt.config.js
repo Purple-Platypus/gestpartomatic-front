@@ -51,7 +51,7 @@ export default {
             {
                 default: true,
                 name: 'gestpartomatic',
-                url: '/api',
+                url: 'http://localhost:3001',
                 vuex: {},
                 namespaces: {}
             }

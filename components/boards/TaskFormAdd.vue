@@ -20,7 +20,7 @@
                 hide-details
                 label="Titre"
                 outlined
-                v-model="formdata.title"
+                v-model="formData.title"
             />
 
             <v-textarea
@@ -30,12 +30,12 @@
                 label="Description"
                 outlined
                 rows="4"
-                v-model="formdata.description"
+                v-model="formData.description"
             />
 
-            <task-assignees-list v-model="formdata.assignees" />
+            <task-assignees-list v-model="formData.assignees" />
 
-            <task-tags-list v-model="formdata.tags" />
+            <task-tags-list v-model="formData.tags" />
 
             <v-divider />
 
@@ -44,7 +44,7 @@
                     <v-btn
                         color="primary"
                         depressed
-                        :disabled="!formdata.title"
+                        :disabled="!formData.title"
                         type="submit"
                     >
                         Ajouter
@@ -73,7 +73,7 @@ export default {
     },
     data() {
         return {
-            formdata: {
+            formData: {
                 title: '',
                 description: '',
                 tags: [],
@@ -90,12 +90,12 @@ export default {
             }
             return guestsList;
         },
-        ...mapState('boards', ['guests'])
+        ...mapState('boards', ['guests', 'lists'])
     },
 
     methods: {
         close() {
-            this.formdata = {
+            this.formData = {
                 title: '',
                 description: '',
                 tags: [],
@@ -104,10 +104,11 @@ export default {
             this.$emit('close');
         },
         add() {
-            this.addTask({
-                task: this.formdata,
-                listId: this.listId
+            const task = Object.assign(this.formData, {
+                listId: this.listId,
+                rank: this.lists[this.listId].tasksList.length
             });
+            this.$emit('createTask', task);
         },
         showTagManager() {
             this.isTagManagerVisible = true;

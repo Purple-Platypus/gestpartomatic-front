@@ -10,7 +10,7 @@
                     <h2 class="mr-8 text-body-2 font-weight-light">
                         {{ list.name }}
                         <span class="ml-4 grey--text text--darken-1">
-                            {{ list.todosList.length }}
+                            {{ list.tasksList.length }}
                         </span>
                     </h2>
 
@@ -56,11 +56,11 @@
 
                 <v-card-text class="px-2 pb-2">
                     <board-task-list-card
-                        v-for="todoId in list.todosList"
-                        :key="todoId"
-                        :todo-id="todoId"
+                        v-for="taskId in list.tasksList"
+                        :key="taskId"
+                        :task-id="taskId"
                     >
-                        {{ todoId }}
+                        {{ taskId }}
                     </board-task-list-card>
                 </v-card-text>
             </v-card>

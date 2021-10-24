@@ -66,13 +66,14 @@
             :listId="addTaskListId"
             :isVisible="isAddTaskFormVisible"
             @close="hideAddTaskForm"
+            @createTask="createTask"
         />
     </v-row>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapState, mapMutations, mapGetters } from 'vuex';
 import BoardTaskList from '../../components/boards/BoardTaskList.vue';
 import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
 import BoardTaskListMembersModal from '../../components/boards/BoardTaskListMembersModal';
@@ -118,11 +119,24 @@ export default {
         ...mapGetters('boards', ['isAdmin'])
     },
     mounted() {
-        this.getBoard(this.$route.params.id).catch(err => {
-            this.$nuxt.error(err);
-        });
+        this.getBoard(this.$route.params.id)
+            .then(this.connectChannel)
+            .catch(err => {
+                this.$nuxt.error(err);
+            });
     },
     methods: {
+        connectChannel(boardId) {
+            this.socket = this.$nuxtSocket({
+                withCredentials: true
+            });
+            this.socket.emit('watchBoard', boardId);
+
+            this.socket.on('addTask', res => {
+                this.addTask(res);
+                this.hideAddTaskForm();
+            });
+        },
         showMembersModal() {
             if (this.isAdmin) {
                 this.isMembersModalVisible = true;
@@ -139,6 +153,10 @@ export default {
             this.addTaskListId = null;
             this.isAddTaskFormVisible = false;
         },
+        createTask(task) {
+            this.socket.emit('createTask', task);
+        },
+        ...mapMutations('boards', ['addTask']),
         ...mapActions('boards', ['getBoard', 'updateListsRanking'])
     }
 };

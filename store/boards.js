@@ -5,7 +5,7 @@ export const state = () => ({
     board: { lists: [] },
     guests: {},
     lists: {},
-    todos: {},
+    tasks: {},
     tags: {}
 });
 
@@ -38,7 +38,7 @@ export const mutations = {
 
     // Lists
     addList(state, list) {
-        list['todosList'] = [];
+        list['tasksList'] = [];
         Vue.set(state.board.lists, state.board.lists.length, list.id);
         Vue.set(state.lists, list.id, list);
     },
@@ -84,11 +84,11 @@ export const mutations = {
         Vue.set(state.tags, tag.id, tag);
     },
 
-    // Todo
-    addTodo(state, todo) {
-        const listId = todo.listId;
-        state.lists[listId].todosList.push(todo.id);
-        Vue.set(state.todos, todo.id, todo);
+    // Tasks
+    addTask(state, task) {
+        const listId = task.listId;
+        state.lists[listId].tasksList.push(task.id);
+        Vue.set(state.tasks, task.id, task);
     }
 };
 
@@ -116,7 +116,7 @@ export const actions = {
                     dispatch('parseLists', lists);
                     dispatch('parseGuests', guests);
                     dispatch('getTags');
-                    resolve();
+                    resolve(board.id);
                 })
                 .catch(err => {
                     reject(err);
@@ -190,12 +190,12 @@ export const actions = {
         });
 
         parsedLists.forEach(parsedList => {
-            const { todos, ...list } = parsedList;
+            const { tasks, ...list } = parsedList;
 
             commit('addList', list);
 
-            todos.forEach(todo => {
-                commit('addTodo', todo);
+            tasks.forEach(task => {
+                commit('addTask', task);
             });
         });
     },
@@ -243,11 +243,6 @@ export const actions = {
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
-    },
-
-    // Tasks
-    addTask({ commit, dispatch, state }, { task, listId }) {
-        console.log(listId);
     },
 
     // Tags

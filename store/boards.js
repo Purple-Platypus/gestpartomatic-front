@@ -87,6 +87,7 @@ export const mutations = {
     // Tasks
     addTask(state, task) {
         const listId = task.listId;
+        task.tags = task.tags.map(tag => tag.id);
         state.lists[listId].tasksList.push(task.id);
         Vue.set(state.tasks, task.id, task);
     }

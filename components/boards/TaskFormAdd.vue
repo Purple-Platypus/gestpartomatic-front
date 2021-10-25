@@ -24,7 +24,7 @@
             />
 
             <v-textarea
-                class="mb-2"
+                class="mb-2 description-textarea"
                 dense
                 hint="Vous pouvez rédiger la description en mardown"
                 label="Description"
@@ -125,3 +125,9 @@ export default {
     }
 };
 </script>
+
+<style>
+.description-textarea {
+    font-size: 0.875rem !important;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-        absolute
+        fixed
         class="pa-3 elevation-0"
         right
         stateless
@@ -95,13 +95,13 @@ export default {
 
     methods: {
         close() {
+            this.$emit('close');
             this.formData = {
                 title: '',
                 description: '',
                 tags: [],
                 assignees: []
             };
-            this.$emit('close');
         },
         add() {
             const task = Object.assign(this.formData, {
@@ -113,6 +113,7 @@ export default {
                 boardId: this.board.id,
                 task
             });
+            this.close();
         },
         showTagManager() {
             this.isTagManagerVisible = true;

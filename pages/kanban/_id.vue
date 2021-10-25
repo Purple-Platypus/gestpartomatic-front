@@ -134,7 +134,6 @@ export default {
 
             this.socket.on('addTask', res => {
                 this.addTask(res);
-                this.hideAddTaskForm();
             });
         },
         showMembersModal() {
@@ -154,8 +153,7 @@ export default {
             this.isAddTaskFormVisible = false;
         },
         createTask(createTaskData) {
-            this.socket.emit('createTask', createTaskData, res => {
-                console.log(res);
+            this.socket.emit('createTask', createTaskData, () => {
                 this.hideAddTaskForm();
             });
         },

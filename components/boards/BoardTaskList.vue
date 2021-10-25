@@ -59,6 +59,7 @@
                         v-for="taskId in list.tasksList"
                         :key="taskId"
                         :task-id="taskId"
+                        class="mb-1"
                     >
                         {{ taskId }}
                     </board-task-list-card>
@@ -122,12 +123,6 @@ export default {
         },
         ...mapState('boards', ['lists']),
         ...mapGetters('boards', ['isAdmin'])
-    },
-    mounted() {
-        // this.socket = this.$nuxtSocket({
-        //     name: 'gestpartomatic',
-        //     channel: '/tasks'
-        // });
     },
     methods: {
         showAddTaskForm() {

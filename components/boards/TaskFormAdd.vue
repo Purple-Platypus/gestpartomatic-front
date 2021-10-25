@@ -90,7 +90,7 @@ export default {
             }
             return guestsList;
         },
-        ...mapState('boards', ['guests', 'lists'])
+        ...mapState('boards', ['board', 'guests', 'lists'])
     },
 
     methods: {
@@ -108,7 +108,11 @@ export default {
                 listId: this.listId,
                 rank: this.lists[this.listId].tasksList.length
             });
-            this.$emit('createTask', task);
+
+            this.$emit('createTask', {
+                boardId: this.board.id,
+                task
+            });
         },
         showTagManager() {
             this.isTagManagerVisible = true;

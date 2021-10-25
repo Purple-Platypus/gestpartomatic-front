@@ -153,8 +153,11 @@ export default {
             this.addTaskListId = null;
             this.isAddTaskFormVisible = false;
         },
-        createTask(task) {
-            this.socket.emit('createTask', task);
+        createTask(createTaskData) {
+            this.socket.emit('createTask', createTaskData, res => {
+                console.log(res);
+                this.hideAddTaskForm();
+            });
         },
         ...mapMutations('boards', ['addTask']),
         ...mapActions('boards', ['getBoard', 'updateListsRanking'])

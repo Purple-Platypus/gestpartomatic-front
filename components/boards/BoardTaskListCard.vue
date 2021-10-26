@@ -3,7 +3,11 @@
         <v-card-title class="pa-2 font-weight-bold text-body-2">
             {{ task.title }}
         </v-card-title>
-        <v-card-text class="pb-2" v-html="md(task.description)" />
+        <v-card-text
+            v-if="task.description"
+            class="pb-2"
+            v-html="md(task.description)"
+        />
         <v-card-actions v-if="task.tags.length">
             <v-chip
                 v-for="tagId in task.tags"

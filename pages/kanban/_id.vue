@@ -118,8 +118,9 @@ export default {
         ...mapState('boards', ['board', 'guests']),
         ...mapGetters('boards', ['isAdmin'])
     },
-    mounted() {
-        this.getBoard(this.$route.params.id)
+    async fetch() {
+        await this.getTags();
+        await this.getBoard(this.$route.params.id)
             .then(this.connectChannel)
             .catch(err => {
                 this.$nuxt.error(err);
@@ -158,7 +159,7 @@ export default {
             });
         },
         ...mapMutations('boards', ['addTask']),
-        ...mapActions('boards', ['getBoard', 'updateListsRanking'])
+        ...mapActions('boards', ['getTags', 'getBoard', 'updateListsRanking'])
     }
 };
 </script>

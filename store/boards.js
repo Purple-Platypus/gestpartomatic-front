@@ -116,7 +116,6 @@ export const actions = {
                     commit('setBoard', board);
                     dispatch('parseLists', lists);
                     dispatch('parseGuests', guests);
-                    dispatch('getTags');
                     resolve(board.id);
                 })
                 .catch(err => {

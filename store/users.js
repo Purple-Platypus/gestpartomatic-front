@@ -1,12 +1,16 @@
 import Vue from 'vue';
 
 export const state = () => ({
-    users: []
+    users: [],
+    usersById: {}
 });
 
 export const mutations = {
     set(state, users) {
         Vue.set(state, 'users', users);
+        users.forEach(user => {
+            Vue.set(state.usersById, user.id, user);
+        });
     }
 };
 

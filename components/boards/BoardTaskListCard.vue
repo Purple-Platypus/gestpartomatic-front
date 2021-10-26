@@ -8,6 +8,35 @@
             class="pb-2"
             v-html="md(task.description)"
         />
+
+        <v-card-actions v-if="task.assignees.length">
+            <v-spacer />
+
+            <v-tooltip
+                v-for="assigneeId in task.assignees"
+                :key="assigneeId"
+                top
+            >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-avatar
+                        class="mr-1"
+                        left
+                        size="20"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-img :src="usersById[assigneeId].avatar"></v-img>
+                    </v-avatar>
+                </template>
+                <span>
+                    {{
+                        usersById[assigneeId].nickname ||
+                            usersById[assigneeId].username
+                    }}
+                </span>
+            </v-tooltip>
+        </v-card-actions>
+
         <v-card-actions v-if="task.tags.length">
             <v-chip
                 v-for="tagId in task.tags"
@@ -39,6 +68,7 @@ export default {
         task() {
             return this.tasks[this.taskId];
         },
+        ...mapState('users', ['usersById']),
         ...mapState('boards', ['tasks', 'tags'])
     }
 };

@@ -11,6 +11,17 @@
                     {{ message.text }}
                 </p>
             </v-card-text>
+
+            <v-alert
+                v-if="error.statusCode == 500"
+                class="mx-4"
+                border="left"
+                outlined
+                color="red"
+            >
+                {{ error.message }}
+            </v-alert>
+
             <v-card-text>
                 <NuxtLink to="/">
                     Revenir à l'accueil

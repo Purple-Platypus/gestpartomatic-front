@@ -1,7 +1,11 @@
 <template>
     <v-card class="pa-2 elevation-0 task-card" outlined>
         <v-card-title class=" pa-0 font-weight-bold text-body-2">
-            <span v-html="md(task.title)"> </span>
+            <a
+                v-html="md(task.title)"
+                class="text--grey"
+                @click.stop="showDetail"
+            ></a>
             <v-spacer />
             <span v-if="task.assignees.length">
                 <v-tooltip top>
@@ -79,6 +83,11 @@ export default {
         },
         ...mapState('users', ['usersById']),
         ...mapState('boards', ['tasks', 'tags'])
+    },
+    methods: {
+        showDetail() {
+            this.$emit('show');
+        }
     }
 };
 </script>

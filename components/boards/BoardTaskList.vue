@@ -60,6 +60,7 @@
                         :key="taskId"
                         :task-id="taskId"
                         class="mb-1"
+                        @show="showTaskDetail(taskId)"
                     >
                         {{ taskId }}
                     </board-task-list-card>
@@ -139,6 +140,9 @@ export default {
         },
         hideRemoveModal() {
             this.isRemoveDialogVisible = false;
+        },
+        showTaskDetail(taskId) {
+            this.$emit('showTask', taskId);
         },
         remove() {
             this.removeList(this.listId).then(() => {

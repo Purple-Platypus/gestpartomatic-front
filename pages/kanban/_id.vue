@@ -1,5 +1,5 @@
 <template>
-    <v-row class="align-self-stretch">
+    <v-row class="align-self-stretch" @click="hideTaskDrawer">
         <v-col cols="12" class="d-flex">
             <v-card class="flex-grow-1 d-flex flex-column" flat outlined>
                 <v-card-title class="pa-2">
@@ -56,6 +56,7 @@
                             :key="listId"
                             :list-id="listId"
                             @showAddTaskForm="showAddTaskForm"
+                            @showTask="showTaskDrawer($event)"
                         />
                         <board-task-list-add slot="footer" />
                     </draggable>
@@ -68,6 +69,11 @@
             @close="hideAddTaskForm"
             @createTask="createTask"
         />
+        <task-detail
+            :taskId="detailTaskId"
+            :isVisible="isDetailVisible"
+            @close="hideTaskDrawer"
+        />
     </v-row>
 </template>
 
@@ -78,6 +84,7 @@ import BoardTaskList from '../../components/boards/BoardTaskList.vue';
 import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
 import BoardTaskListMembersModal from '../../components/boards/BoardTaskListMembersModal';
 import TaskFormAdd from '../../components/boards/TaskFormAdd.vue';
+import TaskDetail from '../../components/boards/tasks/TaskDetail.vue';
 
 export default {
     components: {
@@ -85,7 +92,8 @@ export default {
         BoardTaskList,
         BoardTaskListAdd,
         BoardTaskListMembersModal,
-        TaskFormAdd
+        TaskFormAdd,
+        TaskDetail
     },
     head: () => ({
         title: 'Kanban'
@@ -94,7 +102,9 @@ export default {
         return {
             isMembersModalVisible: false,
             isAddTaskFormVisible: false,
-            addTaskListId: null
+            addTaskListId: null,
+            isDetailVisible: false,
+            detailTaskId: null
         };
     },
     computed: {
@@ -157,6 +167,16 @@ export default {
             this.socket.emit('createTask', createTaskData, () => {
                 this.hideAddTaskForm();
             });
+        },
+        showTaskDrawer(taskId) {
+            this.detailTaskId = taskId;
+            if (!this.isDetailVisible) {
+                this.isDetailVisible = true;
+            }
+        },
+        hideTaskDrawer() {
+            this.detailTaskId = null;
+            this.isDetailVisible = false;
         },
         ...mapMutations('boards', ['addTask']),
         ...mapActions('boards', ['getTags', 'getBoard', 'updateListsRanking'])

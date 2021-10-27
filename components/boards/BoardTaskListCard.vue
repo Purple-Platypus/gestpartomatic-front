@@ -1,43 +1,37 @@
 <template>
-    <v-card class="elevation-0 task-card" outlined>
-        <v-card-title class="pa-2 font-weight-bold text-body-2">
-            {{ task.title }}
+    <v-card class="pa-2 elevation-0 task-card" outlined>
+        <v-card-title class=" pa-0 font-weight-bold text-body-2">
+            <span v-html="md(task.title)"> </span>
+            <v-spacer />
+            <span v-if="task.assignees.length">
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-avatar
+                            v-for="assigneeId in task.assignees"
+                            :key="assigneeId"
+                            class="ml-n2 outlined-avatar"
+                            left
+                            size="20"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-img :src="usersById[assigneeId].avatar"></v-img>
+                        </v-avatar>
+                    </template>
+                    <span>
+                        {{ assigneesNames }}
+                    </span>
+                </v-tooltip>
+            </span>
         </v-card-title>
+
         <v-card-text
             v-if="task.description"
-            class="pb-2"
+            class="py-0"
             v-html="md(task.description)"
         />
 
-        <v-card-actions v-if="task.assignees.length">
-            <v-spacer />
-
-            <v-tooltip
-                v-for="assigneeId in task.assignees"
-                :key="assigneeId"
-                top
-            >
-                <template v-slot:activator="{ on, attrs }">
-                    <v-avatar
-                        class="mr-1"
-                        left
-                        size="20"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-img :src="usersById[assigneeId].avatar"></v-img>
-                    </v-avatar>
-                </template>
-                <span>
-                    {{
-                        usersById[assigneeId].nickname ||
-                            usersById[assigneeId].username
-                    }}
-                </span>
-            </v-tooltip>
-        </v-card-actions>
-
-        <v-card-actions v-if="task.tags.length">
+        <v-card-actions v-if="task.tags.length" class="px-0 pb-0">
             <v-chip
                 v-for="tagId in task.tags"
                 :key="tagId"
@@ -68,6 +62,21 @@ export default {
         task() {
             return this.tasks[this.taskId];
         },
+        assigneesNames() {
+            const names = this.task.assignees.map(assigneeId => {
+                return (
+                    this.usersById[assigneeId].nickname ||
+                    this.usersById[assigneeId].username
+                );
+            });
+
+            if (names.length === 1) {
+                return names[0];
+            } else {
+                const lastName = names.pop();
+                return names.join(', ') + ' et ' + lastName;
+            }
+        },
         ...mapState('users', ['usersById']),
         ...mapState('boards', ['tasks', 'tags'])
     }
@@ -76,6 +85,9 @@ export default {
 
 <style>
 .v-application .task-card p {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.125rem;
+}
+.outlined-avatar {
+    outline: 2px solid #fff;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app class="elevation-0" dark permanent width="180">
+    <v-navigation-drawer app class="elevation-0" dark permanent width="130">
         <auth-menu v-if="auth.id"></auth-menu>
 
         <v-list dense nav>

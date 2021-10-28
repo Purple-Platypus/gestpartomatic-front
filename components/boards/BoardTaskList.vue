@@ -156,7 +156,7 @@ export default {
 
 <style scoped>
 .col-kanban {
-    min-width: 380px !important;
-    max-width: 380px !important;
+    min-width: 360px !important;
+    max-width: 360px !important;
 }
 </style>

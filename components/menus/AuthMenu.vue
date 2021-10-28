@@ -1,6 +1,6 @@
 <template>
     <v-list class="pa-0">
-        <v-list-item class="padded-avatar">
+        <v-list-item class="padded-avatar px-0">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon to="profile" v-bind="attrs" v-on="on">

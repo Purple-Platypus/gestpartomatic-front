@@ -76,10 +76,10 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import AuthMixin from '../commons/mixins/Auth.mixin';
+import AuthMixin from '../../commons/mixins/Auth.mixin';
 
 export default {
-    name: 'board-list-item',
+    name: 'boards-list-item',
     props: {
         boardId: Number
     },

@@ -38,7 +38,7 @@
                         </v-icon>
                     </v-btn>
 
-                    <board-task-list-members-modal
+                    <board-members-modal
                         :is-visible="isMembersModalVisible"
                         @close="hideMembersModal"
                     />
@@ -80,18 +80,18 @@
 <script>
 import draggable from 'vuedraggable';
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex';
-import BoardTaskList from '../../components/boards/BoardTaskList.vue';
-import BoardTaskListAdd from '../../components/boards/BoardTaskListAdd.vue';
-import BoardTaskListMembersModal from '../../components/boards/BoardTaskListMembersModal';
-import TaskFormAdd from '../../components/boards/TaskFormAdd.vue';
-import TaskDetail from '../../components/boards/tasks/TaskDetail.vue';
+import BoardTaskList from '../../components/kanban/lists/BoardTaskList.vue';
+import BoardTaskListAdd from '../../components/kanban/lists/BoardTaskListAdd.vue';
+import BoardMembersModal from '../../components/kanban/boards/BoardMembersModal';
+import TaskFormAdd from '../../components/kanban/tasks/TaskFormAdd.vue';
+import TaskDetail from '../../components/kanban/tasks/TaskDetail.vue';
 
 export default {
     components: {
         draggable,
         BoardTaskList,
         BoardTaskListAdd,
-        BoardTaskListMembersModal,
+        BoardMembersModal,
         TaskFormAdd,
         TaskDetail
     },

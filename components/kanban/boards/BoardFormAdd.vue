@@ -1,19 +1,14 @@
 <template>
-    <board-list-form
-        ref="boardListForm"
-        submit-label="Ajouter"
-        @submit="submit"
-        @cancel="cancel"
-    />
+    <board-form submit-label="Ajouter" @submit="submit" @cancel="cancel" />
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import BoardListForm from './BoardListForm.vue';
+import BoardForm from './BoardForm.vue';
 
 export default {
-    name: 'board-list-form-add',
-    components: { BoardListForm },
+    name: 'board-form-add',
+    components: { BoardForm },
     methods: {
         submit(newBoard) {
             this.addBoard(newBoard).then(() => this.$emit('add'));

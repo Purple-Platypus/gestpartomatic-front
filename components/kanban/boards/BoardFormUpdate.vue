@@ -1,7 +1,6 @@
 <template>
-    <board-list-form
+    <board-form
         :boardData="boardData"
-        ref="boardListForm"
         submit-label="Modifier"
         @submit="submit"
         @cancel="cancel"
@@ -10,11 +9,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import BoardListForm from './BoardListForm.vue';
+import BoardForm from './BoardForm.vue';
 
 export default {
-    name: 'board-list-form-update',
-    components: { BoardListForm },
+    name: 'board-form-update',
+    components: { BoardForm },
     props: {
         boardData: {
             type: Object,

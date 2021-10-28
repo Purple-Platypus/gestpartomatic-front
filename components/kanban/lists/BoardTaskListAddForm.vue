@@ -17,7 +17,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import BoardTaskListForm from './BoardTaskListForm.vue';
+import BoardTaskListForm from '../lists/BoardTaskListForm.vue';
 
 export default {
     name: 'board-list-form-add',

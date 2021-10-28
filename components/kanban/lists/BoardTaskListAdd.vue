@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ShortkeysEmitterMixin from '../commons/mixins/ShortkeysEmitter.mixin';
+import ShortkeysEmitterMixin from '../../commons/mixins/ShortkeysEmitter.mixin';
 import BoardTaskListAddForm from './BoardTaskListAddForm.vue';
 
 export default {

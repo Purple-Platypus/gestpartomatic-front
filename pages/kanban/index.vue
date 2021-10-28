@@ -61,24 +61,22 @@
 
                         <v-divider />
 
-                        <board-list-form-add
+                        <board-form-add
                             v-if="isVisibleAddForm"
                             @cancel="hideAddForm"
                             @add="hideAddForm"
-                            ref="boardListAddForm"
                         />
 
                         <v-list class="pa-0" dense>
                             <template v-for="(board, index) in displayedBoards">
-                                <board-list-form-update
+                                <board-form-update
                                     v-if="visibleUpdateForm == board.id"
                                     :boardData="board"
                                     :key="'form_' + board.id"
-                                    ref="boardListUpdateForm"
                                     @cancel="hideUpdateForm"
                                     @update="hideUpdateForm"
                                 />
-                                <board-list-item
+                                <boards-list-item
                                     v-else
                                     :boardId="board.id"
                                     :key="'item_' + board.id"
@@ -120,20 +118,20 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import ShortkeysEmitter from '../../components/commons/mixins/ShortkeysEmitter.mixin';
-import BoardListItem from '../../components/boards/BoardListItem.vue';
-import BoardListForm from '../../components/boards/BoardListForm.vue';
-import BoardListFormUpdate from '../../components/boards/BoardListFormUpdate.vue';
-import BoardListFormAdd from '../../components/boards/BoardListFormAdd.vue';
+import BoardsListItem from '../../components/kanban/boards/BoardsListItem.vue';
+import BoardForm from '../../components/kanban/boards/BoardForm.vue';
+import BoardFormUpdate from '../../components/kanban/boards/BoardFormUpdate.vue';
+import BoardFormAdd from '../../components/kanban/boards/BoardFormAdd.vue';
 
 export default {
     head: () => ({
         title: 'Kanbans'
     }),
     components: {
-        BoardListItem,
-        BoardListForm,
-        BoardListFormUpdate,
-        BoardListFormAdd
+        BoardsListItem,
+        BoardForm,
+        BoardFormUpdate,
+        BoardFormAdd
     },
     mixins: [ShortkeysEmitter],
     data: () => {

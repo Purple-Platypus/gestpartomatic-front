@@ -51,7 +51,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Markdown from '../commons/mixins/Markdown.mixin';
+import Markdown from '../../commons/mixins/Markdown.mixin';
 
 export default {
     name: 'board-task-list-card',

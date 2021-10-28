@@ -61,8 +61,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import TaskAssigneesList from './TaskAssigneesList.vue';
-import TaskTagsList from './TaskTagsList.vue';
+import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
+import TaskTagsList from './tags/TaskTagsList.vue';
 
 export default {
     name: 'task-form-add',

@@ -70,7 +70,7 @@
 
 <script>
 export default {
-    name: 'board-list-form',
+    name: 'board-form',
     components: {},
     props: {
         boardData: {

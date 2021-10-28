@@ -34,7 +34,7 @@
                 </p>
 
                 <v-list class="pt-0">
-                    <board-task-list-guest-item
+                    <board-members-modal-item
                         v-for="user in privileges"
                         :key="user.id"
                         :user="user"
@@ -55,11 +55,11 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-import BoardTaskListGuestItem from './BoardTaskListGuestItem.vue';
+import BoardMembersModalItem from './BoardMembersModalItem.vue';
 
 export default {
-    components: { BoardTaskListGuestItem },
-    name: 'board-task-list-members-modal',
+    components: { BoardMembersModalItem },
+    name: 'board-members-modal',
     props: ['isVisible'],
     data: function() {
         return {};

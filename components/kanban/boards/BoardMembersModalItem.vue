@@ -32,7 +32,7 @@
 import { mapState, mapMutations, mapActions, maGetters } from 'vuex';
 
 export default {
-    name: 'board-task-list-members-modal',
+    name: 'board-guest-item',
     props: {
         user: Object
     },

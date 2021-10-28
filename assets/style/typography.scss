@@ -1,4 +1,5 @@
 $font-family: 'Open sans';
+
 .v-application {
     [class*='text-'] {
         color: #36405a;
@@ -13,6 +14,10 @@ a {
     &:hover {
         text-decoration: underline;
     }
+}
+
+.v-application p {
+    margin-bottom: 0.25rem;
 }
 
 .text--monospace {

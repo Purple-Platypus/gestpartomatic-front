@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-        class=" elevation-0"
+        class="elevation-0"
         fixed
         hide-overlay
         right
@@ -9,36 +9,128 @@
         width="400px"
         v-model="isVisible"
     >
-        <v-card-title>
-            <h2 class="text-h4 font-weight-light">
-                {{ task.title }}
-            </h2>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text v-html="md(task.description)"></v-card-text>
-
-        <v-divider />
-
-        <v-card-text>
-            <v-chip-group column>
-                <v-chip v-for="assignee in assigneesList" :key="assignee.id">
-                    {{ assignee.nickname || assignee.username }}
-                </v-chip>
-            </v-chip-group>
-
-            <v-chip-group column>
-                <v-chip
-                    v-for="tag in tagsList"
-                    :key="tag.id"
-                    :color="tag.color"
-                    small
+        <template v-if="taskId">
+            <v-hover v-slot="{ hover }">
+                <v-card-title
+                    class="d-flex flex-row justify-space-between flex-nowrap align-start"
                 >
-                    {{ tag.label }}
-                </v-chip>
-            </v-chip-group>
-        </v-card-text>
+                    <h2
+                        class="text-h4 font-weight-light"
+                        v-html="md(task.title)"
+                    ></h2>
+
+                    <div class="d-flex flex-row flex-nowrap">
+                        <v-btn v-if="hover" icon>
+                            <v-icon>
+                                mdi-pencil-outline
+                            </v-icon>
+                        </v-btn>
+
+                        <v-btn icon @click="close">
+                            <v-icon>
+                                mdi-close
+                            </v-icon>
+                        </v-btn>
+                    </div>
+                </v-card-title>
+            </v-hover>
+
+            <v-hover v-slot="{ hover }">
+                <div class="d-flex flex-row flex-nowrap align-start">
+                    <v-card-text
+                        v-html="md(task.description || 'Pas de description')"
+                        class="pb-2"
+                        :class="{ 'grey--text font-italic': !task.description }"
+                    />
+
+                    <v-btn v-if="hover" class="mr-4" icon small>
+                        <v-icon size="20">
+                            mdi-pencil-outline
+                        </v-icon>
+                    </v-btn>
+                </div>
+            </v-hover>
+
+            <v-divider class="mx-4" />
+
+            <v-hover v-slot="{ hover }">
+                <div>
+                    <v-card-subtitle
+                        class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
+                    >
+                        <h3 class="text-overline">
+                            Responsables
+                        </h3>
+
+                        <v-btn v-if="hover" icon small>
+                            <v-icon size="20">
+                                mdi-pencil-outline
+                            </v-icon>
+                        </v-btn>
+                    </v-card-subtitle>
+
+                    <v-card-text class="pt-0">
+                        <v-chip
+                            v-for="assignee in assigneesList"
+                            :key="assignee.id"
+                            class="mr-4"
+                            color="white"
+                        >
+                            <v-avatar left>
+                                <v-img :src="assignee.avatar" />
+                            </v-avatar>
+                            {{ assignee.nickname || assignee.username }}
+                        </v-chip>
+
+                        <span
+                            v-if="!assigneesList.length"
+                            class="grey--text font-italic"
+                        >
+                            Pas encore de responsable
+                        </span>
+                    </v-card-text>
+                </div>
+            </v-hover>
+
+            <v-divider class="mx-4" />
+
+            <v-hover v-slot="{ hover }">
+                <div>
+                    <v-card-subtitle
+                        class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
+                    >
+                        <h3 class="text-overline">
+                            étiquettes
+                        </h3>
+
+                        <v-btn v-if="hover" icon small>
+                            <v-icon size="20">
+                                mdi-pencil-outline
+                            </v-icon>
+                        </v-btn>
+                    </v-card-subtitle>
+
+                    <v-card-text class="pt-0">
+                        <v-chip
+                            v-for="tag in tagsList"
+                            :key="tag.id"
+                            class="mr-1"
+                            :color="tag.color"
+                            small
+                        >
+                            {{ tag.label }}
+                        </v-chip>
+
+                        <span
+                            v-if="!tagsList.length"
+                            class="grey--text font-italic"
+                        >
+                            Pas encore d'étiquette
+                        </span>
+                    </v-card-text>
+                </div>
+            </v-hover>
+        </template>
     </v-navigation-drawer>
 </template>
 
@@ -48,14 +140,10 @@ import Markdown from '../../commons/mixins/Markdown.mixin';
 
 export default {
     name: 'task-detail',
-    components: {},
     mixins: [Markdown],
     props: {
         taskId: Number,
         isVisible: Boolean
-    },
-    data() {
-        return {};
     },
     computed: {
         task() {
@@ -63,7 +151,7 @@ export default {
         },
         assigneesList() {
             const assigneesList = this.task.assignees.map(assigneeId => {
-                return this.users[assigneeId];
+                return this.usersById[assigneeId];
             });
             return assigneesList;
         },
@@ -73,7 +161,7 @@ export default {
             });
             return tagsList;
         },
-        ...mapState('users', ['users']),
+        ...mapState('users', ['usersById']),
         ...mapState('boards', ['tasks', 'tags'])
     },
 

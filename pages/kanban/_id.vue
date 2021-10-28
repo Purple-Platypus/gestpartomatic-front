@@ -1,6 +1,6 @@
 <template>
-    <v-row class="align-self-stretch" @click="hideTaskDrawer">
-        <v-col cols="12" class="d-flex">
+    <v-row class="align-self-stretch">
+        <v-col cols="12" class="d-flex" @click="hideTaskDrawer">
             <v-card class="flex-grow-1 d-flex flex-column" flat outlined>
                 <v-card-title class="pa-2">
                     <h1 class="mb-4 text-h3 font-weight-light">

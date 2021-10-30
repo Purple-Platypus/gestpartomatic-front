@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 export const state = () => ({
     boardsList: [],
+    boards: {},
     board: { lists: [] },
     guests: {},
     lists: {},
@@ -11,9 +12,18 @@ export const state = () => ({
 
 export const mutations = {
     // BoardsList
-    setBoardsList(state, boardsList) {
-        state.boardsList = boardsList;
-    },
+    // setBoardsList(state, boardsList) {
+    //     boardsList.forEach(board => {
+    //         const guestsRoles = {};
+    //         board.guests.forEach(user => {
+    //             guestsRoles[user.userId] = user.role;
+    //         });
+    //         board.guests = guestsRoles;
+
+    //         state.boardsList.push(board.id);
+    //         Vue.set(state.boards, board.id, board);
+    //     });
+    // },
 
     // Board
     setBoard(state, board) {
@@ -22,19 +32,25 @@ export const mutations = {
         state.board = board;
     },
     addBoard(state, board) {
-        state.boardsList.push(board);
-    },
-    updateBoard(state, { boardId, board }) {
-        const UpdatedIndex = state.boardsList.findIndex(board => {
-            return board.id == boardId;
+        const guestsRoles = {};
+        board.guests.forEach(user => {
+            guestsRoles[user.userId] = user.role;
         });
-        Vue.set(state.boardsList, UpdatedIndex, board);
-        if (boardId == state.board.id) {
-            Object.keys(board).forEach(prop => {
-                Vue.set(state.board, prop, board[prop]);
-            });
+        board.guests = guestsRoles;
+
+        if (state.boardsList.indexOf(board.id) === -1) {
+            state.boardsList.push(board.id);
         }
+        Vue.set(state.boards, board.id, board);
     },
+    // updateBoard(state, board) {
+    //     Vue.set(state.boards, board.id, board);
+    //     if (boardId == state.board.id) {
+    //         Object.keys(board).forEach(prop => {
+    //             Vue.set(state.board, prop, board[prop]);
+    //         });
+    //     }
+    // },
 
     // Lists
     addList(state, list) {
@@ -98,11 +114,13 @@ export const mutations = {
 
 export const actions = {
     // BoardsList
-    async getBoardsList({ commit }) {
+    async getBoardsList({ commit, dispatch }) {
         await this.$axios
             .$get('/api/boards')
             .then(boardsList => {
-                commit('setBoardsList', boardsList);
+                boardsList.forEach(board => {
+                    commit('addBoard', board);
+                });
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
@@ -170,14 +188,13 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    updateBoard({ commit, dispatch }, { boardId, boardData }) {
+    updateBoard({ commit, dispatch }, boardData) {
+        const { id, ...board } = boardData;
+
         this.$axios
-            .$patch('/api/boards/' + boardId, boardData)
+            .$patch('/api/boards/' + id, board)
             .then(updatedBoard => {
-                commit('updateBoard', {
-                    boardId,
-                    board: updatedBoard
-                });
+                commit('addBoard', updatedBoard);
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
@@ -324,16 +341,26 @@ export const actions = {
 export const getters = {
     activeBoards: state => {
         return state.boardsList
-            .filter(board => !board.isArchived)
+            .filter(boardId => {
+                return !state.boards[boardId].isArchived;
+            })
             .sort((a, b) => {
-                return a.name.toLowerCase() > b.name.toLowerCase();
+                return (
+                    state.boards[a].name.toLowerCase() >
+                    state.boards[b].name.toLowerCase()
+                );
             });
     },
     archivedBoards: state => {
         return state.boardsList
-            .filter(board => board.isArchived)
+            .filter(boardId => {
+                return state.boards[boardId].isArchived;
+            })
             .sort((a, b) => {
-                return a.name.toLowerCase() > b.name.toLowerCase();
+                return (
+                    state.boards[a].name.toLowerCase() >
+                    state.boards[b].name.toLowerCase()
+                );
             });
     },
     boardById: state => boardId => {

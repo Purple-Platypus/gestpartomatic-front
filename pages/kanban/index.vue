@@ -68,23 +68,25 @@
                         />
 
                         <v-list class="pa-0" dense>
-                            <template v-for="(board, index) in displayedBoards">
+                            <template
+                                v-for="(boardId, index) in displayedBoards"
+                            >
                                 <board-form-update
-                                    v-if="visibleUpdateForm == board.id"
-                                    :boardData="board"
-                                    :key="'form_' + board.id"
+                                    v-if="visibleUpdateForm == boardId"
+                                    :boardId="boardId"
+                                    :key="'form_' + boardId"
                                     @cancel="hideUpdateForm"
                                     @update="hideUpdateForm"
                                 />
                                 <boards-list-item
                                     v-else
-                                    :boardId="board.id"
-                                    :key="'item_' + board.id"
-                                    @update="showUpdateForm(board.id)"
+                                    :boardId="boardId"
+                                    :key="'item_' + boardId"
+                                    @update="showUpdateForm(boardId)"
                                 />
                                 <v-divider
                                     v-if="index + 1 != displayedBoards.length"
-                                    :key="'divider_' + board.id"
+                                    :key="'divider_' + boardId"
                                 />
                             </template>
 
@@ -127,6 +129,7 @@ export default {
     head: () => ({
         title: 'Kanbans'
     }),
+    middleware: 'auth',
     components: {
         BoardsListItem,
         BoardForm,
@@ -196,7 +199,7 @@ export default {
         },
         ...mapActions('boards', ['getBoardsList'])
     },
-    mounted() {
+    fetch() {
         this.getBoardsList();
 
         const shortkeys = [{ keys: '+', label: 'Ajouter un tableau' }];

@@ -17,11 +17,11 @@
             </nuxt-link>
         </v-list-item-content>
 
-        <v-list-item-action v-if="isAdmin" class="d-flex flex-row">
+        <v-list-item-action v-if="isBoardAdmin" class="d-flex flex-row">
             <v-tooltip v-if="!board.isArchived" bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon small @click="update" v-bind="attrs" v-on="on">
-                        <v-icon size="19px">
+                        <v-icon size="18px">
                             mdi-pencil
                         </v-icon>
                     </v-btn>
@@ -34,14 +34,13 @@
             <v-tooltip v-if="!board.isArchived" bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                        :disabled="board.creatorId != auth.id"
                         icon
                         small
-                        @click="archive()"
+                        @click="archive(true)"
                         v-bind="attrs"
                         v-on="on"
                     >
-                        <v-icon size="19px">
+                        <v-icon size="18px">
                             mdi-archive
                         </v-icon>
                     </v-btn>
@@ -54,14 +53,13 @@
             <v-tooltip v-else bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                        :disabled="board.creatorId != auth.id"
                         icon
                         small
-                        @click="restore()"
+                        @click="archive(false)"
                         v-bind="attrs"
                         v-on="on"
                     >
-                        <v-icon size="19px">
+                        <v-icon size="18px">
                             mdi-restore
                         </v-icon>
                     </v-btn>
@@ -84,27 +82,26 @@ export default {
         boardId: Number
     },
     mixins: [AuthMixin],
-    data() {
-        return {};
-    },
     computed: {
         board() {
-            return this.boardById(this.boardId);
+            return this.boards[this.boardId];
         },
-        ...mapGetters('boards', ['boardById', 'isAdmin']),
-        ...mapState('auth', ['id'])
+        isBoardAdmin() {
+            return this.board.guests[this.auth.id] === 'ADMIN';
+        },
+        ...mapState('boards', ['boards'])
     },
     methods: {
-        archive() {
-            this.archiveBoard(this.boardId);
+        archive(isArchived) {
+            this.updateBoard({
+                id: this.boardId,
+                isArchived
+            });
         },
-        restore() {
-            this.restoreBoard(this.boardId);
+        update() {
+            this.$emit('update', this.boardId);
         },
-        update(boardData) {
-            this.$emit('update', boardData);
-        },
-        ...mapActions('boards', ['archiveBoard', 'restoreBoard'])
+        ...mapActions('boards', ['updateBoard', 'restoreBoard'])
     }
 };
 </script>

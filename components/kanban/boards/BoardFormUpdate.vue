@@ -8,29 +8,31 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import BoardForm from './BoardForm.vue';
 
 export default {
     name: 'board-form-update',
     components: { BoardForm },
     props: {
-        boardData: {
-            type: Object,
-            default: () => {
-                return {
-                    name: '',
-                    description: ''
-                };
-            }
+        boardId: {
+            type: Number
         }
+    },
+    computed: {
+        boardData() {
+            return {
+                name: this.boards[this.boardId].name,
+                description: this.boards[this.boardId].description,
+                isPrivate: this.boards[this.boardId].isPrivate
+            };
+        },
+        ...mapState('boards', ['boards'])
     },
     methods: {
         submit(updatedBoard) {
-            this.updateBoard({
-                boardId: this.boardData.id,
-                boardData: updatedBoard
-            }).then(() => this.$emit('update'));
+            updatedBoard.id = this.boardId;
+            this.updateBoard(updatedBoard).then(() => this.$emit('update'));
         },
         cancel() {
             this.$emit('cancel');

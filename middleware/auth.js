@@ -5,7 +5,7 @@ export default function({ store, redirect }) {
         return axios
             .get(`/api/users/me?withTeamsAndBoards=true`)
             .then(reponse => {
-                store.dispatch('auth/login', reponse.data);
+                store.commit('auth/set', reponse.data);
             })
             .catch(err => {
                 console.log(err);
@@ -22,7 +22,7 @@ export default function({ store, redirect }) {
                             axios
                                 .get(`/api/users/me?withTeamsAndBoards=true`)
                                 .then(reponse => {
-                                    store.dispatch('auth/login', reponse.data);
+                                    store.commit('auth/set', reponse.data);
                                 })
                                 .catch(err => {
                                     console.log(err);

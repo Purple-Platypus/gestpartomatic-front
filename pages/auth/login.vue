@@ -127,10 +127,12 @@ export default {
                     this.$router.push('/');
                 })
                 .catch(err => {
-                    if (err === 401) {
+                    if (err.response.status === 401) {
                         this.$refs.loginForm.setErrors({
                             password: [messages.errors.unauthorised]
                         });
+                    } else {
+                        this.$store.dispatch('snackbar/showGenericError', null);
                     }
                     this.loading = false;
                 });

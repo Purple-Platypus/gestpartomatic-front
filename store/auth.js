@@ -42,17 +42,17 @@ export const actions = {
         });
     },
     async login({ commit }, user) {
-        await this.$axios
-            .$post('/api/auth/login/', user)
-            .then(res => {
-                commit('set', res);
-            })
-            .catch(err => {
-                if (err.response.status !== 401) {
-                    dispatch('snackbar/showGenericError', null, { root: true });
-                }
-                return err.response.status;
-            });
+        return new Promise((resolve, reject) => {
+            this.$axios
+                .$post('/api/auth/login/', user)
+                .then(res => {
+                    commit('set', res);
+                    resolve();
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        });
     },
     async logout({ commit }) {
         await this.$axios

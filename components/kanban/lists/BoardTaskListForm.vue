@@ -24,7 +24,6 @@
         <v-row>
             <v-col>
                 <v-select
-                    attach="#board-task-list-update-form"
                     class="white"
                     dense
                     hide-details
@@ -32,7 +31,6 @@
                     label="Niveau d'avancement"
                     v-model="formData.progression"
                     outlined
-                    ref="inputProgression"
                     @keyup.ctrl.enter="submit"
                 />
             </v-col>

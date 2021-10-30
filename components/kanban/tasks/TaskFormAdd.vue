@@ -106,7 +106,8 @@ export default {
         add() {
             const task = Object.assign(this.formData, {
                 listId: this.listId,
-                rank: this.lists[this.listId].tasksList.length
+                rank: this.lists[this.listId].tasksList.length,
+                progression: this.lists[this.listId].progression
             });
 
             this.$emit('createTask', {

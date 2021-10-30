@@ -159,8 +159,7 @@ export default {
                 !this.isVisibleAddForm
             );
         },
-        ...mapGetters('boards', ['activeBoards', 'archivedBoards']),
-        ...mapState('auth', ['id'])
+        ...mapGetters('boards', ['activeBoards', 'archivedBoards'])
     },
     methods: {
         handleShortkey(e) {

@@ -33,9 +33,13 @@
                 v-model="formData.description"
             />
 
-            <task-assignees-list v-model="formData.assignees" />
+            <task-assignees-list v-model="formData.assignees">
+                Ajoutez des responsable pour cette tâche
+            </task-assignees-list>
 
-            <task-tags-list v-model="formData.tags" />
+            <task-tags-list v-model="formData.tags">
+                Ajoutez des étiquettes à cette tâche
+            </task-tags-list>
 
             <v-divider />
 

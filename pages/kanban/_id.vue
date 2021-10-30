@@ -73,6 +73,7 @@
             :taskId="detailTaskId"
             :isVisible="isDetailVisible"
             @close="hideTaskDrawer"
+            @update="updateTask"
         />
     </v-row>
 </template>
@@ -146,6 +147,10 @@ export default {
             this.socket.on('addTask', res => {
                 this.addTask(res);
             });
+
+            this.socket.on('updateTask', res => {
+                this.addTask(res);
+            });
         },
         showMembersModal() {
             if (this.isAdmin) {
@@ -167,6 +172,9 @@ export default {
             this.socket.emit('createTask', createTaskData, () => {
                 this.hideAddTaskForm();
             });
+        },
+        updateTask(updateTaskData) {
+            this.socket.emit('updateTask', updateTaskData);
         },
         showTaskDrawer(taskId) {
             this.detailTaskId = taskId;

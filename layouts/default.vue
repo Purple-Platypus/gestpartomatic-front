@@ -30,6 +30,7 @@ import MainMenu from '../components/menus/MainMenu.vue';
 import GlobalSnackbar from '../components/commons/GlobalSnackbar';
 
 export default {
+    name: 'default',
     components: { MainMenu, GlobalSnackbar },
     computed: {
         darkMode() {

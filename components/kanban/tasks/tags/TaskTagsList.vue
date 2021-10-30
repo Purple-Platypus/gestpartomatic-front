@@ -9,28 +9,43 @@
         >
             <template v-slot:activator="{ on, attrs }">
                 <v-container
-                    class="pb-0 cursor-pointer"
+                    class="pb-0 px-0 cursor-pointer"
                     v-bind="attrs"
                     v-on="on"
                 >
-                    <h3 class="text-body-2 font-weight-bold">
-                        Étiquettes
-                    </h3>
+                    <v-card-subtitle
+                        class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
+                    >
+                        <h3 class="text-overline">
+                            étiquettes
+                        </h3>
 
-                    <p v-if="!taskTags.length" class="text-caption grey--text">
-                        Ajoutez des étiquettes à cette tâche
-                    </p>
+                        <v-btn v-if="isHover" icon small>
+                            <v-icon size="20">
+                                mdi-pencil-outline
+                            </v-icon>
+                        </v-btn>
+                    </v-card-subtitle>
 
-                    <v-chip-group column>
-                        <v-chip
-                            v-for="tagId in taskTags"
-                            :key="tagId"
-                            :color="tags[tagId].color"
-                            small
-                        >
-                            {{ tags[tagId].label }}
-                        </v-chip>
-                    </v-chip-group>
+                    <v-card-text
+                        v-if="!taskTags.length"
+                        class="pt-0 grey--text font-italic"
+                    >
+                        <slot></slot>
+                    </v-card-text>
+
+                    <v-card-text class="pt-0">
+                        <v-chip-group column>
+                            <v-chip
+                                v-for="tagId in taskTags"
+                                :key="tagId"
+                                :color="tags[tagId].color"
+                                small
+                            >
+                                {{ tags[tagId].label }}
+                            </v-chip>
+                        </v-chip-group>
+                    </v-card-text>
                 </v-container>
             </template>
 
@@ -39,7 +54,7 @@
                     <v-sheet class="pa-2" outlined rounded>
                         <v-chip-group column multiple v-model="taskTags">
                             <v-chip
-                                v-for="tag in tags"
+                                v-for="tag in tagsList"
                                 :key="tag.id"
                                 :color="tag.color"
                                 filter
@@ -73,24 +88,37 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import TaskTagsManager from './TaskTagsManager.vue';
 
 export default {
     name: 'task-tags-list',
     components: { TaskTagsManager },
     props: {
-        listId: Number
+        listId: Number,
+        isHover: {
+            type: Boolean,
+            default: false
+        },
+        value: Array
     },
     data() {
         return {
             isVisible: false,
-            taskTags: [],
             visibleMenu: 'list'
         };
     },
     computed: {
-        ...mapState('boards', ['tags'])
+        taskTags: {
+            get() {
+                return this.value;
+            },
+            set(tagsList) {
+                this.$emit('input', tagsList);
+            }
+        },
+        ...mapState('boards', ['tags']),
+        ...mapGetters('boards', ['tagsList'])
     },
     methods: {
         hide() {
@@ -101,11 +129,6 @@ export default {
         },
         hideTagsManager() {
             this.visibleMenu = 'list';
-        }
-    },
-    watch: {
-        taskTags(list) {
-            this.$emit('input', list);
         }
     }
 };

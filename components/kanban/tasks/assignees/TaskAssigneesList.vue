@@ -12,7 +12,7 @@
                     </h3>
 
                     <p v-if="!assignees.length" class="text-caption grey--text">
-                        Ajoutez des responsable pour cette tâche
+                        <slot></slot>
                     </p>
                 </v-container>
             </template>

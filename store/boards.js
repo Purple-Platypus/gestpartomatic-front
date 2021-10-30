@@ -11,20 +11,6 @@ export const state = () => ({
 });
 
 export const mutations = {
-    // BoardsList
-    // setBoardsList(state, boardsList) {
-    //     boardsList.forEach(board => {
-    //         const guestsRoles = {};
-    //         board.guests.forEach(user => {
-    //             guestsRoles[user.userId] = user.role;
-    //         });
-    //         board.guests = guestsRoles;
-
-    //         state.boardsList.push(board.id);
-    //         Vue.set(state.boards, board.id, board);
-    //     });
-    // },
-
     // Board
     setBoard(state, board) {
         board['lists'] = [];
@@ -43,14 +29,6 @@ export const mutations = {
         }
         Vue.set(state.boards, board.id, board);
     },
-    // updateBoard(state, board) {
-    //     Vue.set(state.boards, board.id, board);
-    //     if (boardId == state.board.id) {
-    //         Object.keys(board).forEach(prop => {
-    //             Vue.set(state.board, prop, board[prop]);
-    //         });
-    //     }
-    // },
 
     // Lists
     addList(state, list) {
@@ -97,6 +75,7 @@ export const mutations = {
 
     // Tags
     addTag(state, tag) {
+        console.log(tag);
         Vue.set(state.tags, tag.id, tag);
     },
 
@@ -107,7 +86,9 @@ export const mutations = {
         task.tags = task.tags.map(tag => tag.id);
         task.assignees = task.assignees.map(assignee => assignee.userId);
 
-        state.lists[listId].tasksList.push(task.id);
+        if (state.lists[listId].tasksList.indexOf(task.id) === -1) {
+            state.lists[listId].tasksList.push(task.id);
+        }
         Vue.set(state.tasks, task.id, task);
     }
 };
@@ -149,40 +130,6 @@ export const actions = {
             .$post('/api/boards', board)
             .then(res => {
                 commit('addBoard', res);
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
-    },
-    archiveBoard({ commit, dispatch }, boardId) {
-        const patchPayload = {
-            isArchived: true
-        };
-
-        this.$axios
-            .$patch('/api/boards/' + boardId, patchPayload)
-            .then(updatedBoard => {
-                commit('updateBoard', {
-                    boardId,
-                    board: updatedBoard
-                });
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
-    },
-    restoreBoard({ commit }, boardId) {
-        const patchPayload = {
-            isArchived: false
-        };
-
-        this.$axios
-            .$patch('/api/boards/' + boardId, patchPayload)
-            .then(updatedBoard => {
-                commit('updateBoard', {
-                    boardId,
-                    board: updatedBoard
-                });
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
@@ -374,5 +321,15 @@ export const getters = {
             state.guests.hasOwnProperty(authId) &&
             state.guests[authId].role == 'ADMIN'
         );
+    },
+    tagsList: state => {
+        const tagsArray = [];
+        for (const tagId in state.tags) {
+            tagsArray.push(state.tags[tagId]);
+        }
+
+        return tagsArray.sort((a, b) => {
+            return a.label > b.label;
+        });
     }
 };

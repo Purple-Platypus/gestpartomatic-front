@@ -96,38 +96,9 @@
 
             <v-hover v-slot="{ hover }">
                 <div>
-                    <v-card-subtitle
-                        class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
-                    >
-                        <h3 class="text-overline">
-                            étiquettes
-                        </h3>
-
-                        <v-btn v-if="hover" icon small>
-                            <v-icon size="20">
-                                mdi-pencil-outline
-                            </v-icon>
-                        </v-btn>
-                    </v-card-subtitle>
-
-                    <v-card-text class="pt-0">
-                        <v-chip
-                            v-for="tag in tagsList"
-                            :key="tag.id"
-                            class="mr-1"
-                            :color="tag.color"
-                            small
-                        >
-                            {{ tag.label }}
-                        </v-chip>
-
-                        <span
-                            v-if="!tagsList.length"
-                            class="grey--text font-italic"
-                        >
-                            Pas encore d'étiquette
-                        </span>
-                    </v-card-text>
+                    <task-tags-list v-model="taskTags" :isHover="hover">
+                        Pas encore d'étiquette
+                    </task-tags-list>
                 </div>
             </v-hover>
         </template>
@@ -137,9 +108,12 @@
 <script>
 import { mapState } from 'vuex';
 import Markdown from '../../commons/mixins/Markdown.mixin';
+import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
+import TaskTagsList from './tags/TaskTagsList.vue';
 
 export default {
     name: 'task-detail',
+    components: { TaskTagsList },
     mixins: [Markdown],
     props: {
         taskId: Number,
@@ -155,14 +129,22 @@ export default {
             });
             return assigneesList;
         },
-        tagsList() {
-            const tagsList = this.task.tags.map(tagId => {
-                return this.tags[tagId];
-            });
-            return tagsList;
+        taskTags: {
+            get() {
+                return this.task.tags;
+            },
+            set(taskTags) {
+                this.$emit('update', {
+                    boardId: this.board.id,
+                    updateData: {
+                        id: this.taskId,
+                        tags: taskTags
+                    }
+                });
+            }
         },
         ...mapState('users', ['usersById']),
-        ...mapState('boards', ['tasks', 'tags'])
+        ...mapState('boards', ['board', 'tasks', 'tags'])
     },
 
     methods: {

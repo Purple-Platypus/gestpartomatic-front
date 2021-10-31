@@ -40,6 +40,7 @@
                                 v-for="tagId in taskTags"
                                 :key="tagId"
                                 :color="tags[tagId].color"
+                                :dark="tags[tagId].isDark"
                                 small
                             >
                                 {{ tags[tagId].label }}
@@ -57,6 +58,7 @@
                                 v-for="tag in tagsList"
                                 :key="tag.id"
                                 :color="tag.color"
+                                :dark="tag.isDark"
                                 filter
                                 :value="tag.id"
                             >

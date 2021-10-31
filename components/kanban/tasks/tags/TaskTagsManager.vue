@@ -7,7 +7,7 @@
         <v-container>
             <v-row v-for="tag in tags" :key="tag.id">
                 <v-col class="py-0">
-                    <v-chip :color="tag.color">
+                    <v-chip :color="tag.color" :dark="tag.isDark">
                         {{ tag.label }}
                     </v-chip>
                 </v-col>

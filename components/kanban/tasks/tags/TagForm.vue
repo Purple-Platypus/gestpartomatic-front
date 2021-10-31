@@ -26,7 +26,15 @@
                         v-on="on"
                     />
                 </template>
-                <v-sheet class="pa-2" outlined>
+                <v-sheet class="pa-2 text-center" outlined>
+                    <v-chip
+                        class="mb-2"
+                        :color="sampleColor"
+                        :dark="isDarkBackground(sampleColor)"
+                        small
+                    >
+                        {{ formData.label || 'Exemple' }}
+                    </v-chip>
                     <v-color-picker
                         mode="hexa"
                         hide-inputs
@@ -34,6 +42,7 @@
                         show-swatches
                         :swatches="colors"
                         v-model="formData.color"
+                        @input="updateSampleColor"
                     />
                     <div class="px-2 text-right">
                         <v-btn depressed @click="hideColorPicker">
@@ -65,6 +74,7 @@ export default {
                 label: this.value.label,
                 color: this.value.color
             },
+            sampleColor: this.value.color,
             colors: [
                 ['#E91E63', '#9C27B0', '#673AB7'],
                 ['#3F51B5', '#2196F3', '#00BCD4'],
@@ -81,11 +91,23 @@ export default {
         },
         hideColorPicker() {
             this.isColorPickerVisible = false;
+        },
+        updateSampleColor(rgb) {
+            this.sampleColor = rgb;
+        },
+        isDarkBackground(rgb) {
+            rgb = rgb.replace('#', '');
+            const r = parseInt(rgb.substr(0, 2), 16);
+            const g = parseInt(rgb.substr(2, 2), 16);
+            const b = parseInt(rgb.substr(4, 2), 16);
+            const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+            return yiq < 150;
         }
     },
     watch: {
         formData: {
             handler(tag) {
+                tag.isDark = this.isDarkBackground(tag.color);
                 this.$emit('input', tag);
             },
             deep: true

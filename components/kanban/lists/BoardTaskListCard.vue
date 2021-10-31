@@ -41,6 +41,7 @@
                 :key="tagId"
                 class="mr-1 px-2"
                 :color="tags[tagId].color"
+                :dark="tags[tagId].isDark"
                 x-small
             >
                 {{ tags[tagId].label }}

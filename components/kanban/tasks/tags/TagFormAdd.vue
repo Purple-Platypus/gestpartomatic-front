@@ -29,7 +29,8 @@ export default {
         return {
             formData: {
                 label: '',
-                color: '#2196F3'
+                color: '#2196F3',
+                isDark: true
             }
         };
     },

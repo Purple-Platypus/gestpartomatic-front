@@ -80,7 +80,10 @@
                 </v-window-item>
 
                 <v-window-item value="manager">
-                    <task-tags-manager @close="hideTagsManager" />
+                    <task-tags-manager
+                        @close="hideTagsManager"
+                        @remove="remove"
+                    />
                 </v-window-item>
             </v-window>
         </v-menu>
@@ -129,6 +132,9 @@ export default {
         },
         hideTagsManager() {
             this.visibleMenu = 'list';
+        },
+        remove(tagId) {
+            this.$emit('remove', tagId);
         }
     }
 };

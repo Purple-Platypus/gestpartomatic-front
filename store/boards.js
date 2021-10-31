@@ -75,8 +75,14 @@ export const mutations = {
 
     // Tags
     addTag(state, tag) {
-        console.log(tag);
         Vue.set(state.tags, tag.id, tag);
+    },
+    purgeTag(state, tagId) {
+        for (const taskId in state.tasks) {
+            const deletedTagIndex = state.tasks[taskId].tags.indexOf(tagId);
+            Vue.delete(state.tasks[taskId].tags, deletedTagIndex);
+        }
+        Vue.delete(state.tags, tagId);
     },
 
     // Tasks

@@ -68,6 +68,7 @@
             :isVisible="isAddTaskFormVisible"
             @close="hideAddTaskForm"
             @createTask="createTask"
+            @removeTag="removeTag"
         />
         <task-detail
             :taskId="detailTaskId"
@@ -151,6 +152,10 @@ export default {
             this.socket.on('updateTask', res => {
                 this.addTask(res);
             });
+
+            this.socket.on('removeTag', res => {
+                this.purgeTag(res);
+            });
         },
         showMembersModal() {
             if (this.isAdmin) {
@@ -186,7 +191,13 @@ export default {
             this.detailTaskId = null;
             this.isDetailVisible = false;
         },
-        ...mapMutations('boards', ['addTask']),
+        removeTag(tagId) {
+            this.socket.emit('removeTag', {
+                boardId: this.board.id,
+                tagId
+            });
+        },
+        ...mapMutations('boards', ['addTask', 'purgeTag']),
         ...mapActions('boards', ['getTags', 'getBoard', 'updateListsRanking'])
     }
 };

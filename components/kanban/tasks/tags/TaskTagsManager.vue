@@ -18,7 +18,7 @@
                             mdi-circle-edit-outline
                         </v-icon>
                     </v-btn>
-                    <v-btn icon>
+                    <v-btn icon @click="showRemoveModal(tag.id)">
                         <v-icon>
                             mdi-close-circle-outline
                         </v-icon>
@@ -32,19 +32,53 @@
                 Retour
             </v-btn>
         </div>
+
+        <v-dialog
+            v-if="removedTag"
+            v-model="isRemoveModalVisible"
+            max-width="500"
+        >
+            <v-card>
+                <v-card-title class="text-h5 font-weight-light">
+                    Supprimer une étiquette
+                </v-card-title>
+
+                <v-card-text>
+                    L'étiquette
+                    <v-chip :color="removedTag.color" small>
+                        {{ removedTag.label }}
+                    </v-chip>
+                    va être définitivement supprimée.
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn depressed @click="hideRemoveModal">
+                        Annuler
+                    </v-btn>
+
+                    <v-btn color="error" depressed @click="remove">
+                        Supprimer
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-sheet>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import TagFormAdd from './TagFormAdd.vue';
 
 export default {
     name: 'task-tags-manager',
     components: { TagFormAdd },
-    props: {},
     data() {
-        return {};
+        return {
+            isRemoveModalVisible: false,
+            removedTag: null
+        };
     },
     computed: {
         ...mapState('boards', ['tags'])
@@ -53,16 +87,20 @@ export default {
         add(tagId) {
             this.tags.push(tagId);
         },
-        remove(tagId) {
-            this.tags.splice(this.tags.indexOf(tagId), 1);
+        remove() {
+            this.$emit('remove', this.removedTag.id);
+            this.hideRemoveModal();
+        },
+        showRemoveModal(tagId) {
+            this.removedTag = this.tags[tagId];
+            this.isRemoveModalVisible = true;
+        },
+        hideRemoveModal() {
+            this.removedTag = null;
+            this.isRemoveModalVisible = false;
         },
         close() {
             this.$emit('close');
-        }
-    },
-    watch: {
-        tags(list) {
-            this.$emit('input', list);
         }
     }
 };

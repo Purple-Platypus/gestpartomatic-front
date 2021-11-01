@@ -1,23 +1,27 @@
 <template>
     <v-row>
-        <v-col class="py-0">
-            <v-chip :color="tag.color" :dark="tag.isDark" small>
-                {{ tag.label }}
-            </v-chip>
-        </v-col>
+        <template v-if="!isUpdated">
+            <v-col class="py-1">
+                <v-chip :color="tag.color" :dark="tag.isDark" small>
+                    {{ tag.label }}
+                </v-chip>
+            </v-col>
 
-        <v-col class="flex-grow-0 d-flex py-0">
-            <v-btn icon>
-                <v-icon>
-                    mdi-circle-edit-outline
-                </v-icon>
-            </v-btn>
-            <v-btn icon @click="showRemoveModal()">
-                <v-icon>
-                    mdi-close-circle-outline
-                </v-icon>
-            </v-btn>
-        </v-col>
+            <v-col class="flex-grow-0 d-flex py-1 px-0">
+                <v-btn icon @click="showUpdateForm" small>
+                    <v-icon>
+                        mdi-circle-edit-outline
+                    </v-icon>
+                </v-btn>
+                <v-btn icon @click="showRemoveModal()" small>
+                    <v-icon>
+                        mdi-close-circle-outline
+                    </v-icon>
+                </v-btn>
+            </v-col>
+        </template>
+
+        <tag-form-update v-else :tagId="tagId" @update="update" />
 
         <v-dialog v-model="isRemoveModalVisible" max-width="500">
             <v-card>
@@ -51,11 +55,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import TagFormUpdate from './TagFormUpdate.vue';
 
 export default {
+    components: { TagFormUpdate },
     name: 'task-tags-manager-item',
     props: {
-        tagId: Number
+        tagId: Number,
+        isUpdated: Boolean
     },
     data() {
         return {
@@ -69,6 +76,12 @@ export default {
         ...mapState('boards', ['tags'])
     },
     methods: {
+        update(tag) {
+            this.$emit('update', {
+                tagId: this.tagId,
+                tagData: tag
+            });
+        },
         remove() {
             this.$emit('remove', this.tagId);
             this.hideRemoveModal();
@@ -78,6 +91,12 @@ export default {
         },
         hideRemoveModal() {
             this.isRemoveModalVisible = false;
+        },
+        showUpdateForm() {
+            this.$emit('showUpdate');
+        },
+        hideUpdateForm() {
+            this.$emit('hideUpdate');
         }
     }
 };

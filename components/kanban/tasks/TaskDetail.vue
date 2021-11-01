@@ -96,7 +96,11 @@
 
             <v-hover v-slot="{ hover }">
                 <div>
-                    <task-tags-list v-model="taskTags" :isHover="hover">
+                    <task-tags-list
+                        v-model="taskTags"
+                        :isHover="hover"
+                        @update="updateTag"
+                    >
                         Pas encore d'étiquette
                     </task-tags-list>
                 </div>
@@ -152,6 +156,9 @@ export default {
             if (this.isVisible) {
                 this.$emit('close');
             }
+        },
+        updateTag(tagData) {
+            this.$emit('updateTag', tagData);
         }
     }
 };

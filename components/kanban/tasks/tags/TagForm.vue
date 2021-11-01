@@ -2,9 +2,10 @@
     <v-row>
         <v-col>
             <v-text-field
+                :disabled="disabled"
                 dense
                 hide-details=""
-                label="Nouvelle étiquette"
+                label="Libellé de l'étiquette"
                 outlined
                 v-model="formData.label"
                 @keyup.enter="submit"
@@ -13,6 +14,7 @@
         <v-col class="flex-grow-0 d-flex align-center px-0">
             <v-menu
                 content-class="elevation-0"
+                :disabled="disabled"
                 :close-on-content-click="false"
                 offset-y
                 z-index="9"
@@ -67,6 +69,10 @@ export default {
                     color: '#2196F3'
                 };
             }
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

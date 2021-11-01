@@ -86,6 +86,7 @@
                     <task-tags-manager
                         @close="hideTagsManager"
                         @remove="remove"
+                        @update="update"
                     />
                 </v-window-item>
             </v-window>
@@ -135,6 +136,9 @@ export default {
         },
         hideTagsManager() {
             this.visibleMenu = 'list';
+        },
+        update(tagData) {
+            this.$emit('update', tagData);
         },
         remove(tagId) {
             this.$emit('remove', tagId);

@@ -37,7 +37,11 @@
                 Ajoutez des responsable pour cette tâche
             </task-assignees-list>
 
-            <task-tags-list v-model="formData.tags" @remove="removeTag">
+            <task-tags-list
+                v-model="formData.tags"
+                @remove="removeTag"
+                @update="updateTag"
+            >
                 Ajoutez des étiquettes à cette tâche
             </task-tags-list>
 
@@ -125,6 +129,9 @@ export default {
         },
         hideTagManager() {
             this.isTagManagerVisible = false;
+        },
+        updateTag(tagData) {
+            this.$emit('updateTag', tagData);
         },
         removeTag(tagId) {
             const deletedTagIndex = this.formData.tags.indexOf(tagId);

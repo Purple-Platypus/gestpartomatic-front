@@ -1,6 +1,6 @@
 <template>
     <v-sheet class="pa-2" outlined>
-        <tag-form-add />
+        <tag-form-add :disabled="!!updatedTagId" />
 
         <v-divider class="my-2" />
 
@@ -9,6 +9,10 @@
                 v-for="tag in tags"
                 :key="tag.id"
                 :tagId="tag.id"
+                :isUpdated="tag.id === updatedTagId"
+                @showUpdate="showUpdate(tag.id)"
+                @hideUpdate="hideUpdate"
+                @update="update"
                 @remove="remove"
             />
             <p v-if="!tagsList.length" class="font-italic grey--text">
@@ -33,7 +37,9 @@ export default {
     name: 'task-tags-manager',
     components: { TagFormAdd, TaskTagsManagerItem },
     data() {
-        return {};
+        return {
+            updatedTagId: null
+        };
     },
     computed: {
         ...mapState('boards', ['tags']),
@@ -43,11 +49,21 @@ export default {
         add(tagId) {
             this.tags.push(tagId);
         },
-        close() {
-            this.$emit('close');
+        showUpdate(tagId) {
+            this.updatedTagId = tagId;
+        },
+        hideUpdate(tagId) {
+            this.updatedTagId = null;
+        },
+        update(tagData) {
+            this.$emit('update', tagData);
         },
         remove(tagId) {
             this.$emit('remove', tagId);
+        },
+        close() {
+            this.hideUpdate();
+            this.$emit('close');
         }
     }
 };

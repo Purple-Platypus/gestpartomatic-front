@@ -69,12 +69,14 @@
             @close="hideAddTaskForm"
             @createTask="createTask"
             @removeTag="removeTag"
+            @updateTag="updateTag"
         />
         <task-detail
             :taskId="detailTaskId"
             :isVisible="isDetailVisible"
             @close="hideTaskDrawer"
             @update="updateTask"
+            @updateTag="updateTag"
         />
     </v-row>
 </template>
@@ -153,6 +155,10 @@ export default {
                 this.addTask(res);
             });
 
+            this.socket.on('updateTag', res => {
+                this.addTag(res);
+            });
+
             this.socket.on('removeTag', res => {
                 this.purgeTag(res);
             });
@@ -191,13 +197,20 @@ export default {
             this.detailTaskId = null;
             this.isDetailVisible = false;
         },
+        updateTag(tagData) {
+            this.socket.emit('updateTag', {
+                boardId: this.board.id,
+                tagId: tagData.tagId,
+                tagData: tagData.tagData
+            });
+        },
         removeTag(tagId) {
             this.socket.emit('removeTag', {
                 boardId: this.board.id,
                 tagId
             });
         },
-        ...mapMutations('boards', ['addTask', 'purgeTag']),
+        ...mapMutations('boards', ['addTask', 'addTag', 'purgeTag']),
         ...mapActions('boards', ['getTags', 'getBoard', 'updateListsRanking'])
     }
 };

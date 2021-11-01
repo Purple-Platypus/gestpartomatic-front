@@ -1,13 +1,15 @@
 <template>
     <v-row>
         <v-col>
-            <tag-form v-model="formData" @submit="add" />
+            <tag-form v-model="formData" :disabled="disabled" @submit="add" />
         </v-col>
         <v-col class="flex-grow-0 d-flex align-center pl-0">
             <v-btn
+                class="ml-1"
                 color="primary"
                 :disabled="!formData.label"
                 icon
+                small
                 @click="add"
             >
                 <v-icon>
@@ -24,7 +26,9 @@ import TagForm from './TagForm.vue';
 export default {
     components: { TagForm },
     name: 'tag-form-add',
-    props: {},
+    props: {
+        disabled: Boolean
+    },
     data() {
         return {
             formData: {

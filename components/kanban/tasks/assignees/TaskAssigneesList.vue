@@ -21,7 +21,7 @@
                     v-for="guest in guestsList"
                     :key="guest.id"
                     :disabled="assignees.indexOf(guest.id) !== -1"
-                    @click="add(guest.id)"
+                    @click="create(guest.id)"
                 >
                     <v-list-item-avatar>
                         <img :src="guest.avatar" />
@@ -80,7 +80,7 @@ export default {
         ...mapState('boards', ['guests'])
     },
     methods: {
-        add(assigneeId) {
+        create(assigneeId) {
             this.assignees.push(assigneeId);
         },
         remove(assigneeId) {

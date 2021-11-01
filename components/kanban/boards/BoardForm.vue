@@ -1,6 +1,6 @@
 <template>
-    <v-form class="pa-2 grey lighten-4" @submit.prevent="submit">
-        <v-row>
+    <v-form class="grey lighten-4" @submit.prevent="submit">
+        <v-row class="px-2 py-1">
             <v-col class="pb-0">
                 <v-text-field
                     autofocus
@@ -17,8 +17,8 @@
             </v-col>
         </v-row>
 
-        <v-row>
-            <v-col class="pb-0">
+        <v-row class="px-2">
+            <v-col>
                 <v-textarea
                     auto-grow
                     class="input-description white"
@@ -34,7 +34,7 @@
             </v-col>
         </v-row>
 
-        <v-row>
+        <v-row class="px-2">
             <v-col>
                 <v-switch
                     class="mt-0 bordered-switch"
@@ -47,7 +47,7 @@
             </v-col>
         </v-row>
 
-        <v-row>
+        <v-row class="px-2 pb-2">
             <v-col cols="6">
                 <v-btn
                     block
@@ -65,6 +65,8 @@
                 </v-btn>
             </v-col>
         </v-row>
+
+        <v-divider />
     </v-form>
 </template>
 

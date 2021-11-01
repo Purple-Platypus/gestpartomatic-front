@@ -6,7 +6,7 @@
 
         <v-divider />
 
-        <board-task-list-form
+        <tasks-list-form
             ref="boardListForm"
             submit-label="Ajouter"
             @submit="submit"
@@ -17,11 +17,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import BoardTaskListForm from '../lists/BoardTaskListForm.vue';
+import TasksListForm from '../lists/TasksListForm.vue';
 
 export default {
-    name: 'board-list-form-add',
-    components: { BoardTaskListForm },
+    name: 'tasks-list-create-form',
+    components: { TasksListForm },
     props: {
         listData: {
             type: Object,
@@ -35,12 +35,12 @@ export default {
     },
     methods: {
         submit(newList) {
-            this.addList(newList).then(() => this.$emit('add'));
+            this.createList(newList).then(() => this.$emit('create'));
         },
         cancel() {
             this.$emit('cancel');
         },
-        ...mapActions('boards', ['addList'])
+        ...mapActions('boards', ['createList'])
     }
 };
 </script>

@@ -1,7 +1,11 @@
 <template>
     <v-row>
         <v-col>
-            <tag-form v-model="formData" :disabled="disabled" @submit="add" />
+            <tag-form
+                v-model="formData"
+                :disabled="disabled"
+                @submit="create"
+            />
         </v-col>
         <v-col class="flex-grow-0 d-flex align-center pl-0">
             <v-btn
@@ -10,7 +14,7 @@
                 :disabled="!formData.label"
                 icon
                 small
-                @click="add"
+                @click="create"
             >
                 <v-icon>
                     mdi-plus-circle-outline
@@ -21,11 +25,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import TagForm from './TagForm.vue';
 export default {
     components: { TagForm },
-    name: 'tag-form-add',
+    name: 'tag-form-create',
     props: {
         disabled: Boolean
     },
@@ -39,10 +42,9 @@ export default {
         };
     },
     methods: {
-        add() {
-            this.addTag(this.formData);
-        },
-        ...mapActions('boards', ['addTag'])
+        create() {
+            this.$emit('create', this.formData);
+        }
     }
 };
 </script>

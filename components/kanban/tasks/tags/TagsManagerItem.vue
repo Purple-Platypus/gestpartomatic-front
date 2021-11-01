@@ -13,7 +13,7 @@
                         mdi-circle-edit-outline
                     </v-icon>
                 </v-btn>
-                <v-btn icon @click="showRemoveModal()" small>
+                <v-btn icon @click="showRemoveDialog()" small>
                     <v-icon>
                         mdi-close-circle-outline
                     </v-icon>
@@ -23,7 +23,7 @@
 
         <tag-form-update v-else :tagId="tagId" @update="update" />
 
-        <v-dialog v-model="isRemoveModalVisible" max-width="500">
+        <v-dialog v-model="isVisibleRemoveDialog" max-width="500">
             <v-card>
                 <v-card-title class="text-h5 font-weight-light">
                     Supprimer une étiquette
@@ -40,7 +40,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
 
-                    <v-btn depressed @click="hideRemoveModal">
+                    <v-btn depressed @click="hideRemoveDialog">
                         Annuler
                     </v-btn>
 
@@ -54,19 +54,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import TagFormUpdate from './TagFormUpdate.vue';
 
 export default {
     components: { TagFormUpdate },
-    name: 'task-tags-manager-item',
+    name: 'tags-manager-item',
     props: {
         tagId: Number,
         isUpdated: Boolean
     },
     data() {
         return {
-            isRemoveModalVisible: false
+            isVisibleRemoveDialog: false
         };
     },
     computed: {
@@ -84,13 +84,13 @@ export default {
         },
         remove() {
             this.$emit('remove', this.tagId);
-            this.hideRemoveModal();
+            this.hideRemoveDialog();
         },
-        showRemoveModal() {
-            this.isRemoveModalVisible = true;
+        showRemoveDialog() {
+            this.isVisibleRemoveDialog = true;
         },
-        hideRemoveModal() {
-            this.isRemoveModalVisible = false;
+        hideRemoveDialog() {
+            this.isVisibleRemoveDialog = false;
         },
         showUpdateForm() {
             this.$emit('showUpdate');

@@ -55,7 +55,7 @@ import { mapState } from 'vuex';
 import Markdown from '../../commons/mixins/Markdown.mixin';
 
 export default {
-    name: 'board-task-list-card',
+    name: 'tasks-list-card',
     mixins: [Markdown],
     props: {
         taskId: Number

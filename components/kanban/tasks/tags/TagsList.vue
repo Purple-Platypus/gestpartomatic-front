@@ -83,10 +83,11 @@
                 </v-window-item>
 
                 <v-window-item value="manager">
-                    <task-tags-manager
+                    <tags-manager
                         @close="hideTagsManager"
                         @remove="remove"
                         @update="update"
+                        @create="create"
                     />
                 </v-window-item>
             </v-window>
@@ -96,11 +97,11 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import TaskTagsManager from './TaskTagsManager.vue';
+import TagsManager from './TagsManager.vue';
 
 export default {
-    name: 'task-tags-list',
-    components: { TaskTagsManager },
+    name: 'tags-list',
+    components: { TagsManager },
     props: {
         listId: Number,
         isHover: {
@@ -136,6 +137,9 @@ export default {
         },
         hideTagsManager() {
             this.visibleMenu = 'list';
+        },
+        create(tagData) {
+            this.$emit('create', tagData);
         },
         update(tagData) {
             this.$emit('update', tagData);

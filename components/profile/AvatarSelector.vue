@@ -22,7 +22,7 @@
             class="d-sr-only"
         />
 
-        <v-dialog v-model="showAvatarEditorModal" width="500" :eager="true">
+        <v-dialog v-model="showAvatarEditorDialog" width="500" :eager="true">
             <v-card>
                 <v-card-title class="headline mb-3">
                     Personalisez l'image
@@ -82,7 +82,7 @@ export default {
         return {
             avatar: this.src,
             avatarSize: this.small ? 40 : 128,
-            showAvatarEditorModal: false,
+            showAvatarEditorDialog: false,
             croppedAvatar: '',
             noUpload: true,
             cropper: {}
@@ -152,7 +152,7 @@ export default {
             reader.readAsDataURL(file);
         },
         showAvatarEditor() {
-            this.showAvatarEditorModal = true;
+            this.showAvatarEditorDialog = true;
 
             Vue.nextTick().then(() => {
                 const image = document.getElementById('image');
@@ -181,15 +181,15 @@ export default {
         updateAvatar() {
             this.$emit('change', this.avatar);
             this.noUpload = false;
-            this.closeModal();
+            this.closeDialog();
             this.cropper.destroy();
         },
         cancel() {
             this.avatar = this.src;
-            this.closeModal();
+            this.closeDialog();
         },
-        closeModal() {
-            this.showAvatarEditorModal = false;
+        closeDialog() {
+            this.showAvatarEditorDialog = false;
         }
     }
 };

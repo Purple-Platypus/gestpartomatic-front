@@ -1,37 +1,37 @@
 <template>
-    <v-col class="col--add-list">
+    <v-col class="col--create-list">
         <v-sheet
-            v-if="!isVisibleAddForm"
+            v-if="!isVisibleCreateForm"
             class="py-8 text-center text-body-1 font-weight-bold grey--text cursor-pointer border-dashed"
             outlined
             rounded
             v-ripple
-            @click="showAddForm"
+            @click="showCreateForm"
         >
             <v-icon size="18px">
                 mdi-plus
             </v-icon>
             Ajouter une colonne
         </v-sheet>
-        <board-task-list-add-form
+        <tasks-list-create-form
             v-else
-            @cancel="hideAddForm"
-            @add="hideAddForm"
+            @cancel="hideCreateForm"
+            @create="hideCreateForm"
         />
     </v-col>
 </template>
 
 <script>
 import ShortkeysEmitterMixin from '../../commons/mixins/ShortkeysEmitter.mixin';
-import BoardTaskListAddForm from './BoardTaskListAddForm.vue';
+import TasksListCreateForm from './TasksListCreateForm.vue';
 
 export default {
-    components: { BoardTaskListAddForm },
-    name: 'board-task-list-add',
+    components: { TasksListCreateForm },
+    name: 'tasks-list-create',
     mixins: [ShortkeysEmitterMixin],
     data() {
         return {
-            isVisibleAddForm: false
+            isVisibleCreateForm: false
         };
     },
     mounted() {
@@ -42,15 +42,15 @@ export default {
         handleShortkey(e) {
             switch (e.key) {
                 case '+':
-                    this.showAddForm();
+                    this.showCreateForm();
                     break;
             }
         },
-        showAddForm() {
-            this.isVisibleAddForm = true;
+        showCreateForm() {
+            this.isVisibleCreateForm = true;
         },
-        hideAddForm() {
-            this.isVisibleAddForm = false;
+        hideCreateForm() {
+            this.isVisibleCreateForm = false;
         },
         submit() {}
     }
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.col--add-list {
+.col--create-list {
     min-width: 300px !important;
     max-width: 300px !important;
 }

@@ -34,7 +34,7 @@
                 </p>
 
                 <v-list class="pt-0">
-                    <board-members-modal-item
+                    <board-guests-dialog-item
                         v-for="user in privileges"
                         :key="user.id"
                         :user="user"
@@ -55,11 +55,11 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-import BoardMembersModalItem from './BoardMembersModalItem.vue';
+import BoardGuestsDialogItem from './BoardGuestsDialogItem.vue';
 
 export default {
-    components: { BoardMembersModalItem },
-    name: 'board-members-modal',
+    components: { BoardGuestsDialogItem },
+    name: 'board-guests-dialog',
     props: ['isVisible'],
     data: function() {
         return {};
@@ -71,10 +71,8 @@ export default {
             },
             set(val) {
                 this.updateBoard({
-                    boardId: this.board.id,
-                    boardData: {
-                        isPrivate: val
-                    }
+                    id: this.board.id,
+                    isPrivate: val
                 });
             }
         },
@@ -84,7 +82,7 @@ export default {
             },
             set: function(guestsIds) {
                 const guestId = guestsIds[guestsIds.length - 1];
-                this.addGuest(guestId);
+                this.createGuest(guestId);
             }
         },
         privileges() {
@@ -107,7 +105,7 @@ export default {
             this.$emit('close');
         },
         ...mapMutations('boards', ['updateBoard']),
-        ...mapActions('boards', ['updateBoard', 'addGuest', 'removeGuest'])
+        ...mapActions('boards', ['updateBoard', 'createGuest', 'removeGuest'])
     }
 };
 </script>

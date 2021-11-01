@@ -1,6 +1,5 @@
 <template>
-    <board-task-list-form
-        ref="boardTaskListForm"
+    <tasks-list-form
         :listData="listData"
         submit-label="Modifier"
         @submit="submit"
@@ -10,11 +9,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import BoardTaskListForm from './BoardTaskListForm.vue';
+import TasksListForm from './TasksListForm.vue';
 
 export default {
-    name: 'board-list-form-update',
-    components: { BoardTaskListForm },
+    name: 'tasks-list-form-update',
+    components: { TasksListForm },
     props: {
         listData: {
             type: Object,

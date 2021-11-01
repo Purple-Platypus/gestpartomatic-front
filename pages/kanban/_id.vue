@@ -27,7 +27,7 @@
                         class="mr-2 ml-4"
                         icon
                         large
-                        @click="showMembersModal"
+                        @click="showGuestsDialog"
                     >
                         <v-icon>
                             {{
@@ -38,9 +38,9 @@
                         </v-icon>
                     </v-btn>
 
-                    <board-members-modal
-                        :is-visible="isMembersModalVisible"
-                        @close="hideMembersModal"
+                    <board-guests-dialog
+                        :is-visible="isVisibleGuestsDialog"
+                        @close="hideGuestsDialog"
                     />
                 </v-card-title>
 
@@ -49,34 +49,37 @@
                         class="d-flex task-list-row flex-nowrap"
                         :disabled="!isAdmin"
                         handle=".task-list-title"
-                        v-model="taskLists"
+                        v-model="tasksLists"
                     >
-                        <board-task-list
-                            v-for="listId in taskLists"
+                        <tasks-list
+                            v-for="listId in tasksLists"
                             :key="listId"
                             :list-id="listId"
-                            @showAddTaskForm="showAddTaskForm"
+                            @showCreateTaskForm="showCreateTaskForm"
                             @showTask="showTaskDrawer($event)"
                         />
-                        <board-task-list-add slot="footer" />
+                        <tasks-list-create slot="footer" />
                     </draggable>
                 </v-card-text>
             </v-card>
         </v-col>
-        <task-form-add
-            :listId="addTaskListId"
-            :isVisible="isAddTaskFormVisible"
-            @close="hideAddTaskForm"
+        <task-form-create
+            :listId="createTasksListId"
+            :isVisible="isVisibleCreateTaskForm"
+            @close="hideCreateTaskForm"
             @createTask="createTask"
-            @removeTag="removeTag"
+            @createTag="createTag"
             @updateTag="updateTag"
+            @removeTag="removeTag"
         />
         <task-detail
             :taskId="detailTaskId"
-            :isVisible="isDetailVisible"
+            :isVisible="isVisibleDetail"
             @close="hideTaskDrawer"
             @update="updateTask"
+            @createTag="createTag"
             @updateTag="updateTag"
+            @removeTag="removeTag"
         />
     </v-row>
 </template>
@@ -84,19 +87,19 @@
 <script>
 import draggable from 'vuedraggable';
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex';
-import BoardTaskList from '../../components/kanban/lists/BoardTaskList.vue';
-import BoardTaskListAdd from '../../components/kanban/lists/BoardTaskListAdd.vue';
-import BoardMembersModal from '../../components/kanban/boards/BoardMembersModal';
-import TaskFormAdd from '../../components/kanban/tasks/TaskFormAdd.vue';
+import TasksList from '../../components/kanban/lists/TasksList.vue';
+import TasksListCreate from '../../components/kanban/lists/TasksListCreate.vue';
+import BoardGuestsDialog from '../../components/kanban/boards/BoardGuestsDialog.vue';
+import TaskFormCreate from '../../components/kanban/tasks/TaskFormCreate.vue';
 import TaskDetail from '../../components/kanban/tasks/TaskDetail.vue';
 
 export default {
     components: {
         draggable,
-        BoardTaskList,
-        BoardTaskListAdd,
-        BoardMembersModal,
-        TaskFormAdd,
+        TasksList,
+        TasksListCreate,
+        BoardGuestsDialog,
+        TaskFormCreate,
         TaskDetail
     },
     head: () => ({
@@ -104,15 +107,15 @@ export default {
     }),
     data() {
         return {
-            isMembersModalVisible: false,
-            isAddTaskFormVisible: false,
-            addTaskListId: null,
-            isDetailVisible: false,
+            isVisibleGuestsDialog: false,
+            isVisibleCreateTaskForm: false,
+            createTasksListId: null,
+            isVisibleDetail: false,
             detailTaskId: null
         };
     },
     computed: {
-        taskLists: {
+        tasksLists: {
             get() {
                 return this.board.lists;
             },
@@ -147,12 +150,16 @@ export default {
             });
             this.socket.emit('watchBoard', boardId);
 
-            this.socket.on('addTask', res => {
+            this.socket.on('createTask', res => {
                 this.addTask(res);
             });
 
             this.socket.on('updateTask', res => {
                 this.addTask(res);
+            });
+
+            this.socket.on('createTag', res => {
+                this.addTag(res);
             });
 
             this.socket.on('updateTag', res => {
@@ -163,25 +170,25 @@ export default {
                 this.purgeTag(res);
             });
         },
-        showMembersModal() {
+        showGuestsDialog() {
             if (this.isAdmin) {
-                this.isMembersModalVisible = true;
+                this.isVisibleGuestsDialog = true;
             }
         },
-        hideMembersModal() {
-            this.isMembersModalVisible = false;
+        hideGuestsDialog() {
+            this.isVisibleGuestsDialog = false;
         },
-        showAddTaskForm(list) {
-            this.addTaskListId = list.listId;
-            this.isAddTaskFormVisible = true;
+        showCreateTaskForm(list) {
+            this.createTasksListId = list.listId;
+            this.isVisibleCreateTaskForm = true;
         },
-        hideAddTaskForm() {
-            this.addTaskListId = null;
-            this.isAddTaskFormVisible = false;
+        hideCreateTaskForm() {
+            this.createTasksListId = null;
+            this.isVisibleCreateTaskForm = false;
         },
         createTask(createTaskData) {
             this.socket.emit('createTask', createTaskData, () => {
-                this.hideAddTaskForm();
+                this.hideCreateTaskForm();
             });
         },
         updateTask(updateTaskData) {
@@ -189,13 +196,19 @@ export default {
         },
         showTaskDrawer(taskId) {
             this.detailTaskId = taskId;
-            if (!this.isDetailVisible) {
-                this.isDetailVisible = true;
+            if (!this.isVisibleDetail) {
+                this.isVisibleDetail = true;
             }
         },
         hideTaskDrawer() {
             this.detailTaskId = null;
-            this.isDetailVisible = false;
+            this.isVisibleDetail = false;
+        },
+        createTag(tagData) {
+            this.socket.emit('createTag', {
+                boardId: this.board.id,
+                tagData: tagData
+            });
         },
         updateTag(tagData) {
             this.socket.emit('updateTag', {

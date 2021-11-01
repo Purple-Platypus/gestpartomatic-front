@@ -16,7 +16,7 @@
 
                     <v-spacer />
 
-                    <v-btn icon small @click="showAddTaskForm">
+                    <v-btn icon small @click="showCreateTaskForm">
                         <v-icon size="18">
                             mdi-plus
                         </v-icon>
@@ -37,7 +37,7 @@
                                     Modifier
                                 </v-list-item-title>
                             </v-list-item>
-                            <v-list-item @click="showRemoveModal">
+                            <v-list-item @click="showRemoveDialog">
                                 <v-list-item-title>
                                     Supprimer
                                 </v-list-item-title>
@@ -46,7 +46,7 @@
                     </v-menu>
                 </v-card-title>
 
-                <board-task-list-update-form
+                <tasks-list-form-update
                     v-else
                     :list-data="list"
                     v-click-outside="hideUpdateForm"
@@ -55,7 +55,7 @@
                 />
 
                 <v-card-text class="px-2 pb-2">
-                    <board-task-list-card
+                    <tasks-list-card
                         v-for="taskId in list.tasksList"
                         :key="taskId"
                         :task-id="taskId"
@@ -63,7 +63,7 @@
                         @show="showTaskDetail(taskId)"
                     >
                         {{ taskId }}
-                    </board-task-list-card>
+                    </tasks-list-card>
                 </v-card-text>
             </v-card>
         </v-sheet>
@@ -83,11 +83,11 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
 
-                    <v-btn color="error" text @click="remove">
+                    <v-btn color="error" depressed @click="remove">
                         Supprimer
                     </v-btn>
 
-                    <v-btn text @click="hideRemoveModal">
+                    <v-btn depressed @click="hideRemoveDialog">
                         Annuler
                     </v-btn>
                 </v-card-actions>
@@ -99,15 +99,15 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
 import draggable from 'vuedraggable';
-import BoardTaskListCard from './BoardTaskListCard.vue';
-import BoardTaskListUpdateForm from './BoardTaskListUpdateForm.vue';
+import TasksListCard from './TasksListCard.vue';
+import TasksListFormUpdate from './TasksListFormUpdate.vue';
 
 export default {
-    name: 'board-task-list',
+    name: 'tasks-list',
     components: {
         draggable,
-        BoardTaskListCard,
-        BoardTaskListUpdateForm
+        TasksListCard,
+        TasksListFormUpdate
     },
     props: {
         listId: Number
@@ -126,8 +126,8 @@ export default {
         ...mapGetters('boards', ['isAdmin'])
     },
     methods: {
-        showAddTaskForm() {
-            this.$emit('showAddTaskForm', { listId: this.listId });
+        showCreateTaskForm() {
+            this.$emit('showCreateTaskForm', { listId: this.listId });
         },
         showUpdateForm() {
             this.isUpdateFormVisible = true;
@@ -135,10 +135,10 @@ export default {
         hideUpdateForm() {
             this.isUpdateFormVisible = false;
         },
-        showRemoveModal() {
+        showRemoveDialog() {
             this.isRemoveDialogVisible = true;
         },
-        hideRemoveModal() {
+        hideRemoveDialog() {
             this.isRemoveDialogVisible = false;
         },
         showTaskDetail(taskId) {
@@ -146,7 +146,7 @@ export default {
         },
         remove() {
             this.removeList(this.listId).then(() => {
-                this.hideRemoveModal();
+                this.hideRemoveDialog();
             });
         },
         ...mapActions('boards', ['removeList'])

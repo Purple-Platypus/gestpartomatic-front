@@ -28,6 +28,12 @@ export const mutations = {
             state.boardsList.push(board.id);
         }
         Vue.set(state.boards, board.id, board);
+
+        if (board.id === state.board.id) {
+            for (const attr in board) {
+                Vue.set(state.board, attr, board[attr]);
+            }
+        }
     },
 
     // Lists
@@ -131,7 +137,7 @@ export const actions = {
                 });
         });
     },
-    addBoard({ commit }, board) {
+    createBoard({ commit, dispatch }, board) {
         this.$axios
             .$post('/api/boards', board)
             .then(res => {
@@ -172,7 +178,7 @@ export const actions = {
             });
         });
     },
-    addList({ commit, dispatch, state }, list) {
+    createList({ commit, dispatch, state }, list) {
         Object.assign(list, {
             boardId: state.board.id,
             rank: state.board.lists.length
@@ -231,19 +237,9 @@ export const actions = {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },
-    addTag({ commit, dispatch }, tag) {
-        this.$axios
-            .$post('/api/tags/', tag)
-            .then(res => {
-                commit('addTag', res);
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
-    },
 
     // Guests
-    addGuest({ state, commit, dispatch }, { userId, role }) {
+    createGuest({ state, commit, dispatch }, { userId, role }) {
         this.$axios
             .$post('/api/boards/' + state.board.id + '/guest', {
                 userId,

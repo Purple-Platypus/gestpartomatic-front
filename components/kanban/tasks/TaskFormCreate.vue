@@ -12,7 +12,7 @@
             Nouvelle tâche
         </h2>
 
-        <v-form dense @submit.prevent="add">
+        <v-form dense @submit.prevent="create">
             <v-text-field
                 autofocus
                 class="mb-2"
@@ -37,13 +37,14 @@
                 Ajoutez des responsable pour cette tâche
             </task-assignees-list>
 
-            <task-tags-list
+            <tags-list
                 v-model="formData.tags"
-                @remove="removeTag"
+                @create="createTag"
                 @update="updateTag"
+                @remove="removeTag"
             >
                 Ajoutez des étiquettes à cette tâche
-            </task-tags-list>
+            </tags-list>
 
             <v-divider />
 
@@ -70,11 +71,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
-import TaskTagsList from './tags/TaskTagsList.vue';
+import TagsList from './tags/TagsList.vue';
 
 export default {
-    name: 'task-form-add',
-    components: { TaskAssigneesList, TaskTagsList },
+    name: 'task-form-create',
+    components: { TaskAssigneesList, TagsList },
     props: {
         listId: Number,
         isVisible: Boolean
@@ -111,7 +112,7 @@ export default {
                 assignees: []
             };
         },
-        add() {
+        create() {
             const task = Object.assign(this.formData, {
                 listId: this.listId,
                 rank: this.lists[this.listId].tasksList.length,
@@ -130,6 +131,9 @@ export default {
         hideTagManager() {
             this.isTagManagerVisible = false;
         },
+        createTag(tagData) {
+            this.$emit('createTag', tagData);
+        },
         updateTag(tagData) {
             this.$emit('updateTag', tagData);
         },
@@ -138,7 +142,7 @@ export default {
             this.formData.tags.splice(deletedTagIndex, 1);
             this.$emit('removeTag', tagId);
         },
-        ...mapActions('boards', ['addTask'])
+        ...mapActions('boards', ['createTask'])
     }
 };
 </script>

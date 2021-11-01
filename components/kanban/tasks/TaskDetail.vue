@@ -96,13 +96,14 @@
 
             <v-hover v-slot="{ hover }">
                 <div>
-                    <task-tags-list
+                    <tags-list
                         v-model="taskTags"
                         :isHover="hover"
                         @update="updateTag"
+                        @create="createTag"
                     >
                         Pas encore d'étiquette
-                    </task-tags-list>
+                    </tags-list>
                 </div>
             </v-hover>
         </template>
@@ -112,12 +113,11 @@
 <script>
 import { mapState } from 'vuex';
 import Markdown from '../../commons/mixins/Markdown.mixin';
-import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
-import TaskTagsList from './tags/TaskTagsList.vue';
+import TagsList from './tags/TagsList.vue';
 
 export default {
     name: 'task-detail',
-    components: { TaskTagsList },
+    components: { TagsList },
     mixins: [Markdown],
     props: {
         taskId: Number,
@@ -156,6 +156,9 @@ export default {
             if (this.isVisible) {
                 this.$emit('close');
             }
+        },
+        createTag(tagData) {
+            this.$emit('createTag', tagData);
         },
         updateTag(tagData) {
             this.$emit('updateTag', tagData);

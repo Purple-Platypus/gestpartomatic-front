@@ -51,7 +51,7 @@
                                 color="primary"
                                 icon
                                 small
-                                @click="showAddForm"
+                                @click="showCreateForm"
                             >
                                 <v-icon size="19px">
                                     mdi-plus
@@ -61,10 +61,10 @@
 
                         <v-divider />
 
-                        <board-form-add
-                            v-if="isVisibleAddForm"
-                            @cancel="hideAddForm"
-                            @add="hideAddForm"
+                        <board-form-create
+                            v-if="isVisibleCreateForm"
+                            @cancel="hideCreateForm"
+                            @create="hideCreateForm"
                         />
 
                         <v-list class="pa-0" dense>
@@ -99,7 +99,7 @@
                                 </p>
                                 <p class="grey--text">
                                     Vous pouvez en
-                                    <a @click="showAddForm">créer un</a
+                                    <a @click="showCreateForm">créer un</a
                                     ><span v-if="archivedBoards.length">
                                         ou restaurer un
                                         <a @click="showArchive"
@@ -123,7 +123,7 @@ import ShortkeysEmitter from '../../components/commons/mixins/ShortkeysEmitter.m
 import BoardsListItem from '../../components/kanban/boards/BoardsListItem.vue';
 import BoardForm from '../../components/kanban/boards/BoardForm.vue';
 import BoardFormUpdate from '../../components/kanban/boards/BoardFormUpdate.vue';
-import BoardFormAdd from '../../components/kanban/boards/BoardFormAdd.vue';
+import BoardFormCreate from '../../components/kanban/boards/BoardFormCreate.vue';
 
 export default {
     head: () => ({
@@ -134,13 +134,13 @@ export default {
         BoardsListItem,
         BoardForm,
         BoardFormUpdate,
-        BoardFormAdd
+        BoardFormCreate
     },
     mixins: [ShortkeysEmitter],
     data: () => {
         return {
             displayActive: true,
-            isVisibleAddForm: false,
+            isVisibleCreateForm: false,
             visibleUpdateForm: null
         };
     },
@@ -156,7 +156,7 @@ export default {
             return (
                 !this.activeBoards.length &&
                 this.displayActive &&
-                !this.isVisibleAddForm
+                !this.isVisibleCreateForm
             );
         },
         ...mapGetters('boards', ['activeBoards', 'archivedBoards'])
@@ -165,7 +165,7 @@ export default {
         handleShortkey(e) {
             switch (e.key) {
                 case '+':
-                    this.showAddForm();
+                    this.showCreateForm();
                     break;
                 case 'Escape':
                     this.hideAll();
@@ -178,22 +178,22 @@ export default {
         showArchive() {
             this.displayActive = false;
         },
-        showAddForm() {
-            this.isVisibleAddForm = true;
+        showCreateForm() {
+            this.isVisibleCreateForm = true;
             this.hideUpdateForm();
         },
         showUpdateForm(boardId) {
             this.visibleUpdateForm = boardId;
-            this.hideAddForm();
+            this.hideCreateForm();
         },
-        hideAddForm() {
-            this.isVisibleAddForm = false;
+        hideCreateForm() {
+            this.isVisibleCreateForm = false;
         },
         hideUpdateForm() {
             this.visibleUpdateForm = null;
         },
         hideAll() {
-            this.hideAddForm();
+            this.hideCreateForm();
             this.hideUpdateForm();
         },
         ...mapActions('boards', ['getBoardsList'])

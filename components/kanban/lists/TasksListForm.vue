@@ -59,7 +59,7 @@
 
 <script>
 export default {
-    name: 'board-list-form',
+    name: 'tasks-list-form',
     components: {},
     props: {
         listData: {

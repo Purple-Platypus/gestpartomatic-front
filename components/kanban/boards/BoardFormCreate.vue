@@ -7,16 +7,16 @@ import { mapActions } from 'vuex';
 import BoardForm from './BoardForm.vue';
 
 export default {
-    name: 'board-form-add',
+    name: 'board-form-create',
     components: { BoardForm },
     methods: {
         submit(newBoard) {
-            this.addBoard(newBoard).then(() => this.$emit('add'));
+            this.createBoard(newBoard).then(() => this.$emit('create'));
         },
         cancel() {
             this.$emit('cancel');
         },
-        ...mapActions('boards', ['addBoard'])
+        ...mapActions('boards', ['createBoard'])
     }
 };
 </script>

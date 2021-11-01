@@ -1,11 +1,11 @@
 <template>
     <v-sheet class="pa-2" outlined>
-        <tag-form-add :disabled="!!updatedTagId" />
+        <tag-form-create :disabled="!!updatedTagId" @create="create" />
 
         <v-divider class="my-2" />
 
         <v-container>
-            <task-tags-manager-item
+            <tags-manager-item
                 v-for="tag in tags"
                 :key="tag.id"
                 :tagId="tag.id"
@@ -30,12 +30,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import TagFormAdd from './TagFormAdd.vue';
-import TaskTagsManagerItem from './TaskTagsManagerItem.vue';
+import TagFormCreate from './TagFormCreate.vue';
+import TagsManagerItem from './TagsManagerItem.vue';
 
 export default {
-    name: 'task-tags-manager',
-    components: { TagFormAdd, TaskTagsManagerItem },
+    name: 'tags-manager',
+    components: { TagFormCreate, TagsManagerItem },
     data() {
         return {
             updatedTagId: null
@@ -46,7 +46,7 @@ export default {
         ...mapGetters('boards', ['tagsList'])
     },
     methods: {
-        add(tagId) {
+        create(tagId) {
             this.tags.push(tagId);
         },
         showUpdate(tagId) {
@@ -54,6 +54,9 @@ export default {
         },
         hideUpdate(tagId) {
             this.updatedTagId = null;
+        },
+        create(tagData) {
+            this.$emit('create', tagData);
         },
         update(tagData) {
             this.$emit('update', tagData);

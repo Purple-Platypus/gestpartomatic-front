@@ -32,7 +32,7 @@
 import { mapState, mapMutations, mapActions, maGetters } from 'vuex';
 
 export default {
-    name: 'board-guest-item',
+    name: 'board-guest-dialog-item',
     props: {
         user: Object
     },
@@ -52,7 +52,7 @@ export default {
     methods: {
         changeRole(role) {
             if (!this.isGuest && role != 'NONE') {
-                this.addGuest({
+                this.createGuest({
                     userId: this.user.id,
                     role
                 });
@@ -71,7 +71,7 @@ export default {
         ...mapMutations('boards', ['updateBoard']),
         ...mapActions('boards', [
             'updateBoard',
-            'addGuest',
+            'createGuest',
             'removeGuest',
             'updateGuestRole'
         ])

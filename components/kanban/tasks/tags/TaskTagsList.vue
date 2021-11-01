@@ -61,6 +61,7 @@
                                 :dark="tag.isDark"
                                 filter
                                 :value="tag.id"
+                                small
                             >
                                 {{ tag.label }}
                             </v-chip>

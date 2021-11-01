@@ -1,7 +1,7 @@
 <template>
     <v-row>
         <v-col>
-            <tag-form v-model="formData" />
+            <tag-form v-model="formData" @submit="add" />
         </v-col>
         <v-col class="flex-grow-0 d-flex align-center pl-0">
             <v-btn

@@ -7,6 +7,7 @@
                 label="Nouvelle étiquette"
                 outlined
                 v-model="formData.label"
+                @keyup.enter="submit"
             />
         </v-col>
         <v-col class="flex-grow-0 d-flex align-center px-0">
@@ -76,10 +77,10 @@ export default {
             },
             sampleColor: this.value.color,
             colors: [
-                ['#E91E63', '#9C27B0', '#673AB7'],
+                ['#FF3030', '#FF5722', '#FF9800'],
+                ['#673AB7', '#9C27B0', '#E91E63'],
                 ['#3F51B5', '#2196F3', '#00BCD4'],
                 ['#009688', '#8BC34A', '#CDDC39'],
-                ['#FFC107', '#FF9800', '#FF5722'],
                 ['#795548', '#607D8B', '#9E9E9E']
             ],
             isColorPickerVisible: false
@@ -102,6 +103,9 @@ export default {
             const b = parseInt(rgb.substr(4, 2), 16);
             const yiq = (r * 299 + g * 587 + b * 114) / 1000;
             return yiq < 150;
+        },
+        submit() {
+            this.$emit('submit');
         }
     },
     watch: {

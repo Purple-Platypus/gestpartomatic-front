@@ -127,6 +127,31 @@
                     </tags-list>
                 </div>
             </v-hover>
+
+            <v-divider class="mx-4" />
+
+            <v-card-actions>
+                <v-btn
+                    class="primary-bg"
+                    :color="isHighPriority ? 'primary' : ''"
+                    icon
+                    @click="pin"
+                >
+                    <v-icon>
+                        {{ isHighPriority ? 'mdi-pin' : 'mdi-pin-outline' }}
+                    </v-icon>
+                </v-btn>
+                <v-btn icon>
+                    <v-icon>
+                        mdi-calendar
+                    </v-icon>
+                </v-btn>
+                <v-btn icon>
+                    <v-icon>
+                        mdi-flag-outline
+                    </v-icon>
+                </v-btn>
+            </v-card-actions>
         </template>
     </v-navigation-drawer>
 </template>
@@ -156,9 +181,14 @@ export default {
             return this.tasks[this.taskId];
         },
         updatedTask() {
-            return { ...this.task };
+            const partialTask = (({ id, title, description, priority }) => ({
+                id,
+                title,
+                description,
+                priority
+            }))(this.task);
+            return partialTask;
         },
-
         assigneesList: {
             get() {
                 return this.task.assignees;
@@ -187,6 +217,9 @@ export default {
                 });
             }
         },
+        isHighPriority() {
+            return this.task.priority == 'HIGH';
+        },
         ...mapState('users', ['usersById']),
         ...mapState('boards', ['board', 'tasks', 'tags'])
     },
@@ -207,17 +240,19 @@ export default {
             this.isVisibleTitleInput = false;
             this.isVisibleDescriptionInput = false;
         },
+        pin() {
+            this.updatedTask.priority =
+                this.updatedTask.priority == 'NORMAL' ? 'HIGH' : 'NORMAL';
+
+            this.update();
+        },
         createTag(tagData) {
             this.$emit('createTag', tagData);
         },
         update() {
             this.$emit('update', {
                 boardId: this.board.id,
-                updateData: {
-                    id: this.taskId,
-                    title: this.updatedTask.title,
-                    description: this.updatedTask.description
-                }
+                updateData: this.updatedTask
             });
             this.hideAll();
         },

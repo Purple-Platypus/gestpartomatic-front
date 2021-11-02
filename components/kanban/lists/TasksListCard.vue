@@ -1,6 +1,9 @@
 <template>
     <v-card class="pa-2 elevation-0 task-card" outlined>
         <v-card-title class=" pa-0 font-weight-bold text-body-2">
+            <v-icon v-if="task.priority == 'HIGH'" class="pulse" left size="16">
+                mdi-pin
+            </v-icon>
             <a
                 v-html="md(task.title)"
                 class="text--grey"
@@ -93,11 +96,39 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .v-application .task-card p {
     margin-bottom: 0.125rem;
 }
 .outlined-avatar {
     outline: 2px solid #fff;
+}
+.pulse {
+    border-radius: 100%;
+    animation: pulse 4s infinite;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        background-color: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.375);
+    }
+
+    35% {
+        transform: scale(1);
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+    }
+
+    50% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
 }
 </style>

@@ -2,7 +2,6 @@
     <div>
         <v-menu
             :close-on-content-click="false"
-            :close-on-click="false"
             content-class="elevation-0"
             offset-y
             v-model="isVisible"
@@ -74,10 +73,6 @@
                                 </v-icon>
                                 Gérer les étiquettes
                             </v-btn>
-
-                            <v-btn color="error" text @click="hide">
-                                Fermer
-                            </v-btn>
                         </div>
                     </v-sheet>
                 </v-window-item>
@@ -129,9 +124,6 @@ export default {
         ...mapGetters('boards', ['tagsList'])
     },
     methods: {
-        hide() {
-            this.isVisible = false;
-        },
         showTagsManager() {
             this.visibleMenu = 'manager';
         },

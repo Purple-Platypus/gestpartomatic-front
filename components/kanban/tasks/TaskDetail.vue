@@ -10,7 +10,7 @@
         v-model="isVisible"
     >
         <template v-if="taskId">
-            <v-hover v-slot="{ hover }">
+            <v-hover v-if="!isVisibleTitleInput" v-slot="{ hover }">
                 <v-card-title
                     class="d-flex flex-row justify-space-between flex-nowrap align-start"
                 >
@@ -20,7 +20,7 @@
                     ></h2>
 
                     <div class="d-flex flex-row flex-nowrap">
-                        <v-btn v-if="hover" icon>
+                        <v-btn v-if="hover" icon @click="showTitleInput">
                             <v-icon>
                                 mdi-pencil-outline
                             </v-icon>
@@ -35,8 +35,32 @@
                 </v-card-title>
             </v-hover>
 
-            <v-hover v-slot="{ hover }">
-                <div class="d-flex flex-row flex-nowrap align-start">
+            <v-card-title v-else>
+                <v-text-field
+                    autofocus
+                    dense
+                    outlined
+                    hide-details
+                    label="Titre"
+                    v-model="updatedTask.title"
+                />
+                <v-btn icon @click="update">
+                    <v-icon color="primary" size="20">
+                        mdi-check-circle-outline
+                    </v-icon>
+                </v-btn>
+                <v-btn icon @click="hideAll">
+                    <v-icon size="20">
+                        mdi-close-circle-outline
+                    </v-icon>
+                </v-btn>
+            </v-card-title>
+
+            <v-hover v-slot="{ hover }" v-if="!isVisibleDescriptionInput">
+                <div
+                    class="d-flex flex-row flex-nowrap align-start cursor-pointer"
+                    @click="showDescriptionInput"
+                >
                     <v-card-text
                         v-html="md(task.description || 'Pas de description')"
                         class="pb-2"
@@ -50,6 +74,31 @@
                     </v-btn>
                 </div>
             </v-hover>
+            <div v-else class="d-flex flex-row flex-nowrap align-start">
+                <v-card-text class="pt-0 pb-2 pr-2">
+                    <v-textarea
+                        autofocus
+                        dense
+                        hide-details=""
+                        label="Description"
+                        outlined
+                        rows="3"
+                        v-model="updatedTask.description"
+                    />
+                </v-card-text>
+                <div class="d-flex flex-column">
+                    <v-btn class="mr-4" icon small @click="update">
+                        <v-icon color="primary" size="20">
+                            mdi-check-circle-outline
+                        </v-icon>
+                    </v-btn>
+                    <v-btn class="mr-4" icon small @click="hideAll">
+                        <v-icon size="20">
+                            mdi-close-circle-outline
+                        </v-icon>
+                    </v-btn>
+                </div>
+            </div>
 
             <v-divider class="mx-4" />
 
@@ -61,41 +110,6 @@
                     >
                         Ajoutez des responsable pour cette tâche
                     </task-assignees-list>
-
-                    <!-- <v-card-subtitle
-                        class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
-                    >
-                        <h3 class="text-overline">
-                            Responsables
-                        </h3>
-
-                        <v-btn v-if="hover" icon small>
-                            <v-icon size="20">
-                                mdi-pencil-outline
-                            </v-icon>
-                        </v-btn>
-                    </v-card-subtitle>
-
-                    <v-card-text class="pt-0">
-                        <v-chip
-                            v-for="assignee in assigneesList"
-                            :key="assignee.id"
-                            class="mr-4"
-                            color="white"
-                        >
-                            <v-avatar left>
-                                <v-img :src="assignee.avatar" />
-                            </v-avatar>
-                            {{ assignee.nickname || assignee.username }}
-                        </v-chip>
-
-                        <span
-                            v-if="!assigneesList.length"
-                            class="grey--text font-italic"
-                        >
-                            Pas encore de responsable
-                        </span>
-                    </v-card-text> -->
                 </div>
             </v-hover>
 
@@ -131,10 +145,20 @@ export default {
         taskId: Number,
         isVisible: Boolean
     },
+    data() {
+        return {
+            isVisibleTitleInput: false,
+            isVisibleDescriptionInput: false
+        };
+    },
     computed: {
         task() {
             return this.tasks[this.taskId];
         },
+        updatedTask() {
+            return { ...this.task };
+        },
+
         assigneesList: {
             get() {
                 return this.task.assignees;
@@ -173,8 +197,29 @@ export default {
                 this.$emit('close');
             }
         },
+        showTitleInput() {
+            this.isVisibleTitleInput = true;
+        },
+        showDescriptionInput() {
+            this.isVisibleDescriptionInput = true;
+        },
+        hideAll() {
+            this.isVisibleTitleInput = false;
+            this.isVisibleDescriptionInput = false;
+        },
         createTag(tagData) {
             this.$emit('createTag', tagData);
+        },
+        update() {
+            this.$emit('update', {
+                boardId: this.board.id,
+                updateData: {
+                    id: this.taskId,
+                    title: this.updatedTask.title,
+                    description: this.updatedTask.description
+                }
+            });
+            this.hideAll();
         },
         updateTag(tagData) {
             this.$emit('updateTag', tagData);

@@ -36,12 +36,12 @@ export const mutations = {
 };
 
 export const actions = {
-    async getUser({ commit }) {
-        await this.$axios.$get('/api/users/me').then(res => {
+    getUser({ commit }) {
+        this.$axios.$get('/api/users/me').then(res => {
             commit('set', res);
         });
     },
-    async login({ commit }, user) {
+    login({ commit }, user) {
         return new Promise((resolve, reject) => {
             this.$axios
                 .$post('/api/auth/login/', user)
@@ -54,8 +54,8 @@ export const actions = {
                 });
         });
     },
-    async logout({ commit }) {
-        await this.$axios
+    logout({ commit, dispatch }) {
+        this.$axios
             .$post('/api/auth/logout')
             .then(() => {
                 const blankUser = {
@@ -71,5 +71,24 @@ export const actions = {
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
+    },
+    async update({ commit, dispatch }, updateData) {
+        return new Promise((resolve, reject) => {
+            this.$axios
+                .$patch('/api/users/me', updateData)
+                .then(() => {
+                    commit('update', updateData);
+                    resolve();
+                })
+                .catch(err => {
+                    if (err.response.status === 422) {
+                        reject(err);
+                    } else {
+                        dispatch('snackbar/showGenericError', null, {
+                            root: true
+                        });
+                    }
+                });
+        });
     }
 };

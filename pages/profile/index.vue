@@ -155,10 +155,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import AvatarSelector from '../../components/profile/AvatarSelector.vue';
-import messages from '~/assets/messages.json';
 
 export default {
     name: 'profile',
@@ -184,6 +183,9 @@ export default {
             loading: false
         };
     },
+    computed: {
+        ...mapState('auth', ['auth'])
+    },
     mounted() {
         this.avatar = this.auth.avatar;
         this.input.nickname = this.auth.nickname;
@@ -192,26 +194,7 @@ export default {
         this.settingDarkMode = this.auth.settingDarkMode;
     },
     methods: {
-        async update(payload) {
-            return this.$axios
-                .$patch('/api/users/me', payload)
-                .then(() => {
-                    this.$store.commit('auth/update', payload);
-                })
-                .catch(err => {
-                    if (err.response.status === 422) {
-                        this.$refs.profileForm.setErrors({
-                            email: [messages.errors.emailNotUnique]
-                        });
-                    } else {
-                        this.$store.commit('snackbar/setSnackbar', {
-                            text: messages.errors.generic,
-                            color: 'error'
-                        });
-                    }
-                });
-        },
-        async updateAvatar(avatarUrl) {
+        updateAvatar(avatarUrl) {
             const payload = {
                 avatar: avatarUrl
             };
@@ -219,7 +202,7 @@ export default {
                 this.avatar = avatarUrl;
             });
         },
-        async updateProfile() {
+        updateProfile() {
             this.loading = true;
 
             const payload = {
@@ -227,9 +210,17 @@ export default {
                 email: this.input.email
             };
 
-            this.update(payload).then(() => {
-                this.$refs.profileForm.reset();
-            });
+            this.update(payload)
+                .then(() => {
+                    this.$refs.profileForm.reset();
+                })
+                .catch(err => {
+                    if (err.response.status === 422) {
+                        this.$refs.profileForm.setErrors({
+                            email: [messages.errors.emailNotUnique]
+                        });
+                    }
+                });
 
             this.loading = false;
         },
@@ -239,11 +230,8 @@ export default {
             };
 
             this.update(payload);
-        }
-    },
-
-    computed: {
-        ...mapState('auth', ['auth'])
+        },
+        ...mapActions('auth', ['update'])
     }
 };
 </script>

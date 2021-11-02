@@ -93,7 +93,6 @@ export const mutations = {
 
     // Tasks
     addTask(state, task) {
-        console.log(task);
         const listId = task.listId;
 
         task.tags = task.tags.map(tag => tag.id);

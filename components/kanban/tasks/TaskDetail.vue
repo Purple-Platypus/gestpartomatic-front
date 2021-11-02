@@ -55,7 +55,14 @@
 
             <v-hover v-slot="{ hover }">
                 <div>
-                    <v-card-subtitle
+                    <task-assignees-list
+                        v-model="assigneesList"
+                        :isHover="hover"
+                    >
+                        Ajoutez des responsable pour cette tâche
+                    </task-assignees-list>
+
+                    <!-- <v-card-subtitle
                         class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
                     >
                         <h3 class="text-overline">
@@ -88,7 +95,7 @@
                         >
                             Pas encore de responsable
                         </span>
-                    </v-card-text>
+                    </v-card-text> -->
                 </div>
             </v-hover>
 
@@ -113,11 +120,12 @@
 <script>
 import { mapState } from 'vuex';
 import Markdown from '../../commons/mixins/Markdown.mixin';
+import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
 import TagsList from './tags/TagsList.vue';
 
 export default {
     name: 'task-detail',
-    components: { TagsList },
+    components: { TaskAssigneesList, TagsList },
     mixins: [Markdown],
     props: {
         taskId: Number,
@@ -127,11 +135,19 @@ export default {
         task() {
             return this.tasks[this.taskId];
         },
-        assigneesList() {
-            const assigneesList = this.task.assignees.map(assigneeId => {
-                return this.usersById[assigneeId];
-            });
-            return assigneesList;
+        assigneesList: {
+            get() {
+                return this.task.assignees;
+            },
+            set(taskAssignees) {
+                this.$emit('update', {
+                    boardId: this.board.id,
+                    updateData: {
+                        id: this.taskId,
+                        assignees: taskAssignees
+                    }
+                });
+            }
         },
         taskTags: {
             get() {

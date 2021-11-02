@@ -44,6 +44,13 @@
                     />
                 </v-card-title>
 
+                <v-card-subtitle
+                    v-if="board.description"
+                    class="px-3 pb-0 grey--text font-italic"
+                >
+                    {{ board.description }}
+                </v-card-subtitle>
+
                 <v-card-text class="pa-0 flex-grow-1 d-flex">
                     <draggable
                         class="d-flex task-list-row flex-nowrap"

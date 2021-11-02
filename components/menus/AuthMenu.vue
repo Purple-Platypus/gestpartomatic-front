@@ -3,8 +3,8 @@
         <v-list-item class="padded-avatar px-0">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon to="profile" v-bind="attrs" v-on="on">
-                        <v-avatar tile size="48" to="profile">
+                    <v-btn icon to="/profile" v-bind="attrs" v-on="on">
+                        <v-avatar tile size="48">
                             <v-img :src="auth.avatar" />
                         </v-avatar>
                     </v-btn>

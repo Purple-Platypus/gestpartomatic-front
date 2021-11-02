@@ -5,7 +5,7 @@
                 <v-col class="flex-grow-0">
                     <v-card outlined class="cursor-pointer card--avatar">
                         <avatar-selector
-                            :src="user.avatar"
+                            :src="auth.avatar"
                             @change="updateAvatar($event)"
                         ></avatar-selector>
                     </v-card>
@@ -21,7 +21,7 @@
                         <v-card-text
                             class="text-h5 text--secondary font-italic"
                         >
-                            @{{ user.username }}
+                            @{{ auth.username }}
                         </v-card-text>
                     </v-card>
 
@@ -155,11 +155,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import AvatarSelector from '../../components/profile/AvatarSelector.vue';
 import messages from '~/assets/messages.json';
 
 export default {
+    name: 'profile',
     middleware: ['auth'],
     components: { ValidationObserver, ValidationProvider, AvatarSelector },
     head: () => ({
@@ -183,11 +185,11 @@ export default {
         };
     },
     mounted() {
-        this.avatar = this.user.avatar;
-        this.input.nickname = this.user.nickname;
-        this.input.email = this.user.email;
+        this.avatar = this.auth.avatar;
+        this.input.nickname = this.auth.nickname;
+        this.input.email = this.auth.email;
 
-        this.settingDarkMode = this.user.settingDarkMode;
+        this.settingDarkMode = this.auth.settingDarkMode;
     },
     methods: {
         async update(payload) {
@@ -241,9 +243,7 @@ export default {
     },
 
     computed: {
-        user: function() {
-            return this.$store.state.auth;
-        }
+        ...mapState('auth', ['auth'])
     }
 };
 </script>

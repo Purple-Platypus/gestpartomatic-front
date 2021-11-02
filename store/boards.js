@@ -93,10 +93,11 @@ export const mutations = {
 
     // Tasks
     addTask(state, task) {
+        console.log(task);
         const listId = task.listId;
 
         task.tags = task.tags.map(tag => tag.id);
-        task.assignees = task.assignees.map(assignee => assignee.userId);
+        task.assignees = task.assignees.map(assignee => assignee.id);
 
         if (state.lists[listId].tasksList.indexOf(task.id) === -1) {
             state.lists[listId].tasksList.push(task.id);

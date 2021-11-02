@@ -9,7 +9,7 @@
         >
             <template v-slot:activator="{ on, attrs }">
                 <v-container
-                    class="pb-0 px-0 cursor-pointer"
+                    class="pa-0 cursor-pointer"
                     v-bind="attrs"
                     v-on="on"
                 >
@@ -34,7 +34,7 @@
                         <slot></slot>
                     </v-card-text>
 
-                    <v-card-text class="pt-0">
+                    <v-card-text v-else class="pt-0">
                         <v-chip-group column>
                             <v-chip
                                 v-for="tagId in taskTags"

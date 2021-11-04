@@ -63,7 +63,8 @@
                             :key="listId"
                             :list-id="listId"
                             @showCreateTaskForm="showCreateTaskForm"
-                            @showTask="showTaskDrawer($event)"
+                            @showTask="showTaskDrawer"
+                            @updateTasksOrder="updateTasksOrder"
                         />
                         <tasks-list-create slot="footer" />
                     </draggable>
@@ -207,6 +208,13 @@ export default {
         },
         updateTask(updateTaskData) {
             this.socket.emit('updateTask', updateTaskData);
+        },
+        updateTasksOrder(changeOrderData) {
+            console.log(changeOrderData);
+            this.socket.emit('updateTasksOrder', {
+                boardId: this.boardId,
+                changeOrderData
+            });
         },
         showTaskDrawer(taskId) {
             this.detailTaskId = taskId;

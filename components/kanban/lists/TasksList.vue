@@ -5,7 +5,7 @@
                 <v-card-title
                     v-if="!isUpdateFormVisible"
                     class="task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase"
-                    :class="{ 'cursor-drag': isAdmin }"
+                    :class="{ 'cursor-grab': isAdmin }"
                 >
                     <h2 class="mr-8 text-body-2 font-weight-light">
                         {{ list.name }}
@@ -55,15 +55,21 @@
                 />
 
                 <v-card-text class="px-2 pb-2">
-                    <tasks-list-card
-                        v-for="taskId in list.tasksList"
-                        :key="taskId"
-                        :task-id="taskId"
-                        class="mb-1"
-                        @show="showTaskDetail(taskId)"
+                    <draggable
+                        :list="draggableTasksIds"
+                        group="tasks"
+                        @change="updateTasksOrder"
                     >
-                        {{ taskId }}
-                    </tasks-list-card>
+                        <tasks-list-card
+                            v-for="taskId in list.tasksList"
+                            :key="taskId"
+                            :task-id="taskId"
+                            class="mb-1"
+                            @show="showTaskDetail"
+                        >
+                            {{ taskId }}
+                        </tasks-list-card>
+                    </draggable>
                 </v-card-text>
             </v-card>
         </v-sheet>
@@ -122,6 +128,9 @@ export default {
         list() {
             return this.lists[this.listId];
         },
+        draggableTasksIds() {
+            return this.list.tasksList.map(taskId => taskId);
+        },
         ...mapState('boards', ['lists']),
         ...mapGetters('boards', ['isAdmin'])
     },
@@ -148,6 +157,31 @@ export default {
             this.removeList(this.listId).then(() => {
                 this.hideRemoveDialog();
             });
+        },
+        updateTasksOrder(change) {
+            const type = this.setChangeType(change);
+            const changeData = {
+                listId: this.listId,
+                taskId: change[type].element,
+                type,
+                oldIndex: change[type].oldIndex,
+                newIndex: change[type].newIndex
+            };
+
+            this.$emit('updateTasksOrder', changeData);
+        },
+        setChangeType(change) {
+            if (change.hasOwnProperty('moved')) {
+                return 'moved';
+            }
+            // Arrivée dans une nouvelle liste
+            else if (change.hasOwnProperty('added')) {
+                return 'added';
+            }
+            // Départ de l'ancienne liste
+            else {
+                return 'removed';
+            }
         },
         ...mapActions('boards', ['removeList'])
     }

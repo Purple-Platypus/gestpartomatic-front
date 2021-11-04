@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-2 elevation-0 task-card" outlined>
+    <v-card class="pa-2 elevation-0 task-card cursor-grab" outlined>
         <v-card-title class=" pa-0 font-weight-bold text-body-2">
             <v-icon v-if="task.priority == 'HIGH'" class="pulse" left size="16">
                 mdi-pin
@@ -90,7 +90,7 @@ export default {
     },
     methods: {
         showDetail() {
-            this.$emit('show');
+            this.$emit('show', this.taskId);
         }
     }
 };

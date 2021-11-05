@@ -37,8 +37,6 @@
             </v-card-text>
         </v-container>
 
-        <v-divider class="mx-4" v-if="isVisibleTagsList" />
-
         <v-expand-transition>
             <v-window
                 v-if="isVisibleTagsList"
@@ -47,7 +45,9 @@
             >
                 <v-window-item value="list">
                     <v-card-title class="d-flex py-0">
-                        <h3 class="flex-grow-1 text-overline">
+                        <h3
+                            class="flex-grow-1 text-caption font-weight-bold font-italic"
+                        >
                             Choisissez des étiquettes
                         </h3>
 
@@ -91,7 +91,9 @@
 
                 <v-window-item value="manager">
                     <v-card-title class="d-flex py-0">
-                        <h3 class="flex-grow-1 text-overline">
+                        <h3
+                            class="flex-grow-1 text-caption font-weight-bold font-italic"
+                        >
                             Gérez des étiquettes
                         </h3>
 

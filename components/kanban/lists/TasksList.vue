@@ -1,10 +1,10 @@
 <template>
     <v-col class="col-kanban pb-0">
         <v-sheet class="fill-height" outlined rounded>
-            <v-card class="fill-height grey lighten-5" flat>
+            <v-card class="d-flex flex-column fill-height grey lighten-5" flat>
                 <v-card-title
                     v-if="!isUpdateFormVisible"
-                    class="task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase"
+                    class="flex-grow-0 task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase"
                     :class="{ 'cursor-grab': isAdmin }"
                 >
                     <h2 class="mr-8 text-body-2 font-weight-light">
@@ -48,14 +48,16 @@
 
                 <tasks-list-form-update
                     v-else
+                    class="flex-grow-0"
                     :list-data="list"
                     v-click-outside="hideUpdateForm"
                     @update="hideUpdateForm"
                     @cancel="hideUpdateForm"
                 />
 
-                <v-card-text class="px-2 pb-2">
+                <v-card-text class="flex-grow-1 px-2 pb-2">
                     <draggable
+                        class="fill-height"
                         :list="draggableTasksIds"
                         group="tasks"
                         @change="updateTasksOrder"
@@ -171,6 +173,7 @@ export default {
             this.$emit('updateTasksOrder', changeData);
         },
         setChangeType(change) {
+            // Déplacement dans la même liste
             if (change.hasOwnProperty('moved')) {
                 return 'moved';
             }

@@ -102,6 +102,29 @@ export const mutations = {
             state.lists[listId].tasksList.push(task.id);
         }
         Vue.set(state.tasks, task.id, task);
+    },
+
+    updateTasksOrder(state, updateData) {
+        if (updateData.type == 'added') {
+            Vue.set(
+                state.tasks[updateData.taskId],
+                'listId',
+                updateData.listId
+            );
+        }
+        if (typeof updateData.oldIndex !== 'undefined') {
+            const removedIndex = state.lists[
+                updateData.listId
+            ].tasksList.indexOf(updateData.taskId);
+            Vue.delete(state.lists[updateData.listId].tasksList, removedIndex);
+        }
+        if (typeof updateData.newIndex !== 'undefined') {
+            state.lists[updateData.listId].tasksList.splice(
+                updateData.newIndex,
+                0,
+                updateData.taskId
+            );
+        }
     }
 };
 
@@ -173,9 +196,13 @@ export const actions = {
 
             commit('addList', list);
 
-            tasks.forEach(task => {
-                commit('addTask', task);
-            });
+            tasks
+                .sort((a, b) => {
+                    return a.rank > b.rank;
+                })
+                .forEach(task => {
+                    commit('addTask', task);
+                });
         });
     },
     createList({ commit, dispatch, state }, list) {

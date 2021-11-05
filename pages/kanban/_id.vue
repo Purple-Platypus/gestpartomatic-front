@@ -64,7 +64,7 @@
                             :list-id="listId"
                             @showCreateTaskForm="showCreateTaskForm"
                             @showTask="showTaskDrawer"
-                            @updateTasksOrder="updateTasksOrder"
+                            @updateTasksOrder="updateTasksRanks"
                         />
                         <tasks-list-create slot="footer" />
                     </draggable>
@@ -100,7 +100,6 @@ import TasksListCreate from '../../components/kanban/lists/TasksListCreate.vue';
 import BoardGuestsDialog from '../../components/kanban/boards/BoardGuestsDialog.vue';
 import TaskFormCreate from '../../components/kanban/tasks/TaskFormCreate.vue';
 import TaskDetail from '../../components/kanban/tasks/TaskDetail.vue';
-import { rejects } from 'assert';
 
 export default {
     components: {
@@ -145,24 +144,21 @@ export default {
         ...mapGetters('boards', ['isAdmin'])
     },
     async fetch() {
-        return new Promise(async (resolve, reject) => {
-            await this.getTags();
-            await this.getBoard(this.$route.params.id)
-                .then(() => {
-                    this.connectChannel;
-                    resolve();
-                })
-                .catch(err => {
-                    this.$nuxt.error(err);
-                    reject();
-                });
-        });
+        await this.getTags();
+        await this.getBoard(this.$route.params.id)
+            .then(() => {
+                this.connectChannel(this.$route.params.id);
+            })
+            .catch(err => {
+                this.$nuxt.error(err);
+            });
     },
     methods: {
         connectChannel(boardId) {
             this.socket = this.$nuxtSocket({
                 withCredentials: true
             });
+
             this.socket.emit('watchBoard', boardId);
 
             this.socket.on('createTask', res => {
@@ -183,6 +179,10 @@ export default {
 
             this.socket.on('removeTag', res => {
                 this.purgeTag(res);
+            });
+
+            this.socket.on('updateTasksOrder', res => {
+                this.updateTasksOrder(res);
             });
         },
         showGuestsDialog() {
@@ -209,10 +209,9 @@ export default {
         updateTask(updateTaskData) {
             this.socket.emit('updateTask', updateTaskData);
         },
-        updateTasksOrder(changeOrderData) {
-            console.log(changeOrderData);
+        updateTasksRanks(changeOrderData) {
             this.socket.emit('updateTasksOrder', {
-                boardId: this.boardId,
+                boardId: this.board.id,
                 changeOrderData
             });
         },
@@ -245,7 +244,12 @@ export default {
                 tagId
             });
         },
-        ...mapMutations('boards', ['addTask', 'addTag', 'purgeTag']),
+        ...mapMutations('boards', [
+            'addTask',
+            'addTag',
+            'purgeTag',
+            'updateTasksOrder'
+        ]),
         ...mapActions('boards', ['getTags', 'getBoard', 'updateListsRanking'])
     }
 };

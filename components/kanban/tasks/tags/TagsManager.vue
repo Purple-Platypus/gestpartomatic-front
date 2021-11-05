@@ -1,5 +1,5 @@
 <template>
-    <v-sheet class="pa-2" outlined>
+    <div class="pa-2" outlined>
         <tag-form-create :disabled="!!updatedTagId" @create="create" />
 
         <v-divider class="my-2" />
@@ -25,7 +25,7 @@
                 Retour
             </v-btn>
         </div>
-    </v-sheet>
+    </div>
 </template>
 
 <script>

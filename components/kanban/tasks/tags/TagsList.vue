@@ -1,57 +1,69 @@
 <template>
     <div>
-        <v-menu
-            :close-on-content-click="false"
-            content-class="elevation-0"
-            offset-y
-            v-model="isVisible"
-        >
-            <template v-slot:activator="{ on, attrs }">
-                <v-container
-                    class="pa-0 cursor-pointer"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    <v-card-subtitle
-                        class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
+        <v-container class="pa-0 cursor-pointer" @click="showTagsList">
+            <v-card-subtitle
+                class="py-1 d-flex flex-row flex-nowrap align-start justify-space-between"
+            >
+                <h3 class="text-overline">
+                    étiquettes
+                </h3>
+
+                <v-btn v-if="isHover" icon small>
+                    <v-icon size="20">
+                        mdi-pencil-outline
+                    </v-icon>
+                </v-btn>
+            </v-card-subtitle>
+
+            <v-card-text
+                v-if="!taskTags.length"
+                class="pt-0 grey--text font-italic"
+            >
+                <slot></slot>
+            </v-card-text>
+
+            <v-card-text v-else class="py-0">
+                <v-chip-group column>
+                    <v-chip
+                        v-for="tagId in taskTags"
+                        :key="tagId"
+                        :color="tags[tagId].color"
+                        :dark="tags[tagId].isDark"
+                        small
                     >
-                        <h3 class="text-overline">
-                            étiquettes
+                        {{ tags[tagId].label }}
+                    </v-chip>
+                </v-chip-group>
+            </v-card-text>
+        </v-container>
+
+        <v-divider class="mx-4" v-if="isVisibleTagsList" />
+
+        <v-expand-transition>
+            <v-window
+                v-if="isVisibleTagsList"
+                v-model="visibleMenu"
+                v-click-outside="hideTagsList"
+            >
+                <v-window-item value="list">
+                    <v-card-title class="d-flex py-0">
+                        <h3 class="flex-grow-1 text-overline">
+                            Choisissez des étiquettes
                         </h3>
 
-                        <v-btn v-if="isHover" icon small>
-                            <v-icon size="20">
-                                mdi-pencil-outline
+                        <v-btn
+                            class="flex-grow-0"
+                            icon
+                            small
+                            @click="hideTagsList"
+                        >
+                            <v-icon>
+                                mdi-close
                             </v-icon>
                         </v-btn>
-                    </v-card-subtitle>
+                    </v-card-title>
 
-                    <v-card-text
-                        v-if="!taskTags.length"
-                        class="pt-0 grey--text font-italic"
-                    >
-                        <slot></slot>
-                    </v-card-text>
-
-                    <v-card-text v-else class="pt-0">
-                        <v-chip-group column>
-                            <v-chip
-                                v-for="tagId in taskTags"
-                                :key="tagId"
-                                :color="tags[tagId].color"
-                                :dark="tags[tagId].isDark"
-                                small
-                            >
-                                {{ tags[tagId].label }}
-                            </v-chip>
-                        </v-chip-group>
-                    </v-card-text>
-                </v-container>
-            </template>
-
-            <v-window v-model="visibleMenu">
-                <v-window-item value="list">
-                    <v-sheet class="pa-2" outlined rounded>
+                    <v-card-text class="py-0">
                         <v-chip-group column multiple v-model="taskTags">
                             <v-chip
                                 v-for="tag in tagsList"
@@ -74,10 +86,27 @@
                                 Gérer les étiquettes
                             </v-btn>
                         </div>
-                    </v-sheet>
+                    </v-card-text>
                 </v-window-item>
 
                 <v-window-item value="manager">
+                    <v-card-title class="d-flex py-0">
+                        <h3 class="flex-grow-1 text-overline">
+                            Gérez des étiquettes
+                        </h3>
+
+                        <v-btn
+                            class="flex-grow-0"
+                            icon
+                            small
+                            @click="hideTagsList"
+                        >
+                            <v-icon>
+                                mdi-close
+                            </v-icon>
+                        </v-btn>
+                    </v-card-title>
+
                     <tags-manager
                         @close="hideTagsManager"
                         @remove="remove"
@@ -86,7 +115,7 @@
                     />
                 </v-window-item>
             </v-window>
-        </v-menu>
+        </v-expand-transition>
     </div>
 </template>
 
@@ -107,7 +136,7 @@ export default {
     },
     data() {
         return {
-            isVisible: false,
+            isVisibleTagsList: false,
             visibleMenu: 'list'
         };
     },
@@ -124,6 +153,12 @@ export default {
         ...mapGetters('boards', ['tagsList'])
     },
     methods: {
+        showTagsList() {
+            this.isVisibleTagsList = true;
+        },
+        hideTagsList() {
+            this.isVisibleTagsList = false;
+        },
         showTagsManager() {
             this.visibleMenu = 'manager';
         },

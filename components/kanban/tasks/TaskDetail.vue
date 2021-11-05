@@ -10,6 +10,17 @@
         v-model="isVisible"
     >
         <template v-if="taskId">
+            <v-alert
+                v-if="task.isArchived"
+                class="ma-3"
+                dense
+                icon="mdi-archive"
+                outlined
+                text
+                type="error"
+            >
+                Cette tâche est archivée.
+            </v-alert>
             <v-hover v-if="!isVisibleTitleInput" v-slot="{ hover }">
                 <v-card-title
                     class="d-flex flex-row justify-space-between flex-nowrap align-start"
@@ -141,14 +152,27 @@
                         {{ isHighPriority ? 'mdi-pin' : 'mdi-pin-outline' }}
                     </v-icon>
                 </v-btn>
+
                 <v-btn icon>
                     <v-icon>
                         mdi-calendar
                     </v-icon>
                 </v-btn>
+
                 <v-btn icon>
                     <v-icon>
                         mdi-flag-outline
+                    </v-icon>
+                </v-btn>
+
+                <v-spacer />
+
+                <v-btn icon @click="archive">
+                    <v-icon v-if="!updatedTask.isArchived">
+                        mdi-archive
+                    </v-icon>
+                    <v-icon v-else>
+                        mdi-archive-off
                     </v-icon>
                 </v-btn>
             </v-card-actions>
@@ -181,11 +205,18 @@ export default {
             return this.tasks[this.taskId];
         },
         updatedTask() {
-            const partialTask = (({ id, title, description, priority }) => ({
+            const partialTask = (({
                 id,
                 title,
                 description,
-                priority
+                priority,
+                isArchived
+            }) => ({
+                id,
+                title,
+                description,
+                priority,
+                isArchived
             }))(this.task);
             return partialTask;
         },
@@ -258,6 +289,11 @@ export default {
         },
         updateTag(tagData) {
             this.$emit('updateTag', tagData);
+        },
+        archive() {
+            this.updatedTask.isArchived = !this.updatedTask.isArchived;
+
+            this.update();
         }
     }
 };

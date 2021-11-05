@@ -88,6 +88,7 @@
             @createTag="createTag"
             @updateTag="updateTag"
             @removeTag="removeTag"
+            @archiveTask="archiveTask"
         />
     </v-row>
 </template>
@@ -242,6 +243,13 @@ export default {
             this.socket.emit('removeTag', {
                 boardId: this.board.id,
                 tagId
+            });
+        },
+        archiveTask(updateData) {
+            console.log('archiveTask');
+            this.socket.emit('updateTask', {
+                boardId: this.board.id,
+                updateData
             });
         },
         ...mapMutations('boards', [

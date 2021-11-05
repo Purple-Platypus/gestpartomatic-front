@@ -42,6 +42,19 @@
                                     Supprimer
                                 </v-list-item-title>
                             </v-list-item>
+                            <v-list-item
+                                v-if="!isArchiveVisible"
+                                @click="showArchive"
+                            >
+                                <v-list-item-title>
+                                    Afficher les tâches archivées
+                                </v-list-item-title>
+                            </v-list-item>
+                            <v-list-item v-else @click="hideArchive">
+                                <v-list-item-title>
+                                    Masquer les tâches archivées
+                                </v-list-item-title>
+                            </v-list-item>
                         </v-list>
                     </v-menu>
                 </v-card-title>
@@ -63,7 +76,7 @@
                         @change="updateTasksOrder"
                     >
                         <tasks-list-card
-                            v-for="taskId in list.tasksList"
+                            v-for="taskId in displayedList"
                             :key="taskId"
                             :task-id="taskId"
                             class="mb-1"
@@ -123,20 +136,35 @@ export default {
     data() {
         return {
             isUpdateFormVisible: false,
-            isRemoveDialogVisible: false
+            isRemoveDialogVisible: false,
+            isArchiveVisible: false
         };
     },
     computed: {
         list() {
             return this.lists[this.listId];
         },
+        displayedList() {
+            return this.list.tasksList.filter(taskId => {
+                return (
+                    this.tasks[taskId].isArchived === this.isArchiveVisible ||
+                    this.isArchiveVisible
+                );
+            });
+        },
         draggableTasksIds() {
             return this.list.tasksList.map(taskId => taskId);
         },
-        ...mapState('boards', ['lists']),
+        ...mapState('boards', ['lists', 'tasks']),
         ...mapGetters('boards', ['isAdmin'])
     },
     methods: {
+        showArchive() {
+            this.isArchiveVisible = true;
+        },
+        hideArchive() {
+            this.isArchiveVisible = false;
+        },
         showCreateTaskForm() {
             this.$emit('showCreateTaskForm', { listId: this.listId });
         },

@@ -1,8 +1,14 @@
 <template>
-    <v-card class="pa-2 elevation-0 task-card cursor-grab" outlined>
+    <v-card
+        :color="task.isArchived ? 'grey lighten-2' : ''"
+        class="pa-2 elevation-0 task-card cursor-grab"
+        outlined
+    >
         <v-card-title class=" pa-0 font-weight-bold text-body-2">
             <v-icon v-if="task.priority == 'HIGH'" class="pulse" left size="16">
-                mdi-pin
+                mdi-pin </v-icon
+            ><v-icon v-if="task.isArchived" left size="16">
+                mdi-archive
             </v-icon>
             <a
                 v-html="md(task.title)"

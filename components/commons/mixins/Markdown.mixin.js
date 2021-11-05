@@ -1,7 +1,9 @@
 import DOMPurify from 'dompurify';
 import MarkdownIt from 'markdown-it';
 import MarkdownItEmoji from 'markdown-it-emoji';
-const mdIt = new MarkdownIt();
+const mdIt = new MarkdownIt({
+    breaks: true
+});
 mdIt.use(MarkdownItEmoji);
 
 export default {

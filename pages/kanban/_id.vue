@@ -84,11 +84,11 @@
             :taskId="detailTaskId"
             :isVisible="isVisibleDetail"
             @close="hideTaskDrawer"
-            @update="updateTask"
+            @updateTask="updateTask"
+            @removeTask="emitRemoveTask"
             @createTag="createTag"
             @updateTag="updateTag"
             @removeTag="removeTag"
-            @archiveTask="archiveTask"
         />
     </v-row>
 </template>
@@ -185,6 +185,10 @@ export default {
             this.socket.on('updateTasksOrder', res => {
                 this.updateTasksOrder(res);
             });
+
+            this.socket.on('removeTask', res => {
+                this.removeTask(res);
+            });
         },
         showGuestsDialog() {
             if (this.isAdmin) {
@@ -207,8 +211,11 @@ export default {
                 this.hideCreateTaskForm();
             });
         },
-        updateTask(updateTaskData) {
-            this.socket.emit('updateTask', updateTaskData);
+        updateTask(updateData) {
+            this.socket.emit('updateTask', {
+                boardId: this.board.id,
+                updateData
+            });
         },
         updateTasksRanks(changeOrderData) {
             this.socket.emit('updateTasksOrder', {
@@ -245,18 +252,18 @@ export default {
                 tagId
             });
         },
-        archiveTask(updateData) {
-            console.log('archiveTask');
-            this.socket.emit('updateTask', {
+        emitRemoveTask(taskId) {
+            this.socket.emit('removeTask', {
                 boardId: this.board.id,
-                updateData
+                taskId
             });
         },
         ...mapMutations('boards', [
             'addTask',
             'addTag',
             'purgeTag',
-            'updateTasksOrder'
+            'updateTasksOrder',
+            'removeTask'
         ]),
         ...mapActions('boards', ['getTags', 'getBoard', 'updateListsRanking'])
     }

@@ -175,6 +175,8 @@
                         mdi-archive-off
                     </v-icon>
                 </v-btn>
+
+                <task-remove-btn :taskId="taskId" @remove="remove" />
             </v-card-actions>
         </template>
     </v-navigation-drawer>
@@ -185,10 +187,11 @@ import { mapState } from 'vuex';
 import Markdown from '../../commons/mixins/Markdown.mixin';
 import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
 import TagsList from './tags/TagsList.vue';
+import TaskRemoveBtn from './TaskRemoveBtn.vue';
 
 export default {
     name: 'task-detail',
-    components: { TaskAssigneesList, TagsList },
+    components: { TaskAssigneesList, TagsList, TaskRemoveBtn },
     mixins: [Markdown],
     props: {
         taskId: Number,
@@ -197,7 +200,8 @@ export default {
     data() {
         return {
             isVisibleTitleInput: false,
-            isVisibleDescriptionInput: false
+            isVisibleDescriptionInput: false,
+            isRemoveDialogVisible: false
         };
     },
     computed: {
@@ -281,10 +285,7 @@ export default {
             this.$emit('createTag', tagData);
         },
         update() {
-            this.$emit('update', {
-                boardId: this.board.id,
-                updateData: this.updatedTask
-            });
+            this.$emit('updateTask', this.updatedTask);
             this.hideAll();
         },
         updateTag(tagData) {
@@ -294,6 +295,17 @@ export default {
             this.updatedTask.isArchived = !this.updatedTask.isArchived;
 
             this.update();
+        },
+        showRemoveDialog() {
+            this.isRemoveDialogVisible = true;
+        },
+        hideRemoveDialog() {
+            this.isRemoveDialogVisible = false;
+        },
+        remove(taskId) {
+            this.hideRemoveDialog();
+            this.close();
+            this.$emit('removeTask', taskId);
         }
     }
 };

@@ -125,6 +125,11 @@ export const mutations = {
                 updateData.taskId
             );
         }
+    },
+    removeTask(state, { taskId, listId }) {
+        const deletedIndex = state.lists[listId].tasksList.indexOf(taskId);
+        state.lists[listId].tasksList.splice(deletedIndex, 1);
+        Vue.delete(state.tasks, taskId);
     }
 };
 

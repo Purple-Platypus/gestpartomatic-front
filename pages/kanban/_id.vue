@@ -64,7 +64,7 @@
                             :list-id="listId"
                             @showCreateTaskForm="showCreateTaskForm"
                             @showTask="showTaskDrawer"
-                            @updateTasksOrder="updateTasksRanks"
+                            @updateTasksOrder="emitUpdateTasksRanks"
                         />
                         <tasks-list-create slot="footer" />
                     </draggable>
@@ -75,20 +75,20 @@
             :listId="createTasksListId"
             :isVisible="isVisibleCreateTaskForm"
             @close="hideCreateTaskForm"
-            @createTask="createTask"
-            @createTag="createTag"
-            @updateTag="updateTag"
-            @removeTag="removeTag"
+            @createTask="emitCreateTask"
+            @createTag="emitCreateTag"
+            @updateTag="emitUpdateTag"
+            @removeTag="emitRemoveTag"
         />
         <task-detail
             :taskId="detailTaskId"
             :isVisible="isVisibleDetail"
             @close="hideTaskDrawer"
-            @updateTask="updateTask"
+            @updateTask="emitUpdateTask"
             @removeTask="emitRemoveTask"
-            @createTag="createTag"
-            @updateTag="updateTag"
-            @removeTag="removeTag"
+            @createTag="emitCreateTag"
+            @updateTag="emitUpdateTag"
+            @removeTag="emitRemoveTag"
         />
     </v-row>
 </template>
@@ -206,23 +206,6 @@ export default {
             this.createTasksListId = null;
             this.isVisibleCreateTaskForm = false;
         },
-        createTask(createTaskData) {
-            this.socket.emit('createTask', createTaskData, () => {
-                this.hideCreateTaskForm();
-            });
-        },
-        updateTask(updateData) {
-            this.socket.emit('updateTask', {
-                boardId: this.board.id,
-                updateData
-            });
-        },
-        updateTasksRanks(changeOrderData) {
-            this.socket.emit('updateTasksOrder', {
-                boardId: this.board.id,
-                changeOrderData
-            });
-        },
         showTaskDrawer(taskId) {
             this.detailTaskId = taskId;
             if (!this.isVisibleDetail) {
@@ -233,29 +216,46 @@ export default {
             this.detailTaskId = null;
             this.isVisibleDetail = false;
         },
-        createTag(tagData) {
-            this.socket.emit('createTag', {
-                boardId: this.board.id,
-                tagData: tagData
+        emitCreateTask(createTaskData) {
+            this.socket.emit('createTask', createTaskData, () => {
+                this.hideCreateTaskForm();
             });
         },
-        updateTag(tagData) {
-            this.socket.emit('updateTag', {
+        emitUpdateTask(updateData) {
+            this.socket.emit('updateTask', {
                 boardId: this.board.id,
-                tagId: tagData.tagId,
-                tagData: tagData.tagData
-            });
-        },
-        removeTag(tagId) {
-            this.socket.emit('removeTag', {
-                boardId: this.board.id,
-                tagId
+                updateData
             });
         },
         emitRemoveTask(taskId) {
             this.socket.emit('removeTask', {
                 boardId: this.board.id,
                 taskId
+            });
+        },
+        emitUpdateTasksRanks(changeOrderData) {
+            this.socket.emit('updateTasksOrder', {
+                boardId: this.board.id,
+                changeOrderData
+            });
+        },
+        emitCreateTag(tagData) {
+            this.socket.emit('createTag', {
+                boardId: this.board.id,
+                tagData: tagData
+            });
+        },
+        emitUpdateTag(tagData) {
+            this.socket.emit('updateTag', {
+                boardId: this.board.id,
+                tagId: tagData.tagId,
+                tagData: tagData.tagData
+            });
+        },
+        emitRemoveTag(tagId) {
+            this.socket.emit('removeTag', {
+                boardId: this.board.id,
+                tagId
             });
         },
         ...mapMutations('boards', [

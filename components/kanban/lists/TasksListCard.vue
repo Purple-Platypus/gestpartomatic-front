@@ -38,11 +38,12 @@
             </span>
         </v-card-title>
 
-        <v-card-text
-            v-if="task.description"
-            class="py-0"
-            v-html="md(task.description)"
-        />
+        <v-card-text v-if="task.description" class="py-0">
+            <tasks-list-card-description
+                :taskId="taskId"
+                @update="updateDescription"
+            />
+        </v-card-text>
 
         <v-card-actions v-if="task.tags.length" class="px-0 pb-0">
             <v-chip
@@ -62,10 +63,12 @@
 <script>
 import { mapState } from 'vuex';
 import Markdown from '../../commons/mixins/Markdown.mixin';
+import TasksListCardDescription from './TasksListCardDescription.vue';
 
 export default {
     name: 'tasks-list-card',
     mixins: [Markdown],
+    components: { TasksListCardDescription },
     props: {
         taskId: Number
     },
@@ -97,6 +100,12 @@ export default {
     methods: {
         showDetail() {
             this.$emit('show', this.taskId);
+        },
+        updateDescription(updatedDescription) {
+            this.$emit('update', {
+                id: this.taskId,
+                description: updatedDescription
+            });
         }
     }
 };

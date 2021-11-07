@@ -81,6 +81,7 @@
                             :task-id="taskId"
                             class="mb-1"
                             @show="showTaskDetail"
+                            @update="updateTask"
                         >
                             {{ taskId }}
                         </tasks-list-card>
@@ -187,6 +188,9 @@ export default {
             this.removeList(this.listId).then(() => {
                 this.hideRemoveDialog();
             });
+        },
+        updateTask(updatedTask) {
+            this.$emit('updateTask', updatedTask);
         },
         updateTasksOrder(change) {
             const type = this.setChangeType(change);

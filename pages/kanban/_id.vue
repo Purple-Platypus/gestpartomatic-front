@@ -64,6 +64,7 @@
                             :list-id="listId"
                             @showCreateTaskForm="showCreateTaskForm"
                             @showTask="showTaskDrawer"
+                            @updateTask="emitUpdateTask"
                             @updateTasksOrder="emitUpdateTasksRanks"
                         />
                         <tasks-list-create slot="footer" />

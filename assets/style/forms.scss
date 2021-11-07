@@ -16,3 +16,11 @@
 .bordered-switch .v-input--switch__thumb.primary--text {
     border-color: transparent !important;
 }
+
+ul.contains-task-list {
+    padding-left: 0;
+
+    li.task-list-item {
+        list-style-type: none;
+    }
+}

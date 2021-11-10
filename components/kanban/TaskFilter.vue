@@ -7,14 +7,18 @@
             @open="onOpen"
         >
             <v-text-field
+                append-outer-icon="mdi-magnify"
+                clearable
                 dense
                 hide-details
                 outlined
-                prepend-inner-icon="mdi-magnify"
                 ref="input"
+                v-model="filterString"
+                @keyup.enter="emitChange"
                 @focus="showMenu"
                 @blur="hideMenu"
-                @input="emitChange"
+                @click:append-outer="emitChange"
+                @click:clear="clear"
             />
 
             <template #no-result>
@@ -74,16 +78,17 @@
 
 <script>
 import { Mentionable } from 'vue-mention';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapMutations, mapGetters } from 'vuex';
 
 export default {
-    name: 'task-search',
+    name: 'task-filter',
     components: { Mentionable },
     data() {
         return {
             items: [],
             isVisibleMenu: false,
-            position: {}
+            position: {},
+            filterString: ''
         };
     },
     computed: {
@@ -140,16 +145,16 @@ export default {
         getPosition() {
             this.position = this.$refs.input.$el.getBoundingClientRect();
         },
-        emitChange(input) {
-            const inputTerms = input.trim().split(';');
-            const searchParams = {
+        emitChange() {
+            const inputTerms = this.filterString.trim().split(';');
+            const filterParams = {
                 words: [],
                 assignees: [],
                 tags: []
             };
 
             if (inputTerms.length) {
-                const searchTerms = inputTerms.map(term => {
+                const filterTerms = inputTerms.map(term => {
                     switch (term.trim().charAt(0)) {
                         case '@':
                             return {
@@ -168,25 +173,34 @@ export default {
                         default:
                             return {
                                 type: 'words',
-                                value: term
+                                value: term.trim().toLowerCase()
                             };
                     }
                 });
 
-                searchTerms.forEach(term => {
+                filterTerms.forEach(term => {
                     if (term.value) {
-                        searchParams[term.type].push(term.value);
+                        filterParams[term.type].push(term.value);
                     }
                 });
-                this.$emit('input', searchParams);
+                this.setFilters(filterParams);
             }
-        }
+        },
+        clear() {
+            const clearedParams = {
+                words: [],
+                assignees: [],
+                tags: []
+            };
+            this.setFilters(clearedParams);
+        },
+        ...mapMutations('boards', ['setFilters'])
     }
 };
 </script>
 <style lang="scss">
 .tooltip {
-    z-index: 99;
+    z-index: 9;
 }
 .mention-item {
     background-color: #ffffff;

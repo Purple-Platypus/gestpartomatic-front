@@ -21,6 +21,7 @@
         "papaparse": "^5.3.1",
         "v-runtime-template": "^1.10.0",
         "vee-validate": "^3.4.10",
+        "vue-mention": "^1.0.0",
         "vuedraggable": "^2.24.3",
         "vuetify": "^2.5.5"
     },

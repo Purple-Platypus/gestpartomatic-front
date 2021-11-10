@@ -63,7 +63,6 @@
                     v-else
                     class="flex-grow-0"
                     :list-data="list"
-                    v-click-outside="hideUpdateForm"
                     @update="hideUpdateForm"
                     @cancel="hideUpdateForm"
                 />
@@ -76,7 +75,7 @@
                         @change="updateTasksOrder"
                     >
                         <tasks-list-card
-                            v-for="taskId in displayedList"
+                            v-for="taskId in filteredList"
                             :key="taskId"
                             :task-id="taskId"
                             class="mb-1"
@@ -153,10 +152,39 @@ export default {
                 );
             });
         },
+        filteredList() {
+            if (!this.isFilterSet()) {
+                return this.displayedList;
+            }
+
+            const filteredList = this.displayedList.filter(taskId => {
+                const matchingTags = this.filters.tags.every(tagId => {
+                    return this.tasks[taskId].tags.includes(tagId);
+                });
+                if (!matchingTags) return false;
+
+                const matchingUsers = this.filters.assignees.every(userId => {
+                    return this.tasks[taskId].assignees.includes(userId);
+                });
+                if (!matchingUsers) return false;
+
+                const matchingWords = this.filters.words.every(word => {
+                    const concatTaskStrings =
+                        this.tasks[taskId].title +
+                        this.tasks[taskId].description;
+                    return concatTaskStrings.toLowerCase().includes(word);
+                });
+                if (!matchingWords) return false;
+
+                return true;
+            });
+
+            return filteredList;
+        },
         draggableTasksIds() {
             return this.list.tasksList.map(taskId => taskId);
         },
-        ...mapState('boards', ['lists', 'tasks']),
+        ...mapState('boards', ['lists', 'tasks', 'filters']),
         ...mapGetters('boards', ['isAdmin'])
     },
     methods: {
@@ -217,6 +245,13 @@ export default {
             else {
                 return 'removed';
             }
+        },
+        isFilterSet() {
+            return (
+                !!this.filters.tags.length ||
+                !!this.filters.assignees.length ||
+                !!this.filters.words.length
+            );
         },
         ...mapActions('boards', ['removeList'])
     }

@@ -229,12 +229,9 @@ export default {
                 return this.task.assignees;
             },
             set(taskAssignees) {
-                this.$emit('update', {
-                    boardId: this.board.id,
-                    updateData: {
-                        id: this.taskId,
-                        assignees: taskAssignees
-                    }
+                this.$emit('updateTask', {
+                    id: this.taskId,
+                    assignees: taskAssignees
                 });
             }
         },
@@ -243,12 +240,9 @@ export default {
                 return this.task.tags;
             },
             set(taskTags) {
-                this.$emit('update', {
-                    boardId: this.board.id,
-                    updateData: {
-                        id: this.taskId,
-                        tags: taskTags
-                    }
+                this.$emit('updateTask', {
+                    id: this.taskId,
+                    tags: taskTags
                 });
             }
         },

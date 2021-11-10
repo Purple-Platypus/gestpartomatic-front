@@ -9,14 +9,11 @@
 
                     <v-spacer />
 
+                    <task-filter class="mr-4 flex-grow-0" />
+
                     <v-tooltip v-for="guest in guests" :key="guest.id" bottom>
                         <template v-slot:activator="{ on, attrs }">
-                            <v-avatar
-                                class="ml-1"
-                                v-bind="attrs"
-                                v-on="on"
-                                size="32"
-                            >
+                            <v-avatar v-bind="attrs" v-on="on" size="32">
                                 <v-img :src="guest.avatar" />
                             </v-avatar>
                         </template>
@@ -24,7 +21,7 @@
                     </v-tooltip>
 
                     <v-btn
-                        class="mr-2 ml-4"
+                        class="mr-2 ml-2"
                         icon
                         large
                         @click="showGuestsDialog"
@@ -102,6 +99,7 @@ import TasksListCreate from '../../components/kanban/lists/TasksListCreate.vue';
 import BoardGuestsDialog from '../../components/kanban/boards/BoardGuestsDialog.vue';
 import TaskFormCreate from '../../components/kanban/tasks/TaskFormCreate.vue';
 import TaskDetail from '../../components/kanban/tasks/TaskDetail.vue';
+import TaskFilter from '../../components/kanban/TaskFilter.vue';
 
 export default {
     components: {
@@ -110,7 +108,8 @@ export default {
         TasksListCreate,
         BoardGuestsDialog,
         TaskFormCreate,
-        TaskDetail
+        TaskDetail,
+        TaskFilter
     },
     head: () => ({
         title: 'Kanban'

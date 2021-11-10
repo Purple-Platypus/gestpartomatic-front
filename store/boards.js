@@ -7,7 +7,12 @@ export const state = () => ({
     guests: {},
     lists: {},
     tasks: {},
-    tags: {}
+    tags: {},
+    filters: {
+        tags: [],
+        assignees: [],
+        words: []
+    }
 });
 
 export const mutations = {
@@ -34,6 +39,9 @@ export const mutations = {
                 Vue.set(state.board, attr, board[attr]);
             }
         }
+    },
+    setFilters(state, filters) {
+        Vue.set(state, 'filters', filters);
     },
 
     // Lists
@@ -295,8 +303,7 @@ export const actions = {
                     board: updatedBoard
                 });
             })
-            .catch(e => {
-                console.log(e);
+            .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });
             });
     },

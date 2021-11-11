@@ -48,7 +48,13 @@
 
             <v-divider />
 
-            <v-row class="pt-4">
+            <v-row>
+                <v-col class="px-4 py-3">
+                    <date-picker-btn v-model="formData.deadline" />
+                </v-col>
+            </v-row>
+
+            <v-row>
                 <v-col class="text-center">
                     <v-btn
                         color="primary"
@@ -72,10 +78,11 @@
 import { mapState, mapActions } from 'vuex';
 import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
 import TagsList from './tags/TagsList.vue';
+import DatePickerBtn from '../../commons/DatePickerBtn.vue';
 
 export default {
     name: 'task-form-create',
-    components: { TaskAssigneesList, TagsList },
+    components: { TaskAssigneesList, TagsList, DatePickerBtn },
     props: {
         listId: Number,
         isVisible: Boolean
@@ -85,6 +92,7 @@ export default {
             formData: {
                 title: '',
                 description: '',
+                deadline: '',
                 tags: [],
                 assignees: []
             },
@@ -108,6 +116,7 @@ export default {
             this.formData = {
                 title: '',
                 description: '',
+                deadline: '',
                 tags: [],
                 assignees: []
             };

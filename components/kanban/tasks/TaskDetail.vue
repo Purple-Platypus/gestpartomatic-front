@@ -153,11 +153,7 @@
                     </v-icon>
                 </v-btn>
 
-                <v-btn icon>
-                    <v-icon>
-                        mdi-calendar
-                    </v-icon>
-                </v-btn>
+                <date-picker-btn v-model="taskDeadline" />
 
                 <v-btn icon>
                     <v-icon>
@@ -188,10 +184,11 @@ import Markdown from '../../commons/mixins/Markdown.mixin';
 import TaskAssigneesList from './assignees/TaskAssigneesList.vue';
 import TagsList from './tags/TagsList.vue';
 import TaskRemoveBtn from './TaskRemoveBtn.vue';
+import DatePickerBtn from '../../commons/DatePickerBtn.vue';
 
 export default {
     name: 'task-detail',
-    components: { TaskAssigneesList, TagsList, TaskRemoveBtn },
+    components: { TaskAssigneesList, TagsList, TaskRemoveBtn, DatePickerBtn },
     mixins: [Markdown],
     props: {
         taskId: Number,
@@ -214,13 +211,15 @@ export default {
                 title,
                 description,
                 priority,
-                isArchived
+                isArchived,
+                deadline
             }) => ({
                 id,
                 title,
                 description,
                 priority,
-                isArchived
+                isArchived,
+                deadline
             }))(this.task);
             return partialTask;
         },
@@ -243,6 +242,17 @@ export default {
                 this.$emit('updateTask', {
                     id: this.taskId,
                     tags: taskTags
+                });
+            }
+        },
+        taskDeadline: {
+            get() {
+                return this.task.deadline;
+            },
+            set(deadline) {
+                this.$emit('updateTask', {
+                    id: this.taskId,
+                    deadline
                 });
             }
         },

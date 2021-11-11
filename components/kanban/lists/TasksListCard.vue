@@ -45,7 +45,10 @@
             />
         </v-card-text>
 
-        <v-card-actions v-if="task.tags.length" class="px-0 pb-0">
+        <v-card-actions
+            v-if="task.tags.length || task.deadline"
+            class="px-0 pb-0"
+        >
             <v-chip
                 v-for="tagId in task.tags"
                 :key="tagId"
@@ -56,6 +59,14 @@
             >
                 {{ tags[tagId].label }}
             </v-chip>
+
+            <template v-if="task.deadline">
+                <v-icon class="ml-2" small> mdi-calendar </v-icon>&nbsp;<span
+                    class="text-caption grey--text text--darken-1"
+                >
+                    {{ deadline }}
+                </span>
+            </template>
         </v-card-actions>
     </v-card>
 </template>
@@ -93,6 +104,9 @@ export default {
                 const lastName = names.pop();
                 return names.join(', ') + ' et ' + lastName;
             }
+        },
+        deadline() {
+            return new Date(this.task.deadline).toLocaleDateString('fr-FR');
         },
         ...mapState('users', ['usersById']),
         ...mapState('boards', ['tasks', 'tags'])

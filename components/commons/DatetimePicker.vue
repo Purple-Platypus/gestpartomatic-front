@@ -158,7 +158,10 @@ export default {
             this.isOpen = true;
         },
         validate() {
-            this.$emit('input', this.date + 'T' + this.time + ':00+02:00');
+            const isoDateTime = new Date(
+                this.date + 'T' + this.time
+            ).toISOString();
+            this.$emit('input', isoDateTime);
             this.isOpen = false;
             window.setTimeout(() => {
                 this.step = 1;

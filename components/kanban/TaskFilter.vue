@@ -22,9 +22,7 @@
             />
 
             <template #no-result>
-                <div>
-                    Pas de résultat...
-                </div>
+                Pas de résultat...
             </template>
 
             <template #item-@="{ item }">

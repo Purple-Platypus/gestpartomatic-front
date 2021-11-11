@@ -10,7 +10,7 @@
                     <h2 class="mr-8 text-body-2 font-weight-light">
                         {{ list.name }}
                         <span class="ml-4 grey--text text--darken-1">
-                            {{ list.tasksList.length }}
+                            {{ filteredList.length }}
                         </span>
                     </h2>
 

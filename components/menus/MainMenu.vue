@@ -4,6 +4,7 @@
 
         <v-list dense nav>
             <v-list-item
+            v-if="!link.auth || auth.id"
                 v-for="link in links"
                 :key="link.label"
                 :to="link.target"
@@ -29,9 +30,9 @@ export default {
     data() {
         return {
             links: [
-                { target: '/flux1', label: 'Flux 1' },
-                { target: '/glun', label: 'GLUN' },
-                { target: '/kanban', label: 'Kanbans' }
+                { target: '/flux1', label: 'Flux 1', auth: false },
+                { target: '/glun', label: 'GLUN', auth: false },
+                { target: '/kanban', label: 'Kanbans', auth: true }
             ]
         };
     }

@@ -1,31 +1,21 @@
 <template>
-    <div class="pa-2" outlined>
+    <v-card-text outlined>
         <tag-form-create :disabled="!!updatedTagId" @create="create" />
 
-        <v-divider class="my-2" />
-
-        <v-container>
-            <tags-manager-item
-                v-for="tag in tags"
-                :key="tag.id"
-                :tagId="tag.id"
-                :isUpdated="tag.id === updatedTagId"
-                @showUpdate="showUpdate(tag.id)"
-                @hideUpdate="hideUpdate"
-                @update="update"
-                @remove="remove"
-            />
-            <p v-if="!tagsList.length" class="font-italic grey--text">
-                Il n'existe aucune étiquette pour le moment.
-            </p>
-        </v-container>
-
-        <div class="text-right">
-            <v-btn depressed @click="close">
-                Retour
-            </v-btn>
-        </div>
-    </div>
+        <tags-manager-item
+            v-for="tag in tags"
+            :key="tag.id"
+            :tagId="tag.id"
+            :isUpdated="tag.id === updatedTagId"
+            @showUpdate="showUpdate(tag.id)"
+            @hideUpdate="hideUpdate"
+            @update="update"
+            @remove="remove"
+        />
+        <p v-if="!tagsList.length" class="font-italic grey--text">
+            Il n'existe aucune étiquette pour le moment.
+        </p>
+    </v-card-text>
 </template>
 
 <script>
@@ -63,10 +53,6 @@ export default {
         },
         remove(tagId) {
             this.$emit('remove', tagId);
-        },
-        close() {
-            this.hideUpdate();
-            this.$emit('close');
         }
     }
 };

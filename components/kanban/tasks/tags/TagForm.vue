@@ -17,7 +17,7 @@
                 :disabled="disabled"
                 :close-on-content-click="false"
                 offset-y
-                z-index="9"
+                z-index="999"
                 v-model="isColorPickerVisible"
             >
                 <template v-slot:activator="{ on, attrs }">

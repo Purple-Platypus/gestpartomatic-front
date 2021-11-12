@@ -81,6 +81,7 @@ export default {
                 tagId: this.tagId,
                 tagData: tag
             });
+            this.hideUpdateForm();
         },
         remove() {
             this.$emit('remove', this.tagId);

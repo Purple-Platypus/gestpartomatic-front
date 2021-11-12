@@ -10,7 +10,9 @@
                     Suppression de tâche
                 </v-card-title>
 
-                <v-card-text>
+                <v-divider />
+
+                <v-card-text class="pt-4">
                     <p>
                         Vous allez supprimer définitivement la tâche :
                         <strong>

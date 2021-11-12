@@ -127,18 +127,16 @@
 
             <v-divider class="mx-4" />
 
-            <v-hover v-slot="{ hover }">
-                <div>
-                    <tags-list
-                        v-model="taskTags"
-                        :isHover="hover"
-                        @update="updateTag"
-                        @create="createTag"
-                    >
-                        Pas encore d'étiquette
-                    </tags-list>
-                </div>
-            </v-hover>
+            <div>
+                <tags-list
+                    v-model="taskTags"
+                    @update="updateTag"
+                    @create="createTag"
+                    @remove="removeTag"
+                >
+                    Pas encore d'étiquette
+                </tags-list>
+            </div>
 
             <v-divider class="mx-4" />
 
@@ -276,6 +274,12 @@ export default {
         showDescriptionInput() {
             this.isVisibleDescriptionInput = true;
         },
+        showRemoveDialog() {
+            this.isRemoveDialogVisible = true;
+        },
+        hideRemoveDialog() {
+            this.isRemoveDialogVisible = false;
+        },
         hideAll() {
             this.isVisibleTitleInput = false;
             this.isVisibleDescriptionInput = false;
@@ -286,31 +290,28 @@ export default {
 
             this.update();
         },
-        createTag(tagData) {
-            this.$emit('createTag', tagData);
-        },
         update() {
             this.$emit('updateTask', this.updatedTask);
             this.hideAll();
         },
-        updateTag(tagData) {
-            this.$emit('updateTag', tagData);
+        remove(taskId) {
+            this.hideRemoveDialog();
+            this.close();
+            this.$emit('removeTask', taskId);
         },
         archive() {
             this.updatedTask.isArchived = !this.updatedTask.isArchived;
 
             this.update();
         },
-        showRemoveDialog() {
-            this.isRemoveDialogVisible = true;
+        createTag(tagData) {
+            this.$emit('createTag', tagData);
         },
-        hideRemoveDialog() {
-            this.isRemoveDialogVisible = false;
+        updateTag(tagData) {
+            this.$emit('updateTag', tagData);
         },
-        remove(taskId) {
-            this.hideRemoveDialog();
-            this.close();
-            this.$emit('removeTask', taskId);
+        removeTag(tagId) {
+            this.$emit('removeTag', tagId);
         }
     }
 };

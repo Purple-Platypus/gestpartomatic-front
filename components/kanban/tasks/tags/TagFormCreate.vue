@@ -7,9 +7,9 @@
                 @submit="create"
             />
         </v-col>
-        <v-col class="flex-grow-0 d-flex align-center pl-0">
+        <v-col class="flex-grow-0 d-flex align-center px-0">
             <v-btn
-                class="ml-1"
+                class="ml-1 pr-0"
                 color="primary"
                 :disabled="!formData.label"
                 icon

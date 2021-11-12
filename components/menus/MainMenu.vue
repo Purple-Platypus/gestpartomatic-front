@@ -4,7 +4,7 @@
 
         <v-list dense nav>
             <v-list-item
-                v-for="link in links"
+                v-for="link in displayedLinks"
                 :key="link.label"
                 :to="link.target"
             >
@@ -29,11 +29,18 @@ export default {
     data() {
         return {
             links: [
-                { target: '/flux1', label: 'Flux 1' },
-                { target: '/glun', label: 'GLUN' },
-                { target: '/kanban', label: 'Kanbans' }
+                { target: '/flux1', label: 'Flux 1', auth: false },
+                { target: '/glun', label: 'GLUN', auth: false },
+                { target: '/kanban', label: 'Kanbans', auth: true }
             ]
         };
+    },
+    computed: {
+        displayedLinks() {
+            return this.links.filter(link => {
+                return !link.auth || this.auth.id;
+            });
+        }
     }
 };
 </script>

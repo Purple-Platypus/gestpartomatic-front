@@ -1,12 +1,21 @@
 <template>
     <div>
         <v-card-actions>
+            <nuxt-link class="mr-4" to="/flux1">
+                <v-icon color="primary" small>
+                    mdi-chevron-left
+                </v-icon>
+                Retour au Fluxomatic
+            </nuxt-link>
+
+            <v-spacer />
+
             <definition-uploader
                 depressed
                 @input="handleUpload"
                 outlined
                 small
-                v-if="$store.state.auth.id"
+                v-if="auth.id"
             >
                 <template v-if="activeTab == 0">
                     Charger un CSV pour la partie commune
@@ -23,18 +32,11 @@
                 depressed
                 :disabled="!isComplete"
                 small
-                v-if="$store.state.auth.id"
+                v-if="auth.id"
             >
                 <v-icon left>mdi-content-save</v-icon>
                 Enregistrer
             </v-btn>
-
-            <nuxt-link to="/flux1">
-                <v-icon color="primary" small>
-                    mdi-chevron-left
-                </v-icon>
-                Retour au Fluxomatic
-            </nuxt-link>
         </v-card-actions>
 
         <v-card-actions>
@@ -77,10 +79,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import AuthMixin from '../../components/commons/mixins/Auth.mixin';
 import DefinitionUploader from '../../components/flux1/DefinitionUploader';
 
 export default {
     components: { DefinitionUploader },
+    mixins: [AuthMixin],
     data() {
         return {
             activeTab: 0,

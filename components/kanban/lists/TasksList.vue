@@ -1,7 +1,11 @@
 <template>
     <v-col class="col-kanban pb-0">
         <v-sheet class="fill-height" outlined rounded>
-            <v-card class="d-flex flex-column fill-height grey lighten-5" flat>
+            <v-card
+                class="d-flex flex-column fill-height grey lighten-4"
+                flat
+                @dblclick="showCreateTaskForm"
+            >
                 <v-card-title
                     v-if="!isUpdateFormVisible"
                     class="flex-grow-0 task-list-title py-1 px-2 text-body-2 font-weight-light text-uppercase"
@@ -81,6 +85,7 @@
                             class="mb-1"
                             @show="showTaskDetail"
                             @update="updateTask"
+                            @dblclick.capture="console.log('plop')"
                         >
                             {{ taskId }}
                         </tasks-list-card>

@@ -24,6 +24,7 @@
             />
 
             <v-textarea
+                auto-grow
                 class="mb-2 description-textarea"
                 dense
                 hint="Vous pouvez rédiger la description en mardown"
@@ -91,8 +92,8 @@ export default {
         return {
             formData: {
                 title: '',
-                description: '',
-                deadline: '',
+                description: null,
+                deadline: null,
                 tags: [],
                 assignees: []
             },

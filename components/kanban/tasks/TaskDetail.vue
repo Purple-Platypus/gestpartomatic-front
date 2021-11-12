@@ -88,6 +88,7 @@
             <div v-else class="d-flex flex-row flex-nowrap align-start">
                 <v-card-text class="pt-0 pb-2 pr-2">
                     <v-textarea
+                        auto-grow
                         autofocus
                         dense
                         hide-details=""

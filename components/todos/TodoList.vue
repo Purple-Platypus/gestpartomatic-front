@@ -97,7 +97,7 @@
             <v-divider></v-divider>
 
             <draggable
-                :disabled="sortType != 'none'"
+                :disabled="isDragDisabled"
                 v-model="todosList"
                 ghostClass="ghost"
                 dragClass="elevation-4"
@@ -108,6 +108,7 @@
                         :todoId="todo.id"
                         ref="todoListFormUpdate"
                         @close="hideUpdateForm"
+                        v-click-outside="hideUpdateForm"
                     />
                     <todo-list-item
                         v-else
@@ -177,6 +178,9 @@ export default {
                 });
                 this.updateTodosRanking(updatedTodosRanking);
             }
+        },
+        isDragDisabled() {
+            return this.sortType != 'none' || this.visibleUpdateForm;
         },
         ...mapGetters('todos', ['activeTodos', 'doneTodos'])
     },

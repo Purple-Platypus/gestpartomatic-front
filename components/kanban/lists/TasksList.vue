@@ -73,6 +73,7 @@
 
                 <v-card-text class="flex-grow-1 px-2 pb-2">
                     <draggable
+                        v-if="dataFetched"
                         class="fill-height"
                         :list="draggableTasksIds"
                         group="tasks"
@@ -90,6 +91,18 @@
                             {{ taskId }}
                         </tasks-list-card>
                     </draggable>
+
+                    <template v-else>
+                        <v-sheet
+                            class="mb-1"
+                            outlined
+                            rounded
+                            v-for="taskId in filteredList"
+                            :key="taskId"
+                        >
+                            <v-skeleton-loader type="list-item-two-line" />
+                        </v-sheet>
+                    </template>
                 </v-card-text>
             </v-card>
         </v-sheet>
@@ -189,7 +202,7 @@ export default {
         draggableTasksIds() {
             return this.list.tasksList.map(taskId => taskId);
         },
-        ...mapState('boards', ['lists', 'tasks', 'filters']),
+        ...mapState('boards', ['lists', 'tasks', 'filters', 'dataFetched']),
         ...mapGetters('boards', ['isAdmin'])
     },
     methods: {
@@ -265,7 +278,7 @@ export default {
 
 <style scoped>
 .col-kanban {
-    min-width: 360px !important;
-    max-width: 360px !important;
+    min-width: 355px !important;
+    max-width: 355px !important;
 }
 </style>

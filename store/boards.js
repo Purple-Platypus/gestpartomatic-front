@@ -12,7 +12,8 @@ export const state = () => ({
         tags: [],
         assignees: [],
         words: []
-    }
+    },
+    dataFetched: false
 });
 
 export const mutations = {
@@ -138,6 +139,10 @@ export const mutations = {
         const deletedIndex = state.lists[listId].tasksList.indexOf(taskId);
         state.lists[listId].tasksList.splice(deletedIndex, 1);
         Vue.delete(state.tasks, taskId);
+    },
+
+    endFetch(state) {
+        Vue.set(state, 'dataFetched', true);
     }
 };
 
@@ -268,10 +273,11 @@ export const actions = {
     getTags({ commit, dispatch }) {
         this.$axios
             .$get('/api/tags')
-            .then(res => {
-                res.forEach(tag => {
+            .then(async res => {
+                await res.forEach(tag => {
                     commit('addTag', tag);
                 });
+                commit('endFetch');
             })
             .catch(() => {
                 dispatch('snackbar/showGenericError', null, { root: true });

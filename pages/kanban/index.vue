@@ -4,7 +4,7 @@
             <v-card flat outlined>
                 <v-card-title class="pa-2">
                     <h1 class="mb-4 text-h3 font-weight-light">
-                        Tableaux
+                        Projets
                     </h1>
                 </v-card-title>
 
@@ -195,12 +195,9 @@ export default {
         hideAll() {
             this.hideCreateForm();
             this.hideUpdateForm();
-        },
-        ...mapActions('boards', ['getBoardsList'])
+        }
     },
-    fetch() {
-        this.getBoardsList();
-
+    mounted() {
         const shortkeys = [{ keys: '+', label: 'Ajouter un tableau' }];
         this.$store.commit('help/set', shortkeys);
     },

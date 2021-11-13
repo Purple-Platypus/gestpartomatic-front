@@ -1,12 +1,13 @@
 <template>
-    <v-navigation-drawer app class="elevation-0" dark permanent width="130">
+    <v-navigation-drawer app class="elevation-0" dark permanent width="150">
         <auth-menu v-if="auth.id"></auth-menu>
 
-        <v-list dense nav>
+        <v-list class="px-0" dense tile>
             <v-list-item
                 v-for="link in displayedLinks"
                 :key="link.label"
                 :to="link.target"
+                exact-path
             >
                 <v-list-item-content>
                     <v-list-item-title>
@@ -14,11 +15,38 @@
                     </v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+
+            <template v-if="auth.id">
+                <v-divider />
+
+                <v-list-item to="/kanban" exact-path>
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            Projets
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item
+                    v-for="boardId in activeBoards"
+                    :key="boardId"
+                    class="pl-6 list-item-compact"
+                    :to="'/kanban/' + boardId"
+                    exact-path
+                >
+                    <v-list-item-content class="py-0">
+                        <v-list-item-title>
+                            {{ boards[boardId].name }}
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </template>
         </v-list>
     </v-navigation-drawer>
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex';
 import AuthMixin from '../commons/mixins/Auth.mixin';
 import AuthMenu from './AuthMenu.vue';
 
@@ -26,12 +54,14 @@ export default {
     name: 'mainMenu',
     components: { AuthMenu },
     mixins: [AuthMixin],
+    fetch() {
+        this.getBoardsList();
+    },
     data() {
         return {
             links: [
                 { target: '/flux1', label: 'Flux 1', auth: false },
-                { target: '/glun', label: 'GLUN', auth: false },
-                { target: '/kanban', label: 'Kanbans', auth: true }
+                { target: '/glun', label: 'GLUN', auth: false }
             ]
         };
     },
@@ -40,7 +70,12 @@ export default {
             return this.links.filter(link => {
                 return !link.auth || this.auth.id;
             });
-        }
+        },
+        ...mapState('boards', ['boards']),
+        ...mapGetters('boards', ['activeBoards'])
+    },
+    methods: {
+        ...mapActions('boards', ['getBoardsList'])
     }
 };
 </script>
@@ -48,5 +83,8 @@ export default {
 <style scoped>
 .padded-avatar {
     padding-left: 6px !important;
+}
+.list-item-compact {
+    min-height: 28px !important;
 }
 </style>

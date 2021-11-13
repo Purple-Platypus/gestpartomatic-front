@@ -124,8 +124,8 @@ export default {
             return this.touched.includes(articleIndex);
         },
         async save() {
-            console.log();
             const savePayload = this.$store.state.flux1.definitions;
+
             await this.$axios
                 .$post('/api/flux1', { data: savePayload })
                 .catch(err => {

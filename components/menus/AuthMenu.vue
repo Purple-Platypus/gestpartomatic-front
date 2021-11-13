@@ -44,7 +44,7 @@ export default {
     methods: {
         async logout() {
             this.$store.dispatch('auth/logout').then(() => {
-                this.$router.push('/auth/login');
+                this.$router.push('/');
             });
         }
     }

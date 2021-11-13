@@ -48,7 +48,6 @@ export default {
                 transform: this.formatData,
                 complete: res => {
                     res.data.map(def => {
-                        console.log(def);
                         const type =
                             def.nature.substring(0, 1) == 'X'
                                 ? 'STRING'

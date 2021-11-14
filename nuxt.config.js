@@ -70,7 +70,10 @@ export default {
                         url: '/api/auth/logout/',
                         method: 'post'
                     },
-                    user: { url: '/api/users/me', method: 'get' }
+                    user: {
+                        url: '/api/users/me',
+                        method: 'get'
+                    }
                 },
                 user: {
                     autoFetch: false

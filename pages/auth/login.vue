@@ -124,9 +124,7 @@ export default {
             this.$auth
                 .loginWith('cookie', { data: this.input })
                 .then(async user => {
-                    await this.$auth.setUser(user.data);
-
-                    this.$router.push('/');
+                    await this.$auth.setUser(user);
                 })
                 .catch(err => {
                     if (err.response.status === 401) {

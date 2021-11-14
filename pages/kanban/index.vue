@@ -129,7 +129,6 @@ export default {
     head: () => ({
         title: 'Kanbans'
     }),
-    middleware: 'auth',
     components: {
         BoardsListItem,
         BoardForm,

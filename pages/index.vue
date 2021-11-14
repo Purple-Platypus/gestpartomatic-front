@@ -1,6 +1,7 @@
 <template>
     <v-row class="fill-height">
-        <v-col class="pa-0" cols="3">
+        {{ $auth.loggedIn }}
+        <v-col v-if="$auth.loggedIn" class="pa-0" cols="3">
             <todo-list></todo-list>
         </v-col>
     </v-row>

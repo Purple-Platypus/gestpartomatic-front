@@ -15,7 +15,7 @@
                 @input="handleUpload"
                 outlined
                 small
-                v-if="auth.id"
+                v-if="$auth.loggedIn"
             >
                 <template v-if="activeTab == 0">
                     Charger un CSV pour la partie commune
@@ -32,7 +32,7 @@
                 depressed
                 :disabled="!isComplete"
                 small
-                v-if="auth.id"
+                v-if="$auth.loggedIn"
             >
                 <v-icon left>mdi-content-save</v-icon>
                 Enregistrer
@@ -79,12 +79,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import AuthMixin from '../../components/commons/mixins/Auth.mixin';
 import DefinitionUploader from '../../components/flux1/DefinitionUploader';
 
 export default {
     components: { DefinitionUploader },
-    mixins: [AuthMixin],
     data() {
         return {
             activeTab: 0,

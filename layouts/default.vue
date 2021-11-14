@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import MainMenu from '../components/menus/MainMenu.vue';
 import GlobalSnackbar from '../components/commons/GlobalSnackbar';
 
@@ -34,20 +34,21 @@ export default {
     components: { MainMenu, GlobalSnackbar },
     computed: {
         darkMode() {
-            return this.auth.settingDarkMode;
+            return this.profile.settingDarkMode;
         },
-        ...mapState('auth', ['auth']),
+        ...mapState('profile', ['profile']),
         ...mapGetters('help', ['shortkeys'])
     },
     mounted() {
-        this.$vuetify.theme.dark = this.auth.settingDarkMode;
+        this.$vuetify.theme.dark = this.profile.settingDarkMode;
     },
     async fetch() {
-        this.getUser();
-        this.getUsers();
+        if (this.$auth.loggedIn) {
+            this.getUsers();
+        }
     },
     methods: {
-        ...mapActions('auth', ['getUser']),
+        ...mapActions('profile', ['getUser']),
         ...mapActions('users', ['getUsers'])
     },
     watch: {

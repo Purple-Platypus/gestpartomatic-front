@@ -74,20 +74,18 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import AuthMixin from '../../commons/mixins/Auth.mixin';
 
 export default {
     name: 'boards-list-item',
     props: {
         boardId: Number
     },
-    mixins: [AuthMixin],
     computed: {
         board() {
             return this.boards[this.boardId];
         },
         isBoardAdmin() {
-            return this.board.guests[this.auth.id] === 'ADMIN';
+            return this.board.guests[this.$auth.id] === 'ADMIN';
         },
         ...mapState('boards', ['boards'])
     },

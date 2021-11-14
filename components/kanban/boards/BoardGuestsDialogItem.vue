@@ -44,9 +44,8 @@ export default {
             return this.guests.hasOwnProperty(this.user.id);
         },
         disableChange() {
-            return !this.board.isPrivate || this.auth.id == this.user.id;
+            return !this.board.isPrivate || this.$auth.user.id == this.user.id;
         },
-        ...mapState('auth', ['auth']),
         ...mapState('boards', ['board', 'guests'])
     },
     methods: {

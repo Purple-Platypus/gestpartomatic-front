@@ -216,7 +216,7 @@ export default {
         },
         async login() {
             this.loading = true;
-            this.$store.dispatch('auth/login', this.input).then(() => {
+            this.$auth.login(this.input).then(() => {
                 this.$router.push('/');
             });
             this.loading = false;

@@ -15,7 +15,7 @@ export const mutations = {
 };
 
 export const actions = {
-    async getUsers({ commit }) {
+    async getUsers({ commit, dispatch }) {
         await this.$axios
             .$get('/api/users')
             .then(res => {

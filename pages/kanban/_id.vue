@@ -139,7 +139,6 @@ export default {
             }
         },
 
-        ...mapState('auth', ['auth']),
         ...mapState('users', ['users']),
         ...mapState('boards', ['board', 'guests']),
         ...mapGetters('boards', ['isAdmin'])

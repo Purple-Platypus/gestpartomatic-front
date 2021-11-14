@@ -5,7 +5,7 @@
                 <v-col class="flex-grow-0">
                     <v-card outlined class="cursor-pointer card--avatar">
                         <avatar-selector
-                            :src="auth.avatar"
+                            :src="$auth.user.avatar"
                             @change="updateAvatar($event)"
                         ></avatar-selector>
                     </v-card>
@@ -21,7 +21,7 @@
                         <v-card-text
                             class="text-h5 text--secondary font-italic"
                         >
-                            @{{ auth.username }}
+                            @{{ $auth.user.username }}
                         </v-card-text>
                     </v-card>
 
@@ -161,7 +161,6 @@ import AvatarSelector from '../../components/profile/AvatarSelector.vue';
 
 export default {
     name: 'profile',
-    middleware: ['auth'],
     components: { ValidationObserver, ValidationProvider, AvatarSelector },
     head: () => ({
         title: 'Profil'
@@ -183,15 +182,12 @@ export default {
             loading: false
         };
     },
-    computed: {
-        ...mapState('auth', ['auth'])
-    },
     mounted() {
-        this.avatar = this.auth.avatar;
-        this.input.nickname = this.auth.nickname;
-        this.input.email = this.auth.email;
+        this.avatar = this.$auth.user.avatar;
+        this.input.nickname = this.$auth.user.nickname;
+        this.input.email = this.$auth.user.email;
 
-        this.settingDarkMode = this.auth.settingDarkMode;
+        this.settingDarkMode = this.$auth.user.settingDarkMode;
     },
     methods: {
         updateAvatar(avatarUrl) {
@@ -230,8 +226,7 @@ export default {
             };
 
             this.update(payload);
-        },
-        ...mapActions('auth', ['update'])
+        }
     }
 };
 </script>

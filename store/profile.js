@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 export const state = () => ({
-    auth: {
+    profile: {
         id: '',
         nickname: '',
         username: '',
@@ -25,12 +25,12 @@ export const mutations = {
         ];
 
         userProperties.forEach(property => {
-            Vue.set(state.auth, property, user[property]);
+            Vue.set(state.profile, property, user[property]);
         });
     },
     update(state, updateData) {
         for (const key in updateData) {
-            Vue.set(state.auth, key, updateData[key]);
+            Vue.set(state.profile, key, updateData[key]);
         }
     }
 };
@@ -40,37 +40,6 @@ export const actions = {
         this.$axios.$get('/api/users/me').then(res => {
             commit('set', res);
         });
-    },
-    login({ commit }, user) {
-        return new Promise((resolve, reject) => {
-            this.$axios
-                .$post('/api/auth/login/', user)
-                .then(res => {
-                    commit('set', res);
-                    resolve();
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-    },
-    logout({ commit, dispatch }) {
-        this.$axios
-            .$post('/api/auth/logout')
-            .then(() => {
-                const blankUser = {
-                    id: '',
-                    nickname: '',
-                    username: '',
-                    avatar: '',
-                    email: '',
-                    settingDarkMode: false
-                };
-                commit('set', blankUser);
-            })
-            .catch(() => {
-                dispatch('snackbar/showGenericError', null, { root: true });
-            });
     },
     async update({ commit, dispatch }, updateData) {
         return new Promise((resolve, reject) => {

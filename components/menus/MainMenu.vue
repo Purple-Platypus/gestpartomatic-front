@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer app class="elevation-0" dark permanent width="150">
-        <auth-menu v-if="auth.id"></auth-menu>
+        <auth-menu v-if="$auth.loggedIn"></auth-menu>
 
         <v-list class="px-0" dense tile>
             <v-list-item
@@ -16,7 +16,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <template v-if="auth.id">
+            <template v-if="$auth.loggedIn">
                 <v-divider />
 
                 <v-list-item to="/kanban" exact-path>
@@ -47,15 +47,15 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
-import AuthMixin from '../commons/mixins/Auth.mixin';
 import AuthMenu from './AuthMenu.vue';
 
 export default {
     name: 'mainMenu',
     components: { AuthMenu },
-    mixins: [AuthMixin],
     fetch() {
-        this.getBoardsList();
+        if (this.$auth.loggedIn) {
+            this.getBoardsList();
+        }
     },
     data() {
         return {

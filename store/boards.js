@@ -363,7 +363,7 @@ export const getters = {
         });
     },
     isAdmin: (state, getters, rootState) => {
-        const authId = rootState.auth.auth.id;
+        const authId = $auth.user.id;
         return (
             state.guests.hasOwnProperty(authId) &&
             state.guests[authId].role == 'ADMIN'

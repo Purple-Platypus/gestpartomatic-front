@@ -39,7 +39,7 @@ export default {
     ],
 
     // Modules (https://go.nuxtjs.dev/config-modules)
-    modules: ['@nuxtjs/axios', 'nuxt-socket-io'],
+    modules: ['@nuxtjs/axios', 'nuxt-socket-io', '@nuxtjs/auth-next'],
 
     axios: {
         credentials: true,
@@ -56,6 +56,27 @@ export default {
                 namespaces: {}
             }
         ]
+    },
+
+    auth: {
+        strategies: {
+            cookie: {
+                endpoints: {
+                    login: {
+                        url: '/api/auth/login/',
+                        method: 'post'
+                    },
+                    logout: {
+                        url: '/api/auth/logout/',
+                        method: 'post'
+                    },
+                    user: { url: '/api/users/me', method: 'get' }
+                },
+                user: {
+                    autoFetch: false
+                }
+            }
+        }
     },
 
     proxy: {

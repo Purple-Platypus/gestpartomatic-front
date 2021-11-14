@@ -82,7 +82,6 @@ import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import messages from '~/assets/messages.json';
 
 export default {
-    auth: false,
     layout: 'auth',
     transition: 'fade-transition',
     components: {

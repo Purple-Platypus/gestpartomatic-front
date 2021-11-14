@@ -121,9 +121,11 @@ export default {
         async login() {
             this.loading = true;
 
-            this.$store
-                .dispatch('auth/login', this.input)
-                .then(() => {
+            this.$auth
+                .loginWith('cookie', { data: this.input })
+                .then(async user => {
+                    await this.$auth.setUser(user.data);
+
                     this.$router.push('/');
                 })
                 .catch(err => {

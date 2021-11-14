@@ -5,7 +5,7 @@
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon to="/profile" v-bind="attrs" v-on="on">
                         <v-avatar tile size="48">
-                            <v-img :src="auth.avatar" />
+                            <v-img :src="$auth.user.avatar" />
                         </v-avatar>
                     </v-btn>
                 </template>
@@ -36,16 +36,11 @@
 </template>
 
 <script>
-import Auth from '../commons/mixins/Auth.mixin';
-
 export default {
     name: 'authMenu',
-    mixins: [Auth],
     methods: {
         async logout() {
-            this.$store.dispatch('auth/logout').then(() => {
-                this.$router.push('/');
-            });
+            await this.$auth.logout();
         }
     }
 };
